@@ -1,0 +1,174 @@
+{
+  "boxes": [
+    {
+      "name": "Flat roof slab",
+      "gridline_id": "Flat roof slab",
+      "kind": "roof",
+      "host": "",
+      "center_m": [
+        8,
+        6,
+        6.65
+      ],
+      "dimensions_m": [
+        16.6,
+        12.6,
+        0.3
+      ],
+      "rotation_z": 0,
+      "metadata": {},
+      "group": "Roof",
+      "material": "Stone"
+    },
+    {
+      "name": "Parapet south",
+      "gridline_id": "Parapet south",
+      "kind": "parapet",
+      "host": "",
+      "center_m": [
+        8,
+        -0.2,
+        7
+      ],
+      "dimensions_m": [
+        16.6,
+        0.2,
+        0.5
+      ],
+      "rotation_z": 0,
+      "metadata": {},
+      "group": "Roof",
+      "material": "Ivory plaster",
+      "join_group": "parapet"
+    },
+    {
+      "name": "Parapet north",
+      "gridline_id": "Parapet north",
+      "kind": "parapet",
+      "host": "",
+      "center_m": [
+        8,
+        12.2,
+        7
+      ],
+      "dimensions_m": [
+        16.6,
+        0.2,
+        0.5
+      ],
+      "rotation_z": 0,
+      "metadata": {},
+      "group": "Roof",
+      "material": "Ivory plaster",
+      "join_group": "parapet"
+    },
+    {
+      "name": "Parapet west",
+      "gridline_id": "Parapet west",
+      "kind": "parapet",
+      "host": "",
+      "center_m": [
+        -0.2,
+        6,
+        7
+      ],
+      "dimensions_m": [
+        0.2,
+        12.6,
+        0.5
+      ],
+      "rotation_z": 0,
+      "metadata": {},
+      "group": "Roof",
+      "material": "Ivory plaster",
+      "join_group": "parapet"
+    },
+    {
+      "name": "Parapet east",
+      "gridline_id": "Parapet east",
+      "kind": "parapet",
+      "host": "",
+      "center_m": [
+        16.2,
+        6,
+        7
+      ],
+      "dimensions_m": [
+        0.2,
+        12.6,
+        0.5
+      ],
+      "rotation_z": 0,
+      "metadata": {},
+      "group": "Roof",
+      "material": "Ivory plaster",
+      "join_group": "parapet"
+    },
+    {
+      "name": "Balcony front guard",
+      "gridline_id": "Balcony front guard",
+      "kind": "railing",
+      "host": "",
+      "center_m": [
+        8,
+        -2.5,
+        3.85
+      ],
+      "dimensions_m": [
+        5,
+        0.05,
+        1.1
+      ],
+      "rotation_z": 0,
+      "metadata": {},
+      "group": "Upper",
+      "material": "Glass",
+      "join_group": "balcony-guard",
+      "role": "balcony_guard"
+    },
+    {
+      "name": "Balcony side 5.5",
+      "gridline_id": "Balcony side 5.5",
+      "kind": "railing",
+      "host": "",
+      "center_m": [
+        5.5,
+        -1.35,
+        3.85
+      ],
+      "dimensions_m": [
+        0.05,
+        2.3,
+        1.1
+      ],
+      "rotation_z": 0,
+      "metadata": {},
+      "group": "Upper",
+      "material": "Glass",
+      "join_group": "balcony-guard",
+      "role": "balcony_guard"
+    },
+    {
+      "name": "Balcony side 10.5",
+      "gridline_id": "Balcony side 10.5",
+      "kind": "railing",
+      "host": "",
+      "center_m": [
+        10.5,
+        -1.35,
+        3.85
+      ],
+      "dimensions_m": [
+        0.05,
+        2.3,
+        1.1
+      ],
+      "rotation_z": 0,
+      "metadata": {},
+      "group": "Upper",
+      "material": "Glass",
+      "join_group": "balcony-guard",
+      "role": "balcony_guard"
+    }
+  ]
+}

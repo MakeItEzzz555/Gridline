@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased — measured villa topology repair (2026-10-24)
+
+- Scope opening voids to their host level; validate full cutaway inventories after native view-layer evaluation and reject modifiers, shape keys and hidden/excluded geometry. Add real-host corruption regressions.
+
+- Export continuous orthogonal wall union boundaries with declared aperture subtraction, source ID mappings, bounded cell budgets and explicit rejection of mixed oblique joins. Preserve coordinate precision before rotated joins.
+- Independently validate closed face/vertex topology, occupied volume, normals, roles and raw GLB triangles before host import. Add native and portable adversarial regression fixtures.
+- Repair the reproduced villa parapet and balcony guard intersections on a new copy, trim the buried parapet bases to the roof slab top, and publish measured before/after native evidence. The source villa is preserved; PR33 integrates the already-merged feature-branch fixes into main.
+
+## Unreleased — native Blender readback hardening
+
+- Verify world mesh corners, native units, GLB identity/host properties and material assignments; prevent opening metadata from overwriting reserved identity fields.
+- Bound no-follow source reads, pin exclusive publication writes and propagate worker errors with autoexecution disabled.
+- Add deterministic security/corruption tests and a real-host adverse acceptance script.
+
 ## Unreleased — Blender native-scene proof (2026-10-24)
 
 - Add opt-in local Blender headless scene/export bridge for supported building-spec walls, doors and windows, with explicit millimetre-to-metre conversion, new-output-only policy, independent .blend/.glb native readback, input/artifact hashes and known coverage limitations.

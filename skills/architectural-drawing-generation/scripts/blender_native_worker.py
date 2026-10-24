@@ -7,6 +7,11 @@ from pathlib import Path
 import bpy
 from mathutils import Vector
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from wall_topology import geometry_entries
+from mesh_qa import check_surface
+from glb_qa import check_glb
+
 
 def create_material(name, rgb, roughness=0.66, metallic=0.0):
     mat=bpy.data.materials.new(name)
@@ -37,21 +42,33 @@ def build(scene, out):
         "door":create_material("Gridline Door",(.34,.41,.47),0.5),
         "glass":create_material("Gridline Glass",(.26,.56,.69),0.22),
     }
-    for entry in scene["boxes"]:
+    for entry in geometry_entries(scene):
         dims=entry["dimensions_m"]
         if not all(0 < d < 2000 and math.isfinite(d) for d in dims):
             raise ValueError("invalid geometry box")
-        bpy.ops.mesh.primitive_cube_add(size=1, location=entry["center_m"])
-        obj=bpy.context.object
-        obj.name=entry["name"]
-        obj.dimensions=dims
-        obj.rotation_euler[2]=entry["rotation_z"]
+        if "vertices" in entry:
+            check_surface(entry["vertices"], entry["faces"], entry["source_boxes"],voids=entry["void_boxes"])
+            mesh=bpy.data.meshes.new(entry["name"])
+            mesh.from_pydata(entry["vertices"], [], entry["faces"])
+            mesh.update()
+            obj=bpy.data.objects.new(entry["name"],mesh)
+            world.collection.objects.link(obj)
+            obj["gridline_source_ids"]=json.dumps(entry["source_ids"])
+        else:
+            bpy.ops.mesh.primitive_cube_add(size=1, location=entry["center_m"])
+            obj=bpy.context.object
+            obj.name=entry["name"]
+            obj.dimensions=dims
+            obj.rotation_euler[2]=entry["rotation_z"]
         obj["gridline_id"]=entry["gridline_id"]
         obj["gridline_kind"]=entry["kind"]
         obj["gridline_host"]=entry["host"]
+        obj["gridline_role"]=entry["role"]
         obj["gridline_source_units"]="mm"
         obj["gridline_schema"]="gridline-blender-scene.v0"
         for k,v in entry["metadata"].items():
+            if k in ("id", "kind", "host", "source_units", "schema", "role", "source_ids"):
+                raise ValueError("metadata cannot replace reserved identity fields")
             if type(v) in (str,int,float,bool):
                 obj["gridline_"+k]=v
         obj.data.materials.append(mats[entry["kind"]])
@@ -82,50 +99,77 @@ def build(scene, out):
     bpy.ops.wm.save_as_mainfile(filepath=str(out/"model.blend"),check_existing=False)
     bpy.ops.export_scene.gltf(filepath=str(out/"model.glb"),export_format="GLB",
                                export_extras=True,export_cameras=False,export_lights=False)
-    print(f"BLENDER_BUILD: {len(scene['boxes'])} mesh objects")
+    print(f"BLENDER_BUILD: {len(geometry_entries(scene))} mesh objects")
+
+
+def verify_object(obj, entry, tolerance):
+    if (getattr(obj,"modifiers",()) or getattr(obj,"constraints",())
+            or getattr(obj,"hide_render",False) or getattr(obj,"hide_viewport",False)):
+        raise ValueError(f"unsupported modifier/constraint/visibility: {obj.name}")
+    for key, wanted in {"gridline_id": entry["gridline_id"], "gridline_kind": entry["kind"],
+                        "gridline_host": entry["host"], "gridline_source_units": "mm",
+                        "gridline_schema": "gridline-blender-scene.v0"}.items():
+        if obj.get(key) != wanted:
+            raise ValueError(f"identity/host metadata lost: {obj.name} {key}")
+    topology = None
+    if "vertices" in entry:
+        if obj.get("gridline_source_ids") != json.dumps(entry["source_ids"]):
+            raise ValueError(f"source mapping lost: {obj.name}")
+        topology=check_surface([list(obj.matrix_world @ v.co) for v in obj.data.vertices],
+                               [list(p.vertices) for p in obj.data.polygons],entry["source_boxes"],1e-5,entry["void_boxes"])
+    cx, cy, cz = entry["center_m"]
+    dx, dy, dz = (v / 2 for v in entry["dimensions_m"])
+    angle = entry["rotation_z"]
+    c, s = math.cos(angle), math.sin(angle)
+    corners = [(cx + c*x - s*y, cy + s*x + c*y, cz + z)
+               for x in (-dx, dx) for y in (-dy, dy) for z in (-dz, dz)]
+    measured = [tuple(obj.matrix_world @ vertex.co) for vertex in obj.data.vertices]
+    if (not measured or (topology is None and len(measured) > 128) or
+            any(not math.isfinite(v) for point in measured for v in point)):
+        raise ValueError(f"invalid mesh coordinates: {obj.name}")
+    # Both directions catch missing corners and extra/deformed vertices, including parenting drift.
+    error = (None if topology else max(max(min(math.dist(a, b) for b in corners) for a in measured),
+                max(min(math.dist(a, b) for b in measured) for a in corners)))
+    if error is not None and error > tolerance:
+        raise ValueError(f"world geometry mismatch: {obj.name} ({error} m)")
+    materials = obj.data.materials
+    expected_material = {"wall": "Gridline Wall", "door": "Gridline Door", "glass": "Gridline Glass"}[entry["kind"]]
+    if len(materials) != 1 or materials[0] is None or materials[0].name != expected_material:
+        raise ValueError(f"material assignment lost: {obj.name}")
+    if any(p.material_index != 0 for p in obj.data.polygons):
+        raise ValueError(f"mesh references missing material slot: {obj.name}")
+    if topology is None:
+        topology=check_surface(measured,[list(p.vertices) for p in obj.data.polygons],[entry],1e-5)
+    if "role" in entry and obj.get("gridline_role") != entry["role"]:
+        raise ValueError(f"role mapping lost: {obj.name}")
+    return {"topology": topology, "source_ids": entry.get("source_ids",[entry["gridline_id"]]), "id": entry["gridline_id"], "host": entry["host"], "kind": entry["kind"],
+            "material": materials[0].name, "world_corner_error_m": error,
+            "world_min_m": [min(p[i] for p in measured) for i in range(3)],
+            "world_max_m": [max(p[i] for p in measured) for i in range(3)]}
 
 
 def verify(scene,out):
+    raw_glb=check_glb(out/"model.glb")
     bpy.ops.wm.open_mainfile(filepath=str(out/"model.blend"))
-    expected={b["name"]:b for b in scene["boxes"]}
-    mesh_objs=[ob for ob in bpy.data.objects if ob.type=="MESH"]
-    if len(mesh_objs)!=len(expected):
-        raise ValueError(f"native .blend mesh count {len(mesh_objs)} != {len(expected)}")
-    evidence={}
-    for ob in mesh_objs:
-        if ob.name not in expected:
-            raise ValueError(f"unexpected native object {ob.name}")
-        e=expected[ob.name]
-        if ob.get("gridline_id") != e["gridline_id"]:
-            raise ValueError("Gridline ID lost on native object")
-        dims=sorted(float(v) for v in ob.dimensions)
-        wanted=sorted(e["dimensions_m"])
-        if max(abs(a-b) for a,b in zip(dims,wanted))>0.00025:
-            raise ValueError(f"native geometry dimension mismatch {ob.name}: {dims}/{wanted}")
-        if (Vector(ob.location)-Vector(e["center_m"])).length>0.00025:
-            raise ValueError(f"native geometry location mismatch {ob.name}")
-        evidence[ob.name]={"id":ob["gridline_id"],"dimension_m":dims}
-    bpy.ops.wm.read_factory_settings(use_empty=True)
-    bpy.ops.import_scene.gltf(filepath=str(out/"model.glb"))
-    glb_mesh=[ob for ob in bpy.data.objects if ob.type=="MESH"]
-    if len(glb_mesh)!=len(expected):
-        raise ValueError(f"GLB mesh count {len(glb_mesh)} != {len(expected)}")
-    imported={ob.name:ob for ob in glb_mesh}
-    if set(imported)!=set(expected):
-        raise ValueError(f"GLB object identity mismatch; expected {len(expected)}")
-    for name,e in expected.items():
-        obj=imported[name]
-        dims=sorted(float(v) for v in obj.dimensions)
-        want=sorted(e["dimensions_m"])
-        if max(abs(a-b) for a,b in zip(dims,want))>0.001:
-            raise ValueError(f"GLB dimensions lost for {name}: {dims}/{want}")
-        if (Vector(obj.location)-Vector(e["center_m"])).length>0.001:
-            raise ValueError(f"GLB location drift for {name}")
-    result={"status":"PASS","native_mesh_count":len(mesh_objs),
-            "glb_mesh_count":len(glb_mesh),"scope":"SUPPORTED_BOX_GEOMETRY_ONLY",
-            "native_inspected":evidence,"known_limitations":scene["unverified"]}
+    units = bpy.context.scene.unit_settings
+    if units.system != "METRIC" or abs(units.scale_length - 1) > 1e-9:
+        raise ValueError("native scene units changed")
+    expected={b["name"]:b for b in geometry_entries(scene)}
+    evidence = {}
+    for format_name, tolerance in (("blend", 0.00025), ("glb", 0.001)):
+        if format_name == "glb":
+            bpy.ops.wm.read_factory_settings(use_empty=True)
+            bpy.ops.import_scene.gltf(filepath=str(out/"model.glb"))
+        objects = [obj for obj in bpy.data.objects if obj.type == "MESH"]
+        if len(objects) != len(expected) or {obj.name for obj in objects} != set(expected):
+            raise ValueError(f"{format_name} mesh identity/count mismatch")
+        evidence[format_name] = {obj.name: verify_object(obj, expected[obj.name], tolerance) for obj in objects}
+    result={"status":"PASS", "raw_glb":raw_glb, "native_mesh_count":len(evidence["blend"]),
+            "glb_mesh_count":len(evidence["glb"]), "scope":"ORTHOGONAL_WALL_UNION_AND_BOX_READBACK",
+            "tolerances_m":{"blend":0.00025,"glb":0.001,"topology_weld":0.00001}, "readback":evidence,
+            "known_limitations":scene["unverified"] + ["Material appearance/nodes/textures and construction intent not verified"]}
     (out/"verification.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
-    print("BLENDER_READBACK_PASS:",len(mesh_objs))
+    print("BLENDER_READBACK_PASS:",len(expected))
 
 
 def main():

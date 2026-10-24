@@ -9,6 +9,9 @@ import copy
 import hashlib
 import json
 import math
+import os
+import stat
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -18,6 +21,7 @@ HERE = Path(__file__).resolve().parent
 SHAPE_DIR = HERE
 sys.path.insert(0, str(SHAPE_DIR))
 from building_spec import shape_errors  # noqa: E402
+from wall_topology import geometry_entries  # noqa: E402
 
 DEFAULT_BLENDER = Path("/Applications/Blender.app/Contents/MacOS/Blender")
 MAX_SPEC_BYTES = 1024 * 1024
@@ -106,8 +110,8 @@ def compile_scene(spec):
             return
         boxes.append({"name": f"{kind}_{gid}_{len(boxes):04d}",
                       "kind": kind, "gridline_id": gid, "host": host or "",
-                      "center_m": [round(v / 1000, 7) for v in center],
-                      "dimensions_m": [round(v / 1000, 7) for v in dims],
+                      "center_m": [v / 1000 for v in center],
+                      "dimensions_m": [v / 1000 for v in dims],
                       "rotation_z": angle, "metadata": metadata or {}})
     for ident, (w, length, thick) in walls.items():
         theta = math.atan2(w["end"][1] - w["start"][1], w["end"][0] - w["start"][0])
@@ -117,7 +121,7 @@ def compile_scene(spec):
         for prev, nex in zip(ops, ops[1:]):
             if nex[0] < prev[1] - 1e-6:
                 raise ValueError(f"wall {ident}: overlapping hosted openings")
-        # Deliberate fragment solids around each opening: no unreliably applied boolean.
+        # Source occupancy cells; worker exports only their union boundary.
         stops = sorted(set([0.0, length] + [p for a,b,*_ in ops for p in (a,b)]))
         for a,b in zip(stops, stops[1:]):
             if b - a <= 1e-6:
@@ -142,11 +146,12 @@ def compile_scene(spec):
             kind = "glass" if op["kind"] == "window" else "door"
             box(kind, op["id"], ident, [x,y,zbase + (sill+head)/2],
                 [right-left, min(35, thick/3), head-sill], theta,
-                {"kind":op["kind"],"host_id":ident, "sill_mm":sill})
+                {"opening_kind":op["kind"],"host_id":ident, "sill_mm":sill})
             elements.append({"id":op["id"],"kind":op["kind"],"host":ident,
                              "width_mm":right-left,"height_mm":head-sill,"sill_mm":sill})
     # No guessed foundations, ceilings, roofs, furniture or site. They require separate inputs.
-    unverified=["Wall intersections, joins, and topological manifoldness",
+    unverified=["Mixed oblique joins unsupported; common rotated orthogonal walls only",
+                "Intentional material/level/joint groups are not unioned across boundaries",
                 "Materials, window and door manufacturing details are illustrative",
                 "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
                 "Image-reference similarity was not evaluated",
@@ -156,14 +161,69 @@ def compile_scene(spec):
             "boxes":boxes,"elements":elements,"unverified":unverified}
 
 
+def source_bytes(path):
+    # Pin components so source path swaps cannot turn reads into symlink escapes.
+    path = Path(path).expanduser().absolute()
+    if len(path.parts) < 2:
+        raise ValueError('source must name a file')
+    if sys.platform == 'darwin' and path.parts[1] in ('tmp', 'var'):
+        path = Path('/private').joinpath(*path.parts[1:])
+    if '..' in path.parts:
+        raise ValueError("source traversal is unsupported")
+    directory = os.open(path.anchor, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        for part in path.parts[1:-1]:
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=directory)
+            os.close(directory)
+            directory = child
+        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
+        with os.fdopen(fd, 'rb') as handle:
+            if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
+                raise ValueError("source must be a regular file")
+            data = handle.read(MAX_SPEC_BYTES + 1)
+        if len(data) > MAX_SPEC_BYTES:
+            raise ValueError("oversized source")
+        return data
+    finally:
+        os.close(directory)
+
+
 def load_spec(path):
-    if not path.is_file() or path.stat().st_size > MAX_SPEC_BYTES:
-        raise ValueError("missing or oversized building specification")
-    return json.loads(path.read_text(encoding="utf-8"), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(f"invalid {x}")))
+    return json.loads(source_bytes(path), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(f"invalid {x}")))
+
+
+def publish(tmp, out, receipts):
+    parent = os.open(out.anchor, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        for part in out.parts[1:-1]:
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)
+            os.close(parent)
+            parent = child
+        os.mkdir(out.name, mode=0o700, dir_fd=parent)
+        fd = os.open(out.name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)
+    finally:
+        os.close(parent)
+    try:
+        for name in ("model.blend", "model.glb", "verification.json", "scene.json", "receipt.json"):
+            dest = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=fd)
+            with os.fdopen(dest, 'wb') as handle:
+                if name == 'receipt.json':
+                    handle.write((json.dumps(receipts, indent=2, sort_keys=True) + '\n').encode())
+                else:
+                    with (tmp / name).open('rb') as source:
+                        shutil.copyfileobj(source, handle)
+                handle.flush()
+                os.fsync(handle.fileno())
+        current = out.stat(follow_symlinks=False)
+        pinned = os.fstat(fd)
+        if (current.st_dev, current.st_ino) != (pinned.st_dev, pinned.st_ino):
+            raise ValueError("output directory changed during publication")
+    finally:
+        os.close(fd)
 
 
 def run_blender(blender, worker, command, *args):
-    cmd=[str(blender), "--background", "--factory-startup", "--python",
+    cmd=[str(blender), "--background", "--factory-startup", "--disable-autoexec", "--python-exit-code", "1", "--python",
          str(worker), "--", command, *map(str,args)]
     result=subprocess.run(cmd, check=False, timeout=180, capture_output=True, text=True)
     if result.returncode:
@@ -192,12 +252,10 @@ def main():
             print(json.dumps({"host":"Blender","version":version,"executable":str(blender),
                 "state":"CLI_VERIFIED","model_readback":"NOT_TESTED","autocad":"NOT_TESTED"},indent=2))
             return 0
-        source_file=args.spec.resolve(strict=True)
-        source_bytes=source_file.read_bytes()
-        if len(source_bytes) > MAX_SPEC_BYTES:
-            raise ValueError("oversized source")
-        spec=json.loads(source_bytes, parse_constant=lambda x: (_ for _ in ()).throw(ValueError(f"invalid {x}")))
-        source_hash=hashlib.sha256(source_bytes).hexdigest()
+        source_file=args.spec.expanduser().absolute()
+        consumed=source_bytes(source_file)
+        spec=json.loads(consumed, parse_constant=lambda x: (_ for _ in ()).throw(ValueError(f"invalid {x}")))
+        source_hash=hashlib.sha256(consumed).hexdigest()
         scene=compile_scene(spec)
         out=args.out.expanduser().absolute()
         parent=out.parent.resolve(strict=True)
@@ -205,6 +263,7 @@ def main():
             raise ValueError("output path must be new; existing data must not be overwritten")
         if out.name in ("", ".", "..") or parent == Path("/"):
             raise ValueError("unsafe output directory")
+        out = parent / out.name
         worker=HERE/"blender_native_worker.py"
         with tempfile.TemporaryDirectory(prefix=".gridline-blender-",dir=parent) as tmp:
             tmp=Path(tmp)
@@ -216,20 +275,22 @@ def main():
             for name,file in files.items():
                 if not file.is_file() or file.stat().st_size == 0:
                     raise ValueError(f"required result {name} missing")
-            if hashlib.sha256(source_file.read_bytes()).hexdigest() != source_hash:
+            if hashlib.sha256(source_bytes(source_file)).hexdigest() != source_hash:
                 raise ValueError("source changed during build; refusing verification")
             receipts={"status":"SUPPORTED_LOCAL_3D_VERIFIED","blender_version":version,
                       "source_sha256":source_hash,
                       "supported_element_count":len(scene["elements"]),
-                      "mesh_count":len(scene["boxes"]),
+                      "mesh_count":len(geometry_entries(scene)),
+                      "source_occupancy_box_count":len(scene["boxes"]),
                       "files":{k:hashlib.sha256(v.read_bytes()).hexdigest() for k,v in files.items()},
+                      "adapter_sha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                      "worker_sha256":hashlib.sha256(worker.read_bytes()).hexdigest(),
+                      "geometry_code_sha256":{n:hashlib.sha256((HERE/n).read_bytes()).hexdigest()
+                          for n in ("wall_topology.py","mesh_qa.py","glb_qa.py")},
+                      "scene_sha256":hashlib.sha256(scene_path.read_bytes()).hexdigest(),
+                      "format_results":{"blend":"PASS", "glb":"PASS", "dwg":"NOT_TESTED", "ifc":"NOT_TESTED"},
                       "unverified":scene["unverified"]}
-            # Reserve destination atomically: renaming a directory onto a symlink
-            # could overwrite an unrelated pathname even after an earlier check.
-            out.mkdir(mode=0o700)
-            for name in ("model.blend","model.glb","verification.json","scene.json"):
-                (tmp/name).rename(out/name)
-            (out/"receipt.json").write_text(json.dumps(receipts,indent=2,sort_keys=True)+"\n")
+            publish(tmp, out, receipts)
         print(json.dumps({"output":str(out),**receipts},indent=2))
         return 0
     except (ValueError, OSError, RuntimeError, subprocess.TimeoutExpired,
