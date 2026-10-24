@@ -1,0 +1,91 @@
+{
+  "schema": "gridline-work-package-evidence.v1",
+  "date": "2026-10-24",
+  "reviewed_base_sha": "72f3d3a1ef4e9b1cce5eeafa05b3d32c0fc7e645",
+  "dependency": "Unmerged PR23; no merge authorized",
+  "host": {
+    "version": "Blender 5.2.3 LTS",
+    "build_hash": "e13b728c6880",
+    "transport": "LOCAL_SUBPROCESS_BPY",
+    "mcp": false
+  },
+  "native_sample": {
+    "adapter_sha256": "fa4aaa7d037df2f2395901ce16c65a47b652463a60f9c236926cd0ed87a77377",
+    "blender_version": "Blender 5.2.3 LTS",
+    "files": {
+      "model.blend": "eca06d362afca899115377789b86bfe4b07d65616fa16f68e97d4c9a9da87839",
+      "model.glb": "8cd21602f9cf82d3f507ff7320856e6457904450dc3e2af1f523ca5bf2453fd7",
+      "verification.json": "23e78f6a0675ecacc5ffc1085b112eca6e8f898fc0159b6e6e3b92d3b3c55b30"
+    },
+    "format_results": {
+      "blend": "PASS",
+      "dwg": "NOT_TESTED",
+      "glb": "PASS",
+      "ifc": "NOT_TESTED"
+    },
+    "mesh_count": 42,
+    "scene_sha256": "1449b2a8d044bfaf941caa445c1015912dd8681614e467c1a5fdaa9ed4fec255",
+    "source_sha256": "43c09c555dd2fb84016e503846e4c9792522d6c543401f9c723cf4799839828f",
+    "status": "SUPPORTED_LOCAL_3D_VERIFIED",
+    "supported_element_count": 17,
+    "unverified": [
+      "Wall intersections, joins, and topological manifoldness",
+      "Materials, window and door manufacturing details are illustrative",
+      "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
+      "Image-reference similarity was not evaluated",
+      "Native AutoCAD/DWG and IFC BIM interoperability not tested"
+    ],
+    "worker_sha256": "c84d131e4335f5fa040e00ef297272fb7804c53ee132080fc76f43207efb839e"
+  },
+  "world_error_max_m": {
+    "blend": 5.72354832195966e-07,
+    "glb": 6.271813596007895e-07
+  },
+  "tolerance_m": {
+    "blend": 0.00025,
+    "glb": 0.001
+  },
+  "real_native_adverse_results": [
+    {
+      "fault": "rotation",
+      "result": "REJECTED"
+    },
+    {
+      "fault": "parent_transform",
+      "result": "REJECTED"
+    },
+    {
+      "fault": "glb_identity",
+      "result": "REJECTED"
+    },
+    {
+      "fault": "material",
+      "result": "REJECTED"
+    }
+  ],
+  "targeted_tests": {
+    "count": 11,
+    "status": "PASS"
+  },
+  "cad_required_regression": {
+    "count": 84,
+    "skips": 0,
+    "status": "PASS",
+    "wall_seconds": 59.094
+  },
+  "review": "Independent read-only PR23 review identified orientation/identity/source-read/publication defects; fixed with adverse tests and real native readback. Parent performed bounded final diff/callers review.",
+  "limitations": [
+    "Wall intersections, joins, and topological manifoldness",
+    "Materials, window and door manufacturing details are illustrative",
+    "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
+    "Image-reference similarity was not evaluated",
+    "Native AutoCAD/DWG and IFC BIM interoperability not tested",
+    "Material appearance/nodes/textures and mesh topology not verified"
+  ],
+  "logs_sha256": {
+    "gridline-blender-final-proof-20261024.log": "38409b32b7e97da17d1766a2f8408374f8dfdca52a2fa6f72af3cda303e9d4e8",
+    "gridline-blender-adverse-20261024.log": "e653da0a0bf0642233632e012a413201c8d02bcd1f98580848ab46865a962d17",
+    "gridline-blender-hardened-full-20261024.log": "4e61aa14da75912281e6dd2efe9c5d6b8048e62add9e9e20b676041d19412109"
+  },
+  "provider_usage": "Provider input/cached/uncached/output token receipts unavailable. No attributable savings claimed."
+}
