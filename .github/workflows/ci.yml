@@ -43,11 +43,13 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Portable topology and raw GLB regressions
+      - name: Portable topology, GLB and source-selection regressions
         run: |
           python -m unittest discover -s tests -p test_wall_topology.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_glb_qa.py -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p test_source_registry.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Smoke test PowerShell installer
         shell: pwsh
