@@ -19,6 +19,7 @@ if not expected:
 
 paths = [
     ROOT / "plugin.json",
+    ROOT / "distribution.json",
     ROOT / ".codex-plugin" / "plugin.json",
     ROOT / "gemini-extension.json",
     ROOT / "providers" / "claude" / ".claude-plugin" / "plugin.json",
