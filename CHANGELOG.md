@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Blender native-scene proof (2026-10-24)
+
+- Add opt-in local Blender headless scene/export bridge for supported building-spec walls, doors and windows, with explicit millimetre-to-metre conversion, new-output-only policy, independent .blend/.glb native readback, input/artifact hashes and known coverage limitations.
+- Document that image-reference reconstruction, IFC/BIM semantics, complex detailing and AutoCAD native acceptance are still separate gates; downloadable AutoCAD installer alone is not a verified host.
+
+
 ## Unreleased — recorded skill activation evaluation (2026-10-24)
 
 - Add an offline scorer for real Codex, Claude Code and Gemini CLI activation observations, with per-skill recall, negative-control rates, SHA-256 provenance, baseline comparison and optional per-case regression gates.

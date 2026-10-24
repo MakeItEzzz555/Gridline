@@ -1,0 +1,241 @@
+#!/usr/bin/env python3
+"""Opt-in, local Blender export from Gridline's existing building-spec.v1.
+
+Not a native CAD/BIM integration, reference-image reconstructor, or drawing sign-off.
+No application preferences, existing models or global MCP settings are changed.
+"""
+import argparse
+import copy
+import hashlib
+import json
+import math
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+HERE = Path(__file__).resolve().parent
+SHAPE_DIR = HERE
+sys.path.insert(0, str(SHAPE_DIR))
+from building_spec import shape_errors  # noqa: E402
+
+DEFAULT_BLENDER = Path("/Applications/Blender.app/Contents/MacOS/Blender")
+MAX_SPEC_BYTES = 1024 * 1024
+MAX_ELEMENTS = 400
+MAX_COORD_MM = 1_000_000
+
+
+def _number(v, name, *, positive=False):
+    if type(v) not in (float, int) or not math.isfinite(v):
+        raise ValueError(f"{name} must be a finite number")
+    if (positive and v <= 0) or abs(v) > MAX_COORD_MM:
+        raise ValueError(f"{name} is invalid or outside supported bounds")
+    return float(v)
+
+
+def compile_scene(spec):
+    if not isinstance(spec, dict):
+        raise ValueError("building specification must be an object")
+    if len(json.dumps(spec)) > MAX_SPEC_BYTES:
+        raise ValueError("building specification too large")
+    spec = copy.deepcopy(spec)
+    for k in ("levels", "walls", "openings", "rooms", "grids", "sheets"):
+        spec.setdefault(k, [])
+    errors = shape_errors(spec)
+    if errors:
+        raise ValueError("; ".join(errors[:8]))
+    if spec.get("units") != "mm":
+        raise ValueError("Gridline Blender bridge requires explicit mm units")
+    if not spec["levels"] or not spec["walls"]:
+        raise ValueError("at least one level and wall are required")
+    if sum(len(spec[k]) for k in ("levels", "walls", "openings")) > MAX_ELEMENTS:
+        raise ValueError("too many model entities")
+    levels, walls, ids = {}, {}, set()
+    for i, level in enumerate(spec["levels"]):
+        ident = level["id"]
+        if ident in ids:
+            raise ValueError(f"duplicate element ID {ident}")
+        ids.add(ident)
+        levels[ident] = (_number(level.get("elevation"), f"levels[{i}].elevation"),
+                         _number(level.get("height"), f"levels[{i}].height", positive=True))
+    for i, wall in enumerate(spec["walls"]):
+        ident = wall["id"]
+        if ident in ids:
+            raise ValueError(f"duplicate element ID {ident}")
+        ids.add(ident)
+        if wall.get("level") not in levels:
+            raise ValueError(f"wall {ident}: unknown level")
+        p1, p2 = wall.get("start"), wall.get("end")
+        if p1 is None or p2 is None:
+            raise ValueError(f"wall {ident}: start and end are required")
+        for p in (p1, p2):
+            for x in p:
+                _number(x, f"wall {ident} coordinate")
+        length = math.dist(p1, p2)
+        _number(length, f"wall {ident} length", positive=True)
+        thick = _number(wall.get("thickness"), f"wall {ident} thickness", positive=True)
+        if length <= 1 or thick > 5000:
+            raise ValueError(f"wall {ident}: unsupported dimensions")
+        walls[ident] = (wall, length, thick)
+    openings = {name: [] for name in walls}
+    for i, op in enumerate(spec["openings"]):
+        ident = op["id"]
+        if ident in ids:
+            raise ValueError(f"duplicate element ID {ident}")
+        ids.add(ident)
+        host = op.get("wall")
+        if host not in walls:
+            raise ValueError(f"opening {ident}: unknown wall")
+        if op.get("kind") not in ("window", "door"):
+            raise ValueError(f"opening {ident}: unsupported kind")
+        offset = _number(op.get("offset"), f"opening {ident} offset")
+        width = _number(op.get("width"), f"opening {ident} width", positive=True)
+        height = _number(op.get("height"), f"opening {ident} height", positive=True)
+        sill = (_number(op.get("sill"), f"opening {ident} sill")
+                if op["kind"] == "window" else 0.0)
+        wall, length, thick = walls[host]
+        _, wall_height = levels[wall["level"]]
+        if offset < 0 or sill < 0 or offset + width > length + 1e-6 or sill + height > wall_height + 1e-6:
+            raise ValueError(f"opening {ident}: does not fit inside wall in 3D")
+        if op["kind"] == "door" and (op.get("hinge") not in ("start", "end") or op.get("opens") not in ("left", "right")):
+            raise ValueError(f"door {ident}: missing hinge/direction")
+        openings[host].append((offset, offset + width, sill, sill + height, op))
+    boxes, elements = [], []
+    def box(kind, gid, host, center, dims, angle, metadata=None):
+        if any(v <= 1e-9 for v in dims):
+            return
+        boxes.append({"name": f"{kind}_{gid}_{len(boxes):04d}",
+                      "kind": kind, "gridline_id": gid, "host": host or "",
+                      "center_m": [round(v / 1000, 7) for v in center],
+                      "dimensions_m": [round(v / 1000, 7) for v in dims],
+                      "rotation_z": angle, "metadata": metadata or {}})
+    for ident, (w, length, thick) in walls.items():
+        theta = math.atan2(w["end"][1] - w["start"][1], w["end"][0] - w["start"][0])
+        c, s = math.cos(theta), math.sin(theta)
+        zbase, zheight = levels[w["level"]]
+        ops = sorted(openings[ident], key=lambda v: v[0])
+        for prev, nex in zip(ops, ops[1:]):
+            if nex[0] < prev[1] - 1e-6:
+                raise ValueError(f"wall {ident}: overlapping hosted openings")
+        # Deliberate fragment solids around each opening: no unreliably applied boolean.
+        stops = sorted(set([0.0, length] + [p for a,b,*_ in ops for p in (a,b)]))
+        for a,b in zip(stops, stops[1:]):
+            if b - a <= 1e-6:
+                continue
+            mid = (a+b)/2
+            covering = next((o for o in ops if o[0] < mid < o[1]), None)
+            spans = ([(0, covering[2]), (covering[3], zheight)] if covering
+                     else [(0, zheight)])
+            for low, high in spans:
+                if high - low <= 1e-6:
+                    continue
+                x = w["start"][0] + c * mid
+                y = w["start"][1] + s * mid
+                box("wall", ident, "", [x, y, zbase + (low + high)/2],
+                    [b-a, thick, high-low], theta, {"level":w["level"]})
+        elements.append({"id":ident,"kind":"wall","level":w["level"],
+                         "length_mm":length,"height_mm":zheight,"thickness_mm":thick})
+        for left,right,sill,head,op in ops:
+            mid=(left+right)/2
+            x=w["start"][0] + c*mid
+            y=w["start"][1] + s*mid
+            kind = "glass" if op["kind"] == "window" else "door"
+            box(kind, op["id"], ident, [x,y,zbase + (sill+head)/2],
+                [right-left, min(35, thick/3), head-sill], theta,
+                {"kind":op["kind"],"host_id":ident, "sill_mm":sill})
+            elements.append({"id":op["id"],"kind":op["kind"],"host":ident,
+                             "width_mm":right-left,"height_mm":head-sill,"sill_mm":sill})
+    # No guessed foundations, ceilings, roofs, furniture or site. They require separate inputs.
+    unverified=["Wall intersections, joins, and topological manifoldness",
+                "Materials, window and door manufacturing details are illustrative",
+                "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
+                "Image-reference similarity was not evaluated",
+                "Native AutoCAD/DWG and IFC BIM interoperability not tested"]
+    return {"schema":"gridline-blender-scene.v0", "source_units":"mm",
+            "output_units":"m", "project": spec["project"].get("name","Unnamed"),
+            "boxes":boxes,"elements":elements,"unverified":unverified}
+
+
+def load_spec(path):
+    if not path.is_file() or path.stat().st_size > MAX_SPEC_BYTES:
+        raise ValueError("missing or oversized building specification")
+    return json.loads(path.read_text(encoding="utf-8"), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(f"invalid {x}")))
+
+
+def run_blender(blender, worker, command, *args):
+    cmd=[str(blender), "--background", "--factory-startup", "--python",
+         str(worker), "--", command, *map(str,args)]
+    result=subprocess.run(cmd, check=False, timeout=180, capture_output=True, text=True)
+    if result.returncode:
+        raise RuntimeError(f"Blender {command} failed (exit {result.returncode}): " +
+                           (result.stderr + "\n" + result.stdout)[-1800:])
+    return result
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--blender", type=Path, default=DEFAULT_BLENDER)
+    sub=parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("doctor")
+    b=sub.add_parser("build")
+    b.add_argument("spec", type=Path)
+    b.add_argument("out", type=Path)
+    args=parser.parse_args()
+    try:
+        blender=args.blender.resolve(strict=True)
+        if not blender.is_file() or blender.name not in ("Blender", "blender"):
+            raise ValueError("not a Blender executable; supply a verified Blender binary")
+        version=subprocess.run([str(blender),"--version"],capture_output=True,text=True,timeout=15,check=True).stdout.splitlines()[0]
+        if not version.startswith("Blender "):
+            raise ValueError("Blender version probe failed")
+        if args.command=="doctor":
+            print(json.dumps({"host":"Blender","version":version,"executable":str(blender),
+                "state":"CLI_VERIFIED","model_readback":"NOT_TESTED","autocad":"NOT_TESTED"},indent=2))
+            return 0
+        source_file=args.spec.resolve(strict=True)
+        source_bytes=source_file.read_bytes()
+        if len(source_bytes) > MAX_SPEC_BYTES:
+            raise ValueError("oversized source")
+        spec=json.loads(source_bytes, parse_constant=lambda x: (_ for _ in ()).throw(ValueError(f"invalid {x}")))
+        source_hash=hashlib.sha256(source_bytes).hexdigest()
+        scene=compile_scene(spec)
+        out=args.out.expanduser().absolute()
+        parent=out.parent.resolve(strict=True)
+        if out.exists() or out.is_symlink():
+            raise ValueError("output path must be new; existing data must not be overwritten")
+        if out.name in ("", ".", "..") or parent == Path("/"):
+            raise ValueError("unsafe output directory")
+        worker=HERE/"blender_native_worker.py"
+        with tempfile.TemporaryDirectory(prefix=".gridline-blender-",dir=parent) as tmp:
+            tmp=Path(tmp)
+            scene_path=tmp/"scene.json"
+            scene_path.write_text(json.dumps(scene,sort_keys=True),encoding="utf-8")
+            run_blender(blender,worker,"build",scene_path,tmp)
+            run_blender(blender,worker,"verify",scene_path,tmp)
+            files={"model.blend":tmp/"model.blend","model.glb":tmp/"model.glb","verification.json":tmp/"verification.json"}
+            for name,file in files.items():
+                if not file.is_file() or file.stat().st_size == 0:
+                    raise ValueError(f"required result {name} missing")
+            if hashlib.sha256(source_file.read_bytes()).hexdigest() != source_hash:
+                raise ValueError("source changed during build; refusing verification")
+            receipts={"status":"SUPPORTED_LOCAL_3D_VERIFIED","blender_version":version,
+                      "source_sha256":source_hash,
+                      "supported_element_count":len(scene["elements"]),
+                      "mesh_count":len(scene["boxes"]),
+                      "files":{k:hashlib.sha256(v.read_bytes()).hexdigest() for k,v in files.items()},
+                      "unverified":scene["unverified"]}
+            # Reserve destination atomically: renaming a directory onto a symlink
+            # could overwrite an unrelated pathname even after an earlier check.
+            out.mkdir(mode=0o700)
+            for name in ("model.blend","model.glb","verification.json","scene.json"):
+                (tmp/name).rename(out/name)
+            (out/"receipt.json").write_text(json.dumps(receipts,indent=2,sort_keys=True)+"\n")
+        print(json.dumps({"output":str(out),**receipts},indent=2))
+        return 0
+    except (ValueError, OSError, RuntimeError, subprocess.TimeoutExpired,
+            subprocess.CalledProcessError, json.JSONDecodeError) as exc:
+        print(f"BLOCKED: {exc}",file=sys.stderr)
+        return 1
+
+if __name__=="__main__":
+    raise SystemExit(main())

@@ -52,6 +52,10 @@ python3 scripts/aec_cad.py check SPEC.json OUT/ [--standard ...]
 
 The pipeline draws plans: walls, doors, windows, rooms, grids, dimensions, sheets and schedules. Sections, elevations, details, stairs, furniture, ceilings and site plans are not generated yet. Produce those in a native host, or describe exactly what is needed, rather than faking them with primitives.
 
+## Optional installed Blender 3D preview (experimental)
+
+The bundled `scripts/blender_native.py` may generate a NEW Blender `.blend` plus `.glb` from supported typed walls/levels and hosted door/window openings when Blender is already installed and the user authorizes a new output directory. First run `python3 scripts/blender_native.py doctor`, then `python3 scripts/blender_native.py build SPEC.json NEW_OUT` from this skill directory; both the worker and shared `building_spec.py` validator ship with this skill. The worker does NOT control an existing Blender window, install a Blender MCP, render from photos, generate semantic IFC, or issue drawing approval. Native source and GLB must independently reopen, and missing roof/levels/material detail must be presented as unsupported—not invented from a reference image. See repository `docs/BLENDER_NATIVE_BRIDGE.md` where available.
+
 ## Verification and boundaries
 
 - Report the files produced, the standard used, the `check` result and the warnings, and every assumption you made.
