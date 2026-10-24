@@ -60,6 +60,18 @@ class DrawingVerificationTests(unittest.TestCase):
     def report(self):
         return json.loads((self.out / "check-report.json").read_text())
 
+    def test_overall_paperspace_viewport_layer_zero_and_native_audit_regression(self):
+        for number in ('A-101', 'A-102'):
+            doc = ezdxf.readfile(self.out / f'{number}.dxf')
+            main = [v for v in doc.layouts.get(number).query('VIEWPORT') if v.dxf.id == 1]
+            self.assertEqual(len(main), 1)
+            self.assertEqual(main[0].dxf.layer, '0')
+        main[0].dxf.layer = 'VIEWPORTS'
+        doc.saveas(self.out / 'A-102.dxf')
+        checked = run('check', EXAMPLE, self.out)
+        self.assertEqual(checked.returncode, 1)
+        self.assertIn('overall paper-space viewport must be on layer 0', checked.stdout)
+
     def test_oversized_csv_field_retains_failure_receipt(self):
         for name in ("room-schedule.csv", "sheet-register.csv"):
             with self.subTest(schedule=name):

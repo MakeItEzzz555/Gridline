@@ -417,6 +417,10 @@ def draw_sheet(doc, spec, profile, sheet, msp):
     m = profile["sheet_margins_mm"]
     psp = doc.layouts.new(sheet["number"])
     psp.page_setup(size=(pw, ph), margins=(0, 0, 0, 0), units="mm", scale=1, name=sheet["size"])
+    # AutoCAD AUDIT requires the overall paper-space viewport (ID 1) on layer 0.
+    for viewport in psp.query("VIEWPORT"):
+        if viewport.dxf.id == 1:
+            viewport.dxf.layer = "0"
     doc.layouts.delete("Layout1")
     x0, y0, x1, y1 = m["left"], m["bottom"], pw - m["right"], ph - m["top"]
     psp.add_lwpolyline([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], close=True, dxfattribs={"layer": L["sheet_frame"]})
@@ -644,6 +648,8 @@ def check_outputs(spec, profile, outputs, gates, errors, warnings, checked):
         for space, layout in (("model", msp), ("paper", psp)):
             for e in layout:
                 is_main_viewport = e.dxftype() == "VIEWPORT" and e.dxf.get("id", 0) == 1
+                if is_main_viewport and e.dxf.layer != "0":
+                    errors.append(f"{number}: overall paper-space viewport must be on layer 0")
                 if e.dxf.layer not in layers and not is_main_viewport:
                     errors.append(f"{number}: {e.dxftype()} on non-standard layer {e.dxf.layer!r} in {space} space")
                 if e.dxf.get("color", 256) != 256 or e.dxf.get("lineweight", -1) != -1:
