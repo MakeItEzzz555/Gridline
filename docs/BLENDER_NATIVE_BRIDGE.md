@@ -50,7 +50,7 @@ Never claim a universal, bugless or construction-ready model. A real loaded 3D s
 
 ## Readback hardening work package (2026-10-24)
 
-Dependent on **unmerged PR #23**, reviewed head `72f3d3a1ef4e9b1cce5eeafa05b3d32c0fc7e645`. Independent read-only review found orientation/parenting false PASS, omitted GLB identity validation, unbounded source allocation and path-based publication races. Scope is those defects, not higher-detail modeling. Reserved identity metadata can no longer be overwritten by an opening's semantic kind; the real native test exposed that collision.
+Originally developed against PR #23 (since merged), reviewed head `72f3d3a1ef4e9b1cce5eeafa05b3d32c0fc7e645`. Independent read-only review found orientation/parenting false PASS, omitted GLB identity validation, unbounded source allocation and path-based publication races. Scope is those defects, not higher-detail modeling. Reserved identity metadata can no longer be overwritten by an opening's semantic kind; the real native test exposed that collision.
 
 Source reads pin directory components, reject symlinks/special files, and consume at most 1 MiB + 1 bytes. The CLI uses the explicitly selected local source; it is not an untrusted MCP endpoint. Child processes disable embedded autoexecution, use a fixed worker and propagate Python exceptions as nonzero exits. Publication pins directory descriptors and uses exclusive no-follow file creation; a swapped path cannot redirect artifact writes. `receipt.json` is written last. Partial new directories can remain on failure and must be quarantined; this is not atomic directory publication or a last-good revision manager. No existing output directory is replaced.
 

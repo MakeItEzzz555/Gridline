@@ -92,7 +92,7 @@ def geometry_entries(scene):
         hosts=[b for b in walls if b['gridline_id']==aperture['host']]
         if not hosts: raise ValueError('opening has no wall host')
         probe=dict(aperture,dimensions_m=[aperture['dimensions_m'][0],hosts[0]['dimensions_m'][1],aperture['dimensions_m'][2]])
-        voids.append(probe)
+        voids.append((hosts[0]['metadata'].get('level',''),probe))
     for raw in scene['boxes']:
         if raw.get('kind') not in ROLE_BY_KIND:
             raise ValueError('unsupported/orphan geometry role')
@@ -109,5 +109,7 @@ def geometry_entries(scene):
             continue
         groups[key].append(entry)
     for number,(_,entries) in enumerate(sorted(groups.items())):
-        result.append(union_boxes(entries,f'joined_{entries[0]["kind"]}_{number:03d}',voids if entries[0]['kind']=='wall' else ()))
+        level=entries[0]['metadata'].get('level','')
+        group_voids=[probe for host_level,probe in voids if host_level==level] if entries[0]['kind']=='wall' else ()
+        result.append(union_boxes(entries,f'joined_{entries[0]["kind"]}_{number:03d}',group_voids))
     return result

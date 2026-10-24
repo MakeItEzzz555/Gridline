@@ -1,0 +1,132 @@
+{
+  "schema": "gridline-pr-review-evidence.v1",
+  "reviewed_parent": "3387c5bc813e455153b48598c39147305a74eb8c",
+  "review_threads": [
+    "PRRT_kwDOU2CY0M6v64NW",
+    "PRRT_kwDOU2CY0M6v64NX",
+    "PRRT_kwDOU2CY0M6v64NZ",
+    "PRRT_kwDOU2CY0M6v64Na"
+  ],
+  "portable_suite": {
+    "tests": 123,
+    "skips": 0,
+    "seconds": 81.445,
+    "status": "PASS"
+  },
+  "baseline_reader_commit": "3387c5bc813e455153b48598c39147305a74eb8c",
+  "baseline_native_false_passes": [
+    "modifier",
+    "extra_cutaway_fragment"
+  ],
+  "villa_native": {
+    "status": "PASS",
+    "cutaways": {
+      "02 Ground floor - ceiling removed": {
+        "status": "PASS",
+        "mesh_count": 186
+      },
+      "03 First floor - roof removed": {
+        "status": "PASS",
+        "mesh_count": 142
+      }
+    },
+    "raw_glb": {
+      "status": "PASS",
+      "raw_triangles": 16344,
+      "mesh_count": 442
+    },
+    "sha256": {
+      "Villa.blend": "b3d6c00c751739a0f5cacda523f4a2fca34768a5e2ef7aaf795a240ba2eccd05",
+      "Villa.glb": "6899ad693ee7371956c99bacde69749522b8c4771c81f03202c76f2c4bfe4753",
+      "villa.scene.json": "b4ed769737c9653705387dd8ca48c85835ed872d94527ed3abe050a2d9f69184",
+      "topology-readback.json": "0be8453f67bf58b30eb8173340b2cd0584c00d0088773017cfcb4b47ef972eb6"
+    }
+  },
+  "native_adversarial": [
+    {
+      "fault": "modifier",
+      "status": "REJECTED",
+      "reason": "unsupported modifier/constraint/visibility/shape keys: joined_wall_002"
+    },
+    {
+      "fault": "shape_key",
+      "status": "REJECTED",
+      "reason": "unsupported modifier/constraint/visibility/shape keys: joined_wall_002"
+    },
+    {
+      "fault": "hidden_render",
+      "status": "REJECTED",
+      "reason": "unsupported modifier/constraint/visibility/shape keys: joined_wall_002"
+    },
+    {
+      "fault": "excluded_collection",
+      "status": "REJECTED",
+      "reason": "unsupported modifier/constraint/visibility/shape keys: joined_wall_002"
+    },
+    {
+      "fault": "extra_cutaway_fragment",
+      "status": "REJECTED",
+      "reason": "extra/orphan/missing cutaway mesh inventory"
+    },
+    {
+      "fault": "missing_cutaway_member",
+      "status": "REJECTED",
+      "reason": "extra/orphan/missing cutaway mesh inventory"
+    },
+    {
+      "fault": "cutaway_modifier",
+      "status": "REJECTED",
+      "reason": "unsupported modifier/constraint/visibility/shape keys: Cutaway Ground joined_wall_000"
+    }
+  ],
+  "independently_rotated_levels": {
+    "adapter_sha256": "f38a13b4b8d86f7a058467e785ca109b5b2e6c83ef65252c1979f8c1fd0e8b75",
+    "blender_version": "Blender 5.2.3 LTS",
+    "files": {
+      "model.blend": "50bdcef0d9542bb7645b6934b0631de829a3cb8ce8445e2c67ec7056c57e87ef",
+      "model.glb": "048997d86cc14b364049df517a6aa4fec33de5fa193d9344c2d2b437a42f4242",
+      "verification.json": "1725c348c3f81e3b83a25e7aed9df56d4d7286f5f25bd7ac731b66915ad1779a"
+    },
+    "format_results": {
+      "blend": "PASS",
+      "dwg": "NOT_TESTED",
+      "glb": "PASS",
+      "ifc": "NOT_TESTED"
+    },
+    "geometry_code_sha256": {
+      "glb_qa.py": "d8c418b1748f553cda0c5bd0d47172328a32ce3860cbb7619d9d1bb12ddecc20",
+      "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+      "wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d"
+    },
+    "mesh_count": 3,
+    "scene_sha256": "76cccc1b0dedd6430d780148267d753d5a86e7eadd36fde68c83e4f33631684a",
+    "source_occupancy_box_count": 5,
+    "source_sha256": "f6b6585749629e9f2c1d61009d8bc8856195b9d28ed1f3dfce4dee00e68317d7",
+    "status": "SUPPORTED_LOCAL_3D_VERIFIED",
+    "supported_element_count": 3,
+    "unverified": [
+      "Mixed oblique joins unsupported; common rotated orthogonal walls only",
+      "Intentional material/level/joint groups are not unioned across boundaries",
+      "Materials, window and door manufacturing details are illustrative",
+      "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
+      "Image-reference similarity was not evaluated",
+      "Native AutoCAD/DWG and IFC BIM interoperability not tested"
+    ],
+    "worker_sha256": "0834d24a6e5f45d7075b114a6c379ce1e9ecaa71f3e6f9c6a65a8e6722bbf454"
+  },
+  "paths": {
+    "sample": "/private/tmp/gridline-villa-topology-evidence-20261024-v1/repaired-v3",
+    "baseline_log": "/private/tmp/gridline-pr33-native-baseline-exact.log",
+    "native_adverse_log": "/private/tmp/gridline-pr33-villa-adverse-final.log",
+    "portable_log": "/private/tmp/gridline-pr33-review-fixes-full.log"
+  },
+  "source_sha256": {
+    "skills/architectural-drawing-generation/scripts/wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d",
+    "tests/villa_topology_acceptance.py": "84842d49cde239859d017b813231dc3f1a0ae6fbbded8a7620607fdf498b1353",
+    "tests/villa_readback_adversarial.py": "599c57bacbab53563e62ef1e6215c1247ac9cc44fb9c06938eff678fa902a068"
+  },
+  "limitations": [
+    "No new construction/BIM, photo-fidelity or mixed-oblique/curved-join acceptance",
+    "Native proof is Blender 5.2.3 LTS on macOS; Windows/Linux native Blender not tested"
+  ]
+}

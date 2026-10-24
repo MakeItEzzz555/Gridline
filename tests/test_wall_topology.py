@@ -161,3 +161,17 @@ class BoundaryCompletenessTests(unittest.TestCase):
         mesh=union_boxes([big],'only-large')
         with self.assertRaisesRegex(ValueError,'missing source'):
             check_surface(mesh['vertices'],mesh['faces'],[big,small],tolerance=1e-5)
+
+
+class PerLevelApertureTests(unittest.TestCase):
+    def test_different_level_basis_does_not_receive_foreign_apertures(self):
+        a=box('L0',[0,0,1.5],[4,.2,3],.37)
+        b=box('L1',[8,8,4.8],[4,.2,3],1.0)
+        a['metadata']['level']='L0';b['metadata']['level']='L1'
+        door=box('door',[8,8,4.45],[1,.035,2.3],1.0)
+        door.update(kind='door',host='L1')
+        walls=[e for e in geometry_entries(dict(boxes=[a,b,door])) if e['kind']=='wall']
+        self.assertEqual([len(e['void_boxes']) for e in walls],[0,1])
+        for e,volume in zip(walls,(2.4,1.94)):
+            report=check_surface(e['vertices'],e['faces'],e['source_boxes'],voids=e['void_boxes'])
+            self.assertAlmostEqual(report['volume_m3'],volume,places=6)

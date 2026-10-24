@@ -17,7 +17,11 @@ from mesh_qa import check_surface
 from glb_qa import check_glb
 
 
-def read_object(obj,entry):
+def read_object(obj,entry,view_layer):
+    if (obj.modifiers or obj.constraints or obj.data.shape_keys is not None
+            or obj.hide_render or obj.hide_viewport or obj.name not in view_layer.objects
+            or not obj.visible_get(view_layer=view_layer) or obj.hide_get(view_layer=view_layer)):
+        raise ValueError(f'unsupported modifier/constraint/visibility/shape keys: {obj.name}')
     if obj.get('gridline_id')!=entry['gridline_id'] or obj.get('gridline_role')!=entry['role']:
         raise ValueError(f'identity/role mismatch: {obj.name}')
     if obj.get('gridline_host')!=entry['host']:raise ValueError(f'host lost: {obj.name}')
@@ -27,7 +31,10 @@ def read_object(obj,entry):
         raise ValueError('source mapping lost')
     points=[list(obj.matrix_world@v.co) for v in obj.data.vertices]
     faces=[list(p.vertices) for p in obj.data.polygons]
-    return check_surface(points,faces,entry.get('source_boxes',[entry]),1e-5,entry.get('void_boxes',()))
+    try:
+        return check_surface(points,faces,entry.get('source_boxes',[entry]),1e-5,entry.get('void_boxes',()))
+    except ValueError as exc:
+        raise ValueError(f'{obj.name}: {exc}') from exc
 
 
 def add_mesh(entry,scene,prefix=''):
@@ -52,6 +59,22 @@ def clipped_entries(source,group,top):
         b['dimensions_m'][2]=min(high,top)-low;b['center_m'][2]=(min(high,top)+low)/2
         boxes.append(b)
     return [e for e in geometry_entries(dict(boxes=boxes)) if 'vertices' in e]
+
+
+
+def cutaway_inventory(source,group,top):
+    expected={'Cutaway '+group+' '+e['name']:e for e in clipped_entries(source,group,top)}
+    groups={'Ground','Site'} if group=='Ground' else {'Upper'}
+    number='02' if group=='Ground' else '03'
+    for raw in geometry_entries(source):
+        if 'vertices' in raw or raw['group'] not in groups:continue
+        entry=copy.deepcopy(raw)
+        low=entry['center_m'][2]-entry['dimensions_m'][2]/2
+        high=min(top,entry['center_m'][2]+entry['dimensions_m'][2]/2)
+        if low>=top:continue
+        entry['center_m'][2]=(low+high)/2;entry['dimensions_m'][2]=high-low
+        expected['Cutaway '+number+' '+entry['name']]=entry
+    return expected
 
 
 def build(original,out):
@@ -97,6 +120,7 @@ def build(original,out):
         for o in list(scene.objects):
             if o.type=='MESH' and o.get('gridline_id') in replacing:bpy.data.objects.remove(o,do_unlink=True)
         for e in clipped_entries(source,group,top):add_mesh(e,scene,'Cutaway '+group+' ')
+        for name,e in cutaway_inventory(source,group,top).items():scene.objects[name]['gridline_role']=e['role']
     bpy.context.window.scene=full
     bpy.ops.object.select_all(action='DESELECT')
     bpy.ops.wm.save_as_mainfile(filepath=str(out/'Villa.blend'),check_existing=False)
@@ -109,7 +133,7 @@ def build(original,out):
 def verify(original,out):
     raw_glb=check_glb(out/'Villa.glb')
     source=json.loads((out/'villa.scene.json').read_text())
-    entries=geometry_entries(source);expected={e['name']:e for e in entries};report={}
+    entries=geometry_entries(source);expected={e['name']:e for e in entries};report={};cutaways={}
     for fmt in ('blend','glb'):
         if fmt=='blend':bpy.ops.wm.open_mainfile(filepath=str(out/'Villa.blend'),load_ui=False)
         else:
@@ -118,21 +142,26 @@ def verify(original,out):
         if fmt=='blend':
             for name,group,top in [('02 Ground floor - ceiling removed','Ground',1.2),('03 First floor - roof removed','Upper',4.5)]:
                 cut=bpy.data.scenes[name]
-                for e in clipped_entries(source,group,top):
-                    o=cut.objects.get('Cutaway '+group+' '+e['name'])
-                    if o is None:raise ValueError('missing repaired cutaway')
-                    read_object(o,e)
+                bpy.context.window.scene=cut
+                cut.view_layers[0].update()
+                wanted=cutaway_inventory(source,group,top)
+                actual={o.name:o for o in cut.objects if o.type=='MESH'}
+                if set(actual)!=set(wanted):raise ValueError('extra/orphan/missing cutaway mesh inventory')
+                for name,obj in actual.items():read_object(obj,wanted[name],cut.view_layers[0])
+                cutaways[cut.name]=dict(status='PASS',mesh_count=len(actual))
             full=bpy.data.scenes['01 Exterior - complete villa']
         else:full=bpy.context.scene
+        bpy.context.window.scene=full
+        full.view_layers[0].update()
         objs={o.name:o for o in full.objects if o.type=='MESH'}
         if set(objs)!=set(expected):raise ValueError('extra/orphan/missing mesh inventory')
-        report[fmt]={n:read_object(o,expected[n]) for n,o in objs.items()}
+        report[fmt]={n:read_object(o,expected[n],full.view_layers[0]) for n,o in objs.items()}
         roof=next(o for o in objs.values() if o.get('gridline_role')=='roof_slab')
         parapet=next(o for o in objs.values() if o.get('gridline_role')=='parapet')
         roof_top=max((roof.matrix_world@v.co).z for v in roof.data.vertices)
         parapet_bottom=min((parapet.matrix_world@v.co).z for v in parapet.data.vertices)
         if parapet_bottom<roof_top-1e-5:raise ValueError('roof/parapet buried-base overlap')
-    (out/'topology-readback.json').write_text(json.dumps(dict(status='PASS',raw_glb=raw_glb,scope='declared box union boundaries and source roles; construction design unverified',readback=report),indent=2)+'\n')
+    (out/'topology-readback.json').write_text(json.dumps(dict(status='PASS',raw_glb=raw_glb,cutaways=cutaways,scope='declared box union boundaries and source roles; construction design unverified',readback=report),indent=2)+'\n')
     hashes={n:hashlib.sha256((out/n).read_bytes()).hexdigest() for n in ('Villa.blend','Villa.glb','villa.scene.json','topology-readback.json')}
     (out/'sha256.json').write_text(json.dumps(hashes,indent=2)+'\n')
     print('VILLA_TOPOLOGY_READBACK_PASS',len(expected),json.dumps(hashes))

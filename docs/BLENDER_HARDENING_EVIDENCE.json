@@ -2,7 +2,7 @@
   "schema": "gridline-work-package-evidence.v1",
   "date": "2026-10-24",
   "reviewed_base_sha": "72f3d3a1ef4e9b1cce5eeafa05b3d32c0fc7e645",
-  "dependency": "Unmerged PR23; no merge authorized",
+  "dependency": "Historical dependency: PR23 was unmerged when this evidence was recorded; PR33 integrates the remaining hardening into main",
   "host": {
     "version": "Blender 5.2.3 LTS",
     "build_hash": "e13b728c6880",

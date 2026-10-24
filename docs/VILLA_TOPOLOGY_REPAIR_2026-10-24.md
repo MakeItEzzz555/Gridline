@@ -2,8 +2,10 @@
 
 CONCEPT / NOT FOR CONSTRUCTION. Proposed 16 × 12 m centreline footprint,
 levels 0/+3.3 m. No surveyed site or measured photo reconstruction is claimed.
-This work is stacked on unmerged PR #25 (`3c9ffcff36d589028e157286e35fce89ac274ccd`),
-which depends on unmerged PR #23. No merge authority follows from this evidence.
+This evidence was originally recorded against PR #25 (`3c9ffcff36d589028e157286e35fce89ac274ccd`)
+while #25/#23 were unmerged. Those feature PRs have since merged; PR #33
+integrates the remaining stacked changes into main. No merge authority follows
+from the historical evidence.
 
 ## Diagnosis and change
 

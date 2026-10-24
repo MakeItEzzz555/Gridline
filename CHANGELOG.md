@@ -2,9 +2,11 @@
 
 ## Unreleased — measured villa topology repair (2026-10-24)
 
+- Scope opening voids to their host level; validate full cutaway inventories after native view-layer evaluation and reject modifiers, shape keys and hidden/excluded geometry. Add real-host corruption regressions.
+
 - Export continuous orthogonal wall union boundaries with declared aperture subtraction, source ID mappings, bounded cell budgets and explicit rejection of mixed oblique joins. Preserve coordinate precision before rotated joins.
 - Independently validate closed face/vertex topology, occupied volume, normals, roles and raw GLB triangles before host import. Add native and portable adversarial regression fixtures.
-- Repair the reproduced villa parapet and balcony guard intersections on a new copy, trim the buried parapet bases to the roof slab top, and publish measured before/after native evidence. The source villa and dependent PRs remain separate and unmerged.
+- Repair the reproduced villa parapet and balcony guard intersections on a new copy, trim the buried parapet bases to the roof slab top, and publish measured before/after native evidence. The source villa is preserved; PR33 integrates the already-merged feature-branch fixes into main.
 
 ## Unreleased — native Blender readback hardening
 
