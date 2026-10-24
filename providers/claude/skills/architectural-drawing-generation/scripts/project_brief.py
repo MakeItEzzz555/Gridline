@@ -196,7 +196,12 @@ def to_building_spec(brief, building):
         raise ValueError('building-spec.v1 requires mm')
     heights = records['floor_to_floor_heights']
     scale = 1000 if heights['unit'] == 'm' else 1
-    if [x['height'] for x in building['levels']] != [v * scale for v in heights['value']]:
+    actual = [x.get('height') for x in building['levels']]
+    expected = [v * scale for v in heights['value']]
+    if (len(actual) != len(expected) or any(
+            type(a) not in (int, float) or not math.isfinite(a)
+            or not math.isclose(a, e, rel_tol=0, abs_tol=1e-6)
+            for a, e in zip(actual, expected))):
         raise ValueError('source level heights conflict with approved floor-to-floor heights')
     # No geometry-fit or roof/site validation here; existing CAD/host validators remain mandatory.
     return copy.deepcopy(building)
@@ -207,7 +212,12 @@ def main(argv=None):
     parser.add_argument('brief', type=Path)
     args = parser.parse_args(argv)
     try:
-        fd = os.open(args.brief, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        if stat.S_ISLNK(os.lstat(args.brief).st_mode):
+            raise ValueError('brief must not be a symlink')
+        # Windows lacks O_NOFOLLOW/O_NONBLOCK; retain explicit lstat rejection.
+        flags = (os.O_RDONLY | getattr(os, 'O_NOFOLLOW', 0)
+                 | getattr(os, 'O_NONBLOCK', 0) | getattr(os, 'O_BINARY', 0))
+        fd = os.open(args.brief, flags)
         with os.fdopen(fd, 'rb') as handle:
             if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
                 raise ValueError('brief must be a regular file')

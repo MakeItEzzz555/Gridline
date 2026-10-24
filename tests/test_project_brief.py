@@ -1,5 +1,6 @@
 import copy
 import json
+import tempfile
 from pathlib import Path
 import sys
 import unittest
@@ -116,6 +117,37 @@ class ProjectBriefTests(unittest.TestCase):
             else:
                 brief['ledger']['records'].append(r)
             self.assertEqual(intake.evaluate(brief)['state'], 'NEEDS_INPUT')
+
+    def test_translation_missing_height_blocks_without_keyerror(self):
+        brief = ready()
+        building = json.loads((ROOT / 'skills/architectural-drawing-generation/references/example-house.building.json').read_text())
+        height = building['levels'][0]['height']
+        brief['ledger']['records'][2] = record('floor_to_floor_heights', [height], 'mm')
+        building['levels'][0].pop('height')
+        with self.assertRaisesRegex(ValueError, 'source level heights conflict'):
+            intake.to_building_spec(brief, building)
+
+    def test_translation_float_rounding_accepts_converted_heights(self):
+        brief = ready()
+        building = json.loads((ROOT / 'skills/architectural-drawing-generation/references/example-house.building.json').read_text())
+        # Binary floating point conversions from metres need mm-level tolerance.
+        height_mm = 123.456
+        brief['ledger']['records'][2] = record('floor_to_floor_heights', [height_mm / 1000], 'm')
+        building['levels'][0]['height'] = height_mm
+        self.assertEqual(intake.to_building_spec(brief, building), building)
+        building['levels'][0]['height'] = height_mm + 0.002
+        with self.assertRaisesRegex(ValueError, 'conflict'):
+            intake.to_building_spec(brief, building)
+
+    def test_cli_rejects_symlink_and_reads_regular_file(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            regular = root / 'brief.json'
+            regular.write_text(json.dumps(ready()))
+            self.assertEqual(intake.main([str(regular)]), 0)
+            symlink = root / 'shortcut.json'
+            symlink.symlink_to(regular)
+            self.assertEqual(intake.main([str(symlink)]), 2)
 
     def test_ready_intake_is_not_bim_delivery_or_native_write_permission(self):
         brief = ready()
