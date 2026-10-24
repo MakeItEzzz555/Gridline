@@ -172,7 +172,8 @@ class BlenderHardeningTests(unittest.TestCase):
         obj.data = types.SimpleNamespace(
             vertices=[types.SimpleNamespace(co=(x,y,z)) for x in (-2,2) for y in (-.1,.1) for z in (-1.5,1.5)],
             materials=[types.SimpleNamespace(name='Gridline Wall')],
-            polygons=[types.SimpleNamespace(material_index=0)])
+            polygons=[types.SimpleNamespace(material_index=0,vertices=f) for f in
+                      [[0,1,3,2],[4,6,7,5],[0,4,5,1],[2,3,7,6],[0,2,6,4],[1,5,7,3]]])
         return obj, entry
 
     def test_world_rotation_parent_drift_and_nonfinite_vertices_fail(self):
@@ -191,6 +192,11 @@ class BlenderHardeningTests(unittest.TestCase):
 
     def test_identity_host_kind_and_missing_material_fail(self):
         worker = self.worker()
+        for attribute,value in [('modifiers',[object()]),('constraints',[object()]),('hide_render',True),('hide_viewport',True)]:
+            obj,entry=self.object();setattr(obj,attribute,value)
+            with self.assertRaisesRegex(ValueError,'unsupported'):worker.verify_object(obj,entry,.001)
+        obj,entry=self.object();entry['role']='wall';obj['gridline_role']='furniture'
+        with self.assertRaisesRegex(ValueError,'role mapping'):worker.verify_object(obj,entry,.001)
         for key in ('gridline_id', 'gridline_host', 'gridline_kind', 'gridline_source_units', 'gridline_schema'):
             obj, entry = self.object()
             del obj[key]

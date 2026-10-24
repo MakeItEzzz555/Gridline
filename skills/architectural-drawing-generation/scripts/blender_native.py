@@ -21,6 +21,7 @@ HERE = Path(__file__).resolve().parent
 SHAPE_DIR = HERE
 sys.path.insert(0, str(SHAPE_DIR))
 from building_spec import shape_errors  # noqa: E402
+from wall_topology import geometry_entries  # noqa: E402
 
 DEFAULT_BLENDER = Path("/Applications/Blender.app/Contents/MacOS/Blender")
 MAX_SPEC_BYTES = 1024 * 1024
@@ -107,8 +108,8 @@ def compile_scene(spec):
             return
         boxes.append({"name": f"{kind}_{gid}_{len(boxes):04d}",
                       "kind": kind, "gridline_id": gid, "host": host or "",
-                      "center_m": [round(v / 1000, 7) for v in center],
-                      "dimensions_m": [round(v / 1000, 7) for v in dims],
+                      "center_m": [v / 1000 for v in center],
+                      "dimensions_m": [v / 1000 for v in dims],
                       "rotation_z": angle, "metadata": metadata or {}})
     for ident, (w, length, thick) in walls.items():
         theta = math.atan2(w["end"][1] - w["start"][1], w["end"][0] - w["start"][0])
@@ -118,7 +119,7 @@ def compile_scene(spec):
         for prev, nex in zip(ops, ops[1:]):
             if nex[0] < prev[1] - 1e-6:
                 raise ValueError(f"wall {ident}: overlapping hosted openings")
-        # Deliberate fragment solids around each opening: no unreliably applied boolean.
+        # Source occupancy cells; worker exports only their union boundary.
         stops = sorted(set([0.0, length] + [p for a,b,*_ in ops for p in (a,b)]))
         for a,b in zip(stops, stops[1:]):
             if b - a <= 1e-6:
@@ -147,7 +148,8 @@ def compile_scene(spec):
             elements.append({"id":op["id"],"kind":op["kind"],"host":ident,
                              "width_mm":right-left,"height_mm":head-sill,"sill_mm":sill})
     # No guessed foundations, ceilings, roofs, furniture or site. They require separate inputs.
-    unverified=["Wall intersections, joins, and topological manifoldness",
+    unverified=["Mixed oblique joins unsupported; common rotated orthogonal walls only",
+                "Intentional material/level/joint groups are not unioned across boundaries",
                 "Materials, window and door manufacturing details are illustrative",
                 "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
                 "Image-reference similarity was not evaluated",
@@ -276,10 +278,13 @@ def main():
             receipts={"status":"SUPPORTED_LOCAL_3D_VERIFIED","blender_version":version,
                       "source_sha256":source_hash,
                       "supported_element_count":len(scene["elements"]),
-                      "mesh_count":len(scene["boxes"]),
+                      "mesh_count":len(geometry_entries(scene)),
+                      "source_occupancy_box_count":len(scene["boxes"]),
                       "files":{k:hashlib.sha256(v.read_bytes()).hexdigest() for k,v in files.items()},
                       "adapter_sha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                       "worker_sha256":hashlib.sha256(worker.read_bytes()).hexdigest(),
+                      "geometry_code_sha256":{n:hashlib.sha256((HERE/n).read_bytes()).hexdigest()
+                          for n in ("wall_topology.py","mesh_qa.py","glb_qa.py")},
                       "scene_sha256":hashlib.sha256(scene_path.read_bytes()).hexdigest(),
                       "format_results":{"blend":"PASS", "glb":"PASS", "dwg":"NOT_TESTED", "ifc":"NOT_TESTED"},
                       "unverified":scene["unverified"]}

@@ -1,0 +1,474 @@
+{
+  "base_sha": "3c9ffcff36d589028e157286e35fce89ac274ccd",
+  "baseline_native_intersections": {
+    "parapet": {
+      "pairs": 4,
+      "pairwise_intersection_m3": 0.07999992787794133
+    },
+    "railing": {
+      "pairs": 44,
+      "pairwise_intersection_m3": 0.003151234901526136
+    },
+    "wall": {
+      "pairs": 49,
+      "pairwise_intersection_m3": 2.2190586273393524
+    }
+  },
+  "blender": "Blender 5.2.3 LTS e13b728c6880",
+  "code_sha256": {
+    "blender_native.py": "1122fed7e741a1ed240121bab5d3af873899322186fcd0421ca49c81c697abe9",
+    "blender_native_worker.py": "0834d24a6e5f45d7075b114a6c379ce1e9ecaa71f3e6f9c6a65a8e6722bbf454",
+    "glb_qa.py": "d8c418b1748f553cda0c5bd0d47172328a32ce3860cbb7619d9d1bb12ddecc20",
+    "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+    "wall_topology.py": "7e67743332eb8a09b5c1e8f8f9c796ad8acde02d54b8fbca489708f26f7c4aca"
+  },
+  "installed_python_isolated_proof": {
+    "adapter_sha256": "1122fed7e741a1ed240121bab5d3af873899322186fcd0421ca49c81c697abe9",
+    "blender_version": "Blender 5.2.3 LTS",
+    "files": {
+      "model.blend": "f804ef819dd7868e4a97e55b1fe2de716d2c39874e72f79c0cda8117aec064cc",
+      "model.glb": "ad7cb8330f2e09ca04a02d86802fe720bdaade8c23da98f98c800599e34cb455",
+      "verification.json": "a0b0e36d3e8ac9511e05761f874f622142c011bc8603eda89fcd827c37a2d0f3"
+    },
+    "format_results": {
+      "blend": "PASS",
+      "dwg": "NOT_TESTED",
+      "glb": "PASS",
+      "ifc": "NOT_TESTED"
+    },
+    "geometry_code_sha256": {
+      "glb_qa.py": "d8c418b1748f553cda0c5bd0d47172328a32ce3860cbb7619d9d1bb12ddecc20",
+      "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+      "wall_topology.py": "7e67743332eb8a09b5c1e8f8f9c796ad8acde02d54b8fbca489708f26f7c4aca"
+    },
+    "mesh_count": 11,
+    "scene_sha256": "ab53d451b2d2caa1bc8fc79ce0d0be29886520e18434118d1afe0f2590570c60",
+    "source_occupancy_box_count": 42,
+    "source_sha256": "43c09c555dd2fb84016e503846e4c9792522d6c543401f9c723cf4799839828f",
+    "status": "SUPPORTED_LOCAL_3D_VERIFIED",
+    "supported_element_count": 17,
+    "unverified": [
+      "Mixed oblique joins unsupported; common rotated orthogonal walls only",
+      "Intentional material/level/joint groups are not unioned across boundaries",
+      "Materials, window and door manufacturing details are illustrative",
+      "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
+      "Image-reference similarity was not evaluated",
+      "Native AutoCAD/DWG and IFC BIM interoperability not tested"
+    ],
+    "worker_sha256": "0834d24a6e5f45d7075b114a6c379ce1e9ecaa71f3e6f9c6a65a8e6722bbf454"
+  },
+  "joined_readback": {
+    "blend": {
+      "joined_parapet_000": {
+        "expected_union_m3": 5.184000000000003,
+        "faces": 32,
+        "status": "PASS",
+        "vertices": 32,
+        "volume_m3": 5.1839901640742685
+      },
+      "joined_railing_001": {
+        "expected_union_m3": 0.5266250000000029,
+        "faces": 42,
+        "status": "PASS",
+        "vertices": 44,
+        "volume_m3": 0.5266246721446263
+      },
+      "joined_wall_002": {
+        "expected_union_m3": 59.84868749999995,
+        "faces": 3018,
+        "status": "PASS",
+        "vertices": 2978,
+        "volume_m3": 59.848593318577855
+      },
+      "joined_wall_003": {
+        "expected_union_m3": 67.182,
+        "faces": 3392,
+        "status": "PASS",
+        "vertices": 3340,
+        "volume_m3": 67.18189767739204
+      }
+    },
+    "glb": {
+      "joined_parapet_000": {
+        "expected_union_m3": 5.184000000000003,
+        "faces": 64,
+        "status": "PASS",
+        "vertices": 80,
+        "volume_m3": 5.1839901640742685
+      },
+      "joined_railing_001": {
+        "expected_union_m3": 0.5266250000000029,
+        "faces": 84,
+        "status": "PASS",
+        "vertices": 104,
+        "volume_m3": 0.5266246721446263
+      },
+      "joined_wall_002": {
+        "expected_union_m3": 59.84868749999995,
+        "faces": 6036,
+        "status": "PASS",
+        "vertices": 4834,
+        "volume_m3": 59.848593318577855
+      },
+      "joined_wall_003": {
+        "expected_union_m3": 67.182,
+        "faces": 6784,
+        "status": "PASS",
+        "vertices": 5432,
+        "volume_m3": 67.18189767739204
+      }
+    }
+  },
+  "limitations": [
+    "Concept only; no survey or photo reconstruction",
+    "Mixed oblique joins unsupported",
+    "Boundary probes and volume tolerance are bounded checks, not certification of arbitrary meshes",
+    "Intentional material/level contacts and unrelated stair/pool intersections not redesigned",
+    "Material appearance and native DWG/IFC acceptance unverified"
+  ],
+  "native_adversarial": [
+    {
+      "fault": "rotation",
+      "reason": "internal, extra or inverted boundary face",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "parent_transform",
+      "reason": "internal, extra or inverted boundary face",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "glb_identity",
+      "reason": "identity/host metadata lost: joined_wall_000 gridline_id",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "material",
+      "reason": "material assignment lost: joined_wall_000",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "duplicate_face",
+      "reason": "duplicate/degenerate faces",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "missing_face",
+      "reason": "open/nonmanifold or inconsistent boundary edges",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "normal",
+      "reason": "internal, extra or inverted boundary face",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "lintel",
+      "reason": "internal, extra or inverted boundary face",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "phantom",
+      "reason": "blend mesh identity/count mismatch",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "glb_duplicate_face",
+      "reason": "raw GLB duplicate triangle",
+      "status": "REJECTED"
+    },
+    {
+      "fault": "glb_lintel",
+      "reason": "internal, extra or inverted boundary face",
+      "status": "REJECTED"
+    }
+  ],
+  "native_glb_results": {
+    "mesh_count": 442,
+    "opening_hosts": 43,
+    "raw_glb": {
+      "mesh_count": 442,
+      "raw_triangles": 18224,
+      "status": "PASS"
+    },
+    "status": "PASS",
+    "wall_ids": 27
+  },
+  "original_group_rejections": {
+    "joined_parapet_000": {
+      "reason": "internal, extra or inverted boundary face",
+      "source_ids": [
+        "Parapet east",
+        "Parapet north",
+        "Parapet south",
+        "Parapet west"
+      ],
+      "status": "REJECTED"
+    },
+    "joined_railing_001": {
+      "reason": "internal, extra or inverted boundary face",
+      "source_ids": [
+        "Balcony front guard",
+        "Balcony side 10.5",
+        "Balcony side 5.5"
+      ],
+      "status": "REJECTED"
+    },
+    "joined_wall_002": {
+      "reason": "internal, extra or inverted boundary face",
+      "source_ids": [
+        "G-ensuite1",
+        "G-ensuite2",
+        "G-service1",
+        "G-service2",
+        "G-service3",
+        "L00-E",
+        "L00-N",
+        "L00-S",
+        "L00-W",
+        "L00-hallE",
+        "L00-hallW"
+      ],
+      "status": "REJECTED"
+    },
+    "joined_wall_003": {
+      "reason": "internal, extra or inverted boundary face",
+      "source_ids": [
+        "L01-E",
+        "L01-N",
+        "L01-S",
+        "L01-W",
+        "L01-hallE",
+        "L01-hallW",
+        "U-bath-h0",
+        "U-bath-h1",
+        "U-bath-h2",
+        "U-bath-h3",
+        "U-bath-v0",
+        "U-bath-v1",
+        "U-bath-v2",
+        "U-bath-v3",
+        "U-eastdivide",
+        "U-westdivide"
+      ],
+      "status": "REJECTED"
+    }
+  },
+  "original_sha256": {
+    "README.md": "9fa1afd503f0e2d759ebe4f46eddbb5bf22f45c33087c2dfcf9ea38fef7adfdd",
+    "Villa.blend": "96715017d899a505a7c6266b5cd620e0b329760ab4365576fd4ce48d31065f93",
+    "Villa.glb": "a93ae79951ee362785f3d2352ca86ff0e777d3ac4018dbdb746ef6e222f96e1f",
+    "build_blender.py": "c82b3089038ad345dfd16b20404d23537e30a24dd070dc0a6a3806832265ed09",
+    "mesh-manifest.json": "ae6063f5b972ef6d8494c9676be975ab89689dd3cb511509dcb05ad3c0fe88b0",
+    "native-readback.json": "9325cb27ee4c118d015e2834dc4b957750d87271b001f7839b73b8a75dfed934",
+    "prepare.py": "96534e11e04b328558b4a9cf4c8c382bbfe8424e70f1f0e2d474105f110c35eb",
+    "villa.building.json": "bef06a6190a13a2821d89dda47bc6b40b322f4114fb41455f2f0eb91bdefe460",
+    "villa.scene.json": "d22d35e9adcbdcf3a024e28e48c75e0b31eeb9bfd8e206f69c0d3d6209aaac95"
+  },
+  "repaired_sha256": {
+    "Villa.blend": "3bf649c0be21fea3b52828625317f5122cc89bd1d5843676b4c7451233f8e16f",
+    "Villa.glb": "de297ef36e44b748e677a3875d40cbda12895b7877156f0fcb170498357db48b",
+    "topology-readback.json": "73c00c0d84f2688d6be805d6d4b99adf16df63ee3db86ab4c60767150153fc0a",
+    "villa.scene.json": "b4ed769737c9653705387dd8ca48c85835ed872d94527ed3abe050a2d9f69184"
+  },
+  "resource_usage": {
+    "attributable_savings": "NOT_CLAIMED",
+    "coding_agents": 1,
+    "new_downloads": 0,
+    "provider_token_receipts": "UNAVAILABLE"
+  },
+  "review": {
+    "findings_fixed": [
+      "rotated coordinate slivers",
+      "raw GLB sanitization gap",
+      "missing small closed member",
+      "loose vertices and vertex fan checks",
+      "unsupported modifiers/visibility",
+      "receipt geometry-module provenance"
+    ],
+    "reviewed_commit_sha": "Record immutable SHA in implementing PR and final-head checks",
+    "type": "single-agent connected-caller Ponytail/architecture/security review",
+    "unresolved_within_covered_fixtures": []
+  },
+  "roles": {
+    "balcony_guard": 1,
+    "balcony_slab": 1,
+    "ceiling": 5,
+    "coping": 4,
+    "fixture": 35,
+    "floor_slab": 5,
+    "furniture": 49,
+    "guard_rail": 83,
+    "opening_door": 19,
+    "opening_frame": 172,
+    "opening_glass": 24,
+    "parapet": 1,
+    "pool": 5,
+    "pool_step": 4,
+    "roof_slab": 1,
+    "site": 8,
+    "stair": 20,
+    "terrace": 2,
+    "wall": 2,
+    "water": 1
+  },
+  "rotated_two_storey_native_proof": {
+    "adapter_sha256": "1122fed7e741a1ed240121bab5d3af873899322186fcd0421ca49c81c697abe9",
+    "blender_version": "Blender 5.2.3 LTS",
+    "files": {
+      "model.blend": "f468cfea637c73068baf45b5c76e3f45080fb78edc84e44742b904ca3f64a11d",
+      "model.glb": "ba5110dbe7021c91017797ea10315b6ee57d07c15760610fda156a8d3680c1fc",
+      "verification.json": "069ce577ed83bd0b2f64956e5aa58a935e22ba034c925c398e6f234d3d0c2e24"
+    },
+    "format_results": {
+      "blend": "PASS",
+      "dwg": "NOT_TESTED",
+      "glb": "PASS",
+      "ifc": "NOT_TESTED"
+    },
+    "geometry_code_sha256": {
+      "glb_qa.py": "d8c418b1748f553cda0c5bd0d47172328a32ce3860cbb7619d9d1bb12ddecc20",
+      "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+      "wall_topology.py": "7e67743332eb8a09b5c1e8f8f9c796ad8acde02d54b8fbca489708f26f7c4aca"
+    },
+    "mesh_count": 45,
+    "scene_sha256": "54330f89214738a26d19fdeff0b20295c21469073f93dee947175082d858aa2b",
+    "source_occupancy_box_count": 180,
+    "source_sha256": "3caa89ee65f716d236a4a0b3490605b8dd3e5eb165197a9e37dff954c5e23f97",
+    "status": "SUPPORTED_LOCAL_3D_VERIFIED",
+    "supported_element_count": 70,
+    "unverified": [
+      "Mixed oblique joins unsupported; common rotated orthogonal walls only",
+      "Intentional material/level/joint groups are not unioned across boundaries",
+      "Materials, window and door manufacturing details are illustrative",
+      "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
+      "Image-reference similarity was not evaluated",
+      "Native AutoCAD/DWG and IFC BIM interoperability not tested"
+    ],
+    "worker_sha256": "0834d24a6e5f45d7075b114a6c379ce1e9ecaa71f3e6f9c6a65a8e6722bbf454"
+  },
+  "source_decisions": [
+    {
+      "before": {
+        "center_m": [
+          8,
+          -0.2,
+          7
+        ],
+        "dimensions_m": [
+          16.6,
+          0.2,
+          0.5
+        ],
+        "gridline_id": "Parapet south",
+        "group": "Roof",
+        "host": "",
+        "kind": "parapet",
+        "material": "Ivory plaster",
+        "metadata": {},
+        "name": "Parapet south",
+        "rotation_z": 0
+      },
+      "id": "Parapet south",
+      "reason": "trim buried base to roof top; preserve parapet top"
+    },
+    {
+      "before": {
+        "center_m": [
+          8,
+          12.2,
+          7
+        ],
+        "dimensions_m": [
+          16.6,
+          0.2,
+          0.5
+        ],
+        "gridline_id": "Parapet north",
+        "group": "Roof",
+        "host": "",
+        "kind": "parapet",
+        "material": "Ivory plaster",
+        "metadata": {},
+        "name": "Parapet north",
+        "rotation_z": 0
+      },
+      "id": "Parapet north",
+      "reason": "trim buried base to roof top; preserve parapet top"
+    },
+    {
+      "before": {
+        "center_m": [
+          -0.2,
+          6,
+          7
+        ],
+        "dimensions_m": [
+          0.2,
+          12.6,
+          0.5
+        ],
+        "gridline_id": "Parapet west",
+        "group": "Roof",
+        "host": "",
+        "kind": "parapet",
+        "material": "Ivory plaster",
+        "metadata": {},
+        "name": "Parapet west",
+        "rotation_z": 0
+      },
+      "id": "Parapet west",
+      "reason": "trim buried base to roof top; preserve parapet top"
+    },
+    {
+      "before": {
+        "center_m": [
+          16.2,
+          6,
+          7
+        ],
+        "dimensions_m": [
+          0.2,
+          12.6,
+          0.5
+        ],
+        "gridline_id": "Parapet east",
+        "group": "Roof",
+        "host": "",
+        "kind": "parapet",
+        "material": "Ivory plaster",
+        "metadata": {},
+        "name": "Parapet east",
+        "rotation_z": 0
+      },
+      "id": "Parapet east",
+      "reason": "trim buried base to roof top; preserve parapet top"
+    }
+  ],
+  "status": "VERIFIED_BOUNDED_CONCEPT_REPAIR",
+  "validation": {
+    "check_repo": "PASS",
+    "concept_draw": "PASS",
+    "independent_agent_review": "NOT_RUN_SINGLE_AGENT_POLICY",
+    "installer_shell_syntax": "PASS",
+    "linux_windows_ci": "CHECK_IMPLEMENTING_PR_FINAL_HEAD",
+    "pinned_suite": {
+      "command": "GRIDLINE_REQUIRE_CAD_TESTS=1 uv run --offline --with ezdxf==1.4.5 --with matplotlib==3.11.2 --with pypdf==6.21.2 python3 -m unittest discover -s tests -v",
+      "log": "delivery-full-suite.log in local evidence root; CI repeats on final head",
+      "skips": 0,
+      "status": "PASS",
+      "tests": 99,
+      "wall_seconds": 64.036
+    },
+    "provider_mirror": "PASS"
+  },
+  "visual_sha256": {
+    "after-corner.png": "0853bf0c20c864c920264c0a0bd3357c5f3038f3be886ae4c186e16f50478c96",
+    "after-exterior.png": "8367a337f23d24f5a180dd919d481a6c8ed821cef855c17b061458c7192205a7",
+    "after-overlays-off.jpg": "78815eec7393adac41de3c5fed90e03bfc593c99ffed585924320e9e1cc6a37e",
+    "after-overlays-on.jpg": "a1d53fda8271b8c2ecd8cabcf25f65c2866aa71b207e542f38d4990a6f5d5f16",
+    "before-corner.png": "629a85d9865048e87beb8659eba4f867fb015aea9c1aa8c49c7b7167e91f0b68",
+    "before-overlays-off.jpg": "8eb759a79e6629f3d36a0e445051939830496f484c654224f770df659ecedefb",
+    "before-overlays-on.jpg": "d026eb6a918312f2507fdd73020e0480b71698597d19dd9e8bfc892032da03c2"
+  }
+}

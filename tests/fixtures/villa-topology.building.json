@@ -1,0 +1,1290 @@
+{
+  "schema_version": "building-spec.v1",
+  "units": "mm",
+  "standard": "iso13567",
+  "project": {
+    "name": "Courtyard Villa - proposed demo",
+    "number": "VILLA-DEMO",
+    "client": "Demonstration",
+    "address": "UNKNOWN - illustrative site",
+    "architect": "Concept demonstration",
+    "drawn_by": "Gridline",
+    "checked_by": "",
+    "status": "CONCEPT",
+    "revision": "P01",
+    "date": "2026-10-24",
+    "north_deg": 0
+  },
+  "levels": [
+    {
+      "id": "L00",
+      "name": "Ground floor",
+      "elevation": 0,
+      "height": 3300
+    },
+    {
+      "id": "L01",
+      "name": "First floor",
+      "elevation": 3300,
+      "height": 3300
+    }
+  ],
+  "walls": [
+    {
+      "id": "L00-S",
+      "level": "L00",
+      "type": "external",
+      "start": [
+        0,
+        0
+      ],
+      "end": [
+        16000,
+        0
+      ],
+      "thickness": 300
+    },
+    {
+      "id": "L00-E",
+      "level": "L00",
+      "type": "external",
+      "start": [
+        16000,
+        0
+      ],
+      "end": [
+        16000,
+        12000
+      ],
+      "thickness": 300
+    },
+    {
+      "id": "L00-N",
+      "level": "L00",
+      "type": "external",
+      "start": [
+        16000,
+        12000
+      ],
+      "end": [
+        0,
+        12000
+      ],
+      "thickness": 300
+    },
+    {
+      "id": "L00-W",
+      "level": "L00",
+      "type": "external",
+      "start": [
+        0,
+        12000
+      ],
+      "end": [
+        0,
+        0
+      ],
+      "thickness": 300
+    },
+    {
+      "id": "L00-hallW",
+      "level": "L00",
+      "type": "external",
+      "start": [
+        7000,
+        0
+      ],
+      "end": [
+        7000,
+        12000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "L00-hallE",
+      "level": "L00",
+      "type": "external",
+      "start": [
+        10200,
+        0
+      ],
+      "end": [
+        10200,
+        12000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "L01-S",
+      "level": "L01",
+      "type": "external",
+      "start": [
+        0,
+        0
+      ],
+      "end": [
+        16000,
+        0
+      ],
+      "thickness": 300
+    },
+    {
+      "id": "L01-E",
+      "level": "L01",
+      "type": "external",
+      "start": [
+        16000,
+        0
+      ],
+      "end": [
+        16000,
+        12000
+      ],
+      "thickness": 300
+    },
+    {
+      "id": "L01-N",
+      "level": "L01",
+      "type": "external",
+      "start": [
+        16000,
+        12000
+      ],
+      "end": [
+        0,
+        12000
+      ],
+      "thickness": 300
+    },
+    {
+      "id": "L01-W",
+      "level": "L01",
+      "type": "external",
+      "start": [
+        0,
+        12000
+      ],
+      "end": [
+        0,
+        0
+      ],
+      "thickness": 300
+    },
+    {
+      "id": "L01-hallW",
+      "level": "L01",
+      "type": "external",
+      "start": [
+        7000,
+        0
+      ],
+      "end": [
+        7000,
+        12000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "L01-hallE",
+      "level": "L01",
+      "type": "external",
+      "start": [
+        10200,
+        0
+      ],
+      "end": [
+        10200,
+        12000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "G-service1",
+      "level": "L00",
+      "type": "internal",
+      "start": [
+        10200,
+        5000
+      ],
+      "end": [
+        16000,
+        5000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "G-service2",
+      "level": "L00",
+      "type": "internal",
+      "start": [
+        10200,
+        8000
+      ],
+      "end": [
+        16000,
+        8000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "G-service3",
+      "level": "L00",
+      "type": "internal",
+      "start": [
+        13000,
+        5000
+      ],
+      "end": [
+        13000,
+        8000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "G-ensuite1",
+      "level": "L00",
+      "type": "internal",
+      "start": [
+        13500,
+        0
+      ],
+      "end": [
+        13500,
+        2700
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "G-ensuite2",
+      "level": "L00",
+      "type": "internal",
+      "start": [
+        13500,
+        2700
+      ],
+      "end": [
+        16000,
+        2700
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-westdivide",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        0,
+        6000
+      ],
+      "end": [
+        7000,
+        6000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-eastdivide",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        10200,
+        6000
+      ],
+      "end": [
+        16000,
+        6000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-bath-v0",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        3000,
+        0
+      ],
+      "end": [
+        3000,
+        2800
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-bath-h0",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        0,
+        2800
+      ],
+      "end": [
+        3000,
+        2800
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-bath-v1",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        13000,
+        0
+      ],
+      "end": [
+        13000,
+        2800
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-bath-h1",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        13000,
+        2800
+      ],
+      "end": [
+        16000,
+        2800
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-bath-v2",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        3000,
+        9200
+      ],
+      "end": [
+        3000,
+        12000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-bath-h2",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        0,
+        9200
+      ],
+      "end": [
+        3000,
+        9200
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-bath-v3",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        13000,
+        9200
+      ],
+      "end": [
+        13000,
+        12000
+      ],
+      "thickness": 150
+    },
+    {
+      "id": "U-bath-h3",
+      "level": "L01",
+      "type": "internal",
+      "start": [
+        13000,
+        9200
+      ],
+      "end": [
+        16000,
+        9200
+      ],
+      "thickness": 150
+    }
+  ],
+  "openings": [
+    {
+      "id": "L00-entry",
+      "wall": "L00-S",
+      "offset": 8250,
+      "width": 1200,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L00-garden",
+      "wall": "L00-N",
+      "offset": 6750,
+      "width": 1600,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L00-S0",
+      "wall": "L00-S",
+      "offset": 900,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-S1",
+      "wall": "L00-S",
+      "offset": 4000,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-S2",
+      "wall": "L00-S",
+      "offset": 11000,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-N0",
+      "wall": "L00-N",
+      "offset": 900,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-N1",
+      "wall": "L00-N",
+      "offset": 10500,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-N2",
+      "wall": "L00-N",
+      "offset": 13600,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-E0",
+      "wall": "L00-E",
+      "offset": 1000,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-E1",
+      "wall": "L00-E",
+      "offset": 4500,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-E2",
+      "wall": "L00-E",
+      "offset": 8500,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-W0",
+      "wall": "L00-W",
+      "offset": 1000,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-W1",
+      "wall": "L00-W",
+      "offset": 4500,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-W2",
+      "wall": "L00-W",
+      "offset": 8500,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L00-hallW0",
+      "wall": "L00-hallW",
+      "offset": 3900,
+      "width": 1000,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L00-hallW1",
+      "wall": "L00-hallW",
+      "offset": 8200,
+      "width": 1000,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L00-hallE0",
+      "wall": "L00-hallE",
+      "offset": 3900,
+      "width": 1000,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L00-hallE1",
+      "wall": "L00-hallE",
+      "offset": 8200,
+      "width": 1000,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L01-entry",
+      "wall": "L01-S",
+      "offset": 8250,
+      "width": 1200,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L01-garden",
+      "wall": "L01-N",
+      "offset": 6750,
+      "width": 1600,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L01-S0",
+      "wall": "L01-S",
+      "offset": 900,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-S1",
+      "wall": "L01-S",
+      "offset": 4000,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-S2",
+      "wall": "L01-S",
+      "offset": 11000,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-N0",
+      "wall": "L01-N",
+      "offset": 900,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-N1",
+      "wall": "L01-N",
+      "offset": 10500,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-N2",
+      "wall": "L01-N",
+      "offset": 13600,
+      "width": 1800,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-E0",
+      "wall": "L01-E",
+      "offset": 1000,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-E1",
+      "wall": "L01-E",
+      "offset": 4500,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-E2",
+      "wall": "L01-E",
+      "offset": 8500,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-W0",
+      "wall": "L01-W",
+      "offset": 1000,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-W1",
+      "wall": "L01-W",
+      "offset": 4500,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-W2",
+      "wall": "L01-W",
+      "offset": 8500,
+      "width": 1900,
+      "kind": "window",
+      "height": 1800,
+      "type": "Proposed window",
+      "sill": 800
+    },
+    {
+      "id": "L01-hallW0",
+      "wall": "L01-hallW",
+      "offset": 3900,
+      "width": 1000,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L01-hallW1",
+      "wall": "L01-hallW",
+      "offset": 8200,
+      "width": 1000,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L01-hallE0",
+      "wall": "L01-hallE",
+      "offset": 3900,
+      "width": 1000,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "L01-hallE1",
+      "wall": "L01-hallE",
+      "offset": 8200,
+      "width": 1000,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "G-bath-access",
+      "wall": "L00-hallE",
+      "offset": 5750,
+      "width": 900,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "G-laundry-access",
+      "wall": "G-service2",
+      "offset": 3600,
+      "width": 900,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "G-ensuite-door",
+      "wall": "G-ensuite2",
+      "offset": 400,
+      "width": 850,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "U-bath-door0",
+      "wall": "U-bath-h0",
+      "offset": 1600,
+      "width": 850,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "U-bath-door1",
+      "wall": "U-bath-h1",
+      "offset": 450,
+      "width": 850,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "U-bath-door2",
+      "wall": "U-bath-h2",
+      "offset": 1600,
+      "width": 850,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    },
+    {
+      "id": "U-bath-door3",
+      "wall": "U-bath-h3",
+      "offset": 450,
+      "width": 850,
+      "kind": "door",
+      "height": 2300,
+      "type": "Proposed door",
+      "hinge": "start",
+      "opens": "left"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "G-living",
+      "level": "L00",
+      "name": "Living / dining / kitchen",
+      "boundary": [
+        [
+          150,
+          150
+        ],
+        [
+          6925,
+          150
+        ],
+        [
+          6925,
+          11850
+        ],
+        [
+          150,
+          11850
+        ]
+      ]
+    },
+    {
+      "id": "G-hall",
+      "level": "L00",
+      "name": "Entry / hall / stair",
+      "boundary": [
+        [
+          7075,
+          150
+        ],
+        [
+          10125,
+          150
+        ],
+        [
+          10125,
+          11850
+        ],
+        [
+          7075,
+          11850
+        ]
+      ]
+    },
+    {
+      "id": "G-guest",
+      "level": "L00",
+      "name": "Bedroom 1 - guest suite",
+      "boundary": [
+        [
+          10275,
+          150
+        ],
+        [
+          13425,
+          150
+        ],
+        [
+          13425,
+          2775
+        ],
+        [
+          15850,
+          2775
+        ],
+        [
+          15850,
+          4925
+        ],
+        [
+          10275,
+          4925
+        ]
+      ]
+    },
+    {
+      "id": "G-ensuite",
+      "level": "L00",
+      "name": "Guest ensuite",
+      "boundary": [
+        [
+          13575,
+          150
+        ],
+        [
+          15850,
+          150
+        ],
+        [
+          15850,
+          2625
+        ],
+        [
+          13575,
+          2625
+        ]
+      ]
+    },
+    {
+      "id": "G-bath",
+      "level": "L00",
+      "name": "Shower / WC",
+      "boundary": [
+        [
+          10275,
+          5075
+        ],
+        [
+          12925,
+          5075
+        ],
+        [
+          12925,
+          7925
+        ],
+        [
+          10275,
+          7925
+        ]
+      ]
+    },
+    {
+      "id": "G-laundry",
+      "level": "L00",
+      "name": "Laundry / plant",
+      "boundary": [
+        [
+          13075,
+          5075
+        ],
+        [
+          15850,
+          5075
+        ],
+        [
+          15850,
+          7925
+        ],
+        [
+          13075,
+          7925
+        ]
+      ]
+    },
+    {
+      "id": "G-office",
+      "level": "L00",
+      "name": "Study / utility access",
+      "boundary": [
+        [
+          10275,
+          8075
+        ],
+        [
+          15850,
+          8075
+        ],
+        [
+          15850,
+          11850
+        ],
+        [
+          10275,
+          11850
+        ]
+      ]
+    },
+    {
+      "id": "U-bath0",
+      "level": "L01",
+      "name": "Ensuite 2",
+      "boundary": [
+        [
+          150,
+          150
+        ],
+        [
+          2850,
+          150
+        ],
+        [
+          2850,
+          2650
+        ],
+        [
+          150,
+          2650
+        ]
+      ]
+    },
+    {
+      "id": "U-bath1",
+      "level": "L01",
+      "name": "Ensuite 3",
+      "boundary": [
+        [
+          13150,
+          150
+        ],
+        [
+          15850,
+          150
+        ],
+        [
+          15850,
+          2650
+        ],
+        [
+          13150,
+          2650
+        ]
+      ]
+    },
+    {
+      "id": "U-bath2",
+      "level": "L01",
+      "name": "Ensuite 4",
+      "boundary": [
+        [
+          150,
+          9350
+        ],
+        [
+          2850,
+          9350
+        ],
+        [
+          2850,
+          11850
+        ],
+        [
+          150,
+          11850
+        ]
+      ]
+    },
+    {
+      "id": "U-bath3",
+      "level": "L01",
+      "name": "Ensuite 5",
+      "boundary": [
+        [
+          13150,
+          9350
+        ],
+        [
+          15850,
+          9350
+        ],
+        [
+          15850,
+          11850
+        ],
+        [
+          13150,
+          11850
+        ]
+      ]
+    },
+    {
+      "id": "U-bed0",
+      "level": "L01",
+      "name": "Bedroom 2",
+      "boundary": [
+        [
+          3075,
+          150
+        ],
+        [
+          6925,
+          150
+        ],
+        [
+          6925,
+          5925
+        ],
+        [
+          150,
+          5925
+        ],
+        [
+          150,
+          2875
+        ],
+        [
+          3075,
+          2875
+        ]
+      ]
+    },
+    {
+      "id": "U-bed1",
+      "level": "L01",
+      "name": "Bedroom 3",
+      "boundary": [
+        [
+          10275,
+          150
+        ],
+        [
+          12925,
+          150
+        ],
+        [
+          12925,
+          2875
+        ],
+        [
+          15850,
+          2875
+        ],
+        [
+          15850,
+          5925
+        ],
+        [
+          10275,
+          5925
+        ]
+      ]
+    },
+    {
+      "id": "U-bed2",
+      "level": "L01",
+      "name": "Bedroom 4",
+      "boundary": [
+        [
+          150,
+          6075
+        ],
+        [
+          6925,
+          6075
+        ],
+        [
+          6925,
+          11850
+        ],
+        [
+          3075,
+          11850
+        ],
+        [
+          3075,
+          9125
+        ],
+        [
+          150,
+          9125
+        ]
+      ]
+    },
+    {
+      "id": "U-bed3",
+      "level": "L01",
+      "name": "Bedroom 5",
+      "boundary": [
+        [
+          10275,
+          6075
+        ],
+        [
+          15850,
+          6075
+        ],
+        [
+          15850,
+          9125
+        ],
+        [
+          12925,
+          9125
+        ],
+        [
+          12925,
+          11850
+        ],
+        [
+          10275,
+          11850
+        ]
+      ]
+    },
+    {
+      "id": "U-hall",
+      "level": "L01",
+      "name": "Gallery / stair landing",
+      "boundary": [
+        [
+          8750,
+          150
+        ],
+        [
+          10125,
+          150
+        ],
+        [
+          10125,
+          11850
+        ],
+        [
+          8750,
+          11850
+        ]
+      ]
+    }
+  ],
+  "grids": [],
+  "sheets": [
+    {
+      "number": "A-101",
+      "title": "Ground floor - CONCEPT",
+      "level": "L00",
+      "scale": 100,
+      "size": "A2"
+    },
+    {
+      "number": "A-102",
+      "title": "First floor - CONCEPT",
+      "level": "L01",
+      "scale": 100,
+      "size": "A2"
+    }
+  ]
+}
