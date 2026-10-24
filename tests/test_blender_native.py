@@ -23,6 +23,8 @@ class BlenderNativeTests(unittest.TestCase):
         self.assertEqual(scene["output_units"],"m")
         self.assertEqual(len(scene["elements"]),17)
         self.assertEqual(len(scene["boxes"]),42)
+        for box in scene["boxes"]:
+            self.assertFalse(set(box["metadata"]) & {"id", "kind", "host", "source_units", "schema"})
         ids={x["id"] for x in scene["elements"]}
         self.assertEqual(len(ids),17)
         self.assertEqual(ids,{x["gridline_id"] for x in scene["boxes"]})
@@ -122,3 +124,104 @@ class BlenderNativeTests(unittest.TestCase):
 
 if __name__=="__main__":
     unittest.main()
+
+
+class BlenderHardeningTests(unittest.TestCase):
+    def test_source_rejects_oversize_symlinks_and_fifo(self):
+        import os
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with self.assertRaises(ValueError):
+                bridge.source_bytes(Path('/'))
+            p = root / 'source.json'
+            p.write_bytes(b'x' * (bridge.MAX_SPEC_BYTES + 1))
+            with self.assertRaisesRegex(ValueError, 'oversized'):
+                bridge.source_bytes(p)
+            (root / 'link.json').symlink_to(p)
+            with self.assertRaises(OSError):
+                bridge.source_bytes(root / 'link.json')
+            os.mkfifo(root / 'pipe')
+            with self.assertRaisesRegex(ValueError, 'regular'):
+                bridge.source_bytes(root / 'pipe')
+
+    def test_output_directory_swap_cannot_redirect_artifacts(self):
+        import os
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            stage, out, moved, foreign = [root / x for x in ('stage', 'out', 'moved', 'foreign')]
+            stage.mkdir()
+            foreign.mkdir()
+            for name in ('model.blend', 'model.glb', 'scene.json', 'verification.json'):
+                (stage / name).write_bytes(b'new data')
+            real_open = os.open
+            def swap(path, *args, **kwargs):
+                fd = real_open(path, *args, **kwargs)
+                if path == out.name and 'dir_fd' in kwargs:
+                    out.rename(moved)
+                    out.symlink_to(foreign, target_is_directory=True)
+                return fd
+            with patch.object(bridge.os, 'open', side_effect=swap):
+                with self.assertRaisesRegex(ValueError, 'directory changed'):
+                    bridge.publish(stage, out, {'status': 'test'})
+            self.assertEqual(list(foreign.iterdir()), [])
+            self.assertTrue((moved / 'model.blend').exists())
+
+    def worker(self):
+        import types
+        from unittest.mock import patch
+        path = MODULE.with_name('blender_native_worker.py')
+        info = importlib.util.spec_from_file_location('worker_for_checks', path)
+        worker = importlib.util.module_from_spec(info)
+        with patch.dict('sys.modules', {'bpy': types.SimpleNamespace(),
+                                        'mathutils': types.SimpleNamespace(Vector=None)}):
+            info.loader.exec_module(worker)
+        return worker
+
+    def object(self, angle=0, drift=0):
+        import math
+        import types
+        entry = {'name': 'wall_w1', 'kind': 'wall', 'gridline_id': 'w1', 'host': '',
+                 'center_m': [0, 0, 0], 'dimensions_m': [4, .2, 3], 'rotation_z': 0}
+        class Matrix:
+            def __matmul__(self, point):
+                x, y, z = point
+                return (math.cos(angle)*x-math.sin(angle)*y+drift,
+                        math.sin(angle)*x+math.cos(angle)*y, z)
+        class Object(dict):
+            pass
+        obj = Object(gridline_id='w1', gridline_kind='wall', gridline_host='',
+                     gridline_source_units='mm', gridline_schema='gridline-blender-scene.v0')
+        obj.name = entry['name']
+        obj.matrix_world = Matrix()
+        obj.data = types.SimpleNamespace(
+            vertices=[types.SimpleNamespace(co=(x,y,z)) for x in (-2,2) for y in (-.1,.1) for z in (-1.5,1.5)],
+            materials=[types.SimpleNamespace(name='Gridline Wall')],
+            polygons=[types.SimpleNamespace(material_index=0)])
+        return obj, entry
+
+    def test_world_rotation_parent_drift_and_nonfinite_vertices_fail(self):
+        import math
+        worker = self.worker()
+        obj, entry = self.object()
+        worker.verify_object(obj, entry, .001)
+        for angle, drift in ((math.pi/2, 0), (0, 1)):
+            obj, entry = self.object(angle, drift)
+            with self.assertRaisesRegex(ValueError, 'world geometry'):
+                worker.verify_object(obj, entry, .001)
+        obj, entry = self.object()
+        obj.data.vertices[0].co = (float('nan'), 0, 0)
+        with self.assertRaisesRegex(ValueError, 'invalid mesh'):
+            worker.verify_object(obj, entry, .001)
+
+    def test_identity_host_kind_and_missing_material_fail(self):
+        worker = self.worker()
+        for key in ('gridline_id', 'gridline_host', 'gridline_kind', 'gridline_source_units', 'gridline_schema'):
+            obj, entry = self.object()
+            del obj[key]
+            with self.assertRaisesRegex(ValueError, 'metadata'):
+                worker.verify_object(obj, entry, .001)
+        obj, entry = self.object()
+        obj.data.materials = []
+        with self.assertRaisesRegex(ValueError, 'material'):
+            worker.verify_object(obj, entry, .001)

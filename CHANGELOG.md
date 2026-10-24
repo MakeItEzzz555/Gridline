@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — native Blender readback hardening
+
+- Verify world mesh corners, native units, GLB identity/host properties and material assignments; prevent opening metadata from overwriting reserved identity fields.
+- Bound no-follow source reads, pin exclusive publication writes and propagate worker errors with autoexecution disabled.
+- Add deterministic security/corruption tests and a real-host adverse acceptance script.
+
 ## Unreleased — Blender native-scene proof (2026-10-24)
 
 - Add opt-in local Blender headless scene/export bridge for supported building-spec walls, doors and windows, with explicit millimetre-to-metre conversion, new-output-only policy, independent .blend/.glb native readback, input/artifact hashes and known coverage limitations.
