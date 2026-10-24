@@ -30,3 +30,7 @@ These sources inform capability coverage. They do not replace the actual project
 ## Repository-design lesson
 
 TuckBit, Claude Widget Kit and Codex Widget Kit informed the onboarding style: a clear hero/value proposition, copyable agent-install prompt, exact verification, honest capability boundaries, native-provider paths and evidence-driven validation.
+
+## Source-edition and jurisdiction triage (2026-10-25)
+
+The [portable source registry and offline selector](../skills/site-regulation-research/references/source-selection.md) records exact source/edition/access metadata and unresolved national/local adoption. It does not evaluate building requirements or establish compliance. All rule activation remains disabled; the existing drawing profiles are separate output conventions.
