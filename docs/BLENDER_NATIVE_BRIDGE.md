@@ -21,8 +21,8 @@ Result:
 - `model.blend`: Blender source scene with named mesh objects and retained `gridline_id`, levels and opening-host metadata.
 - `model.glb`: glTF scene for viewers or import into supported downstream 3D applications.
 - `scene.json`: exact typed geometry inputs, transformed from millimetres to metres.
-- `verification.json`: independent Blender reopen of .blend and import of .glb, with mesh counts, identity/host properties, material slots and measured world-space mesh corners.
-- `receipt.json`: source/spec hash, artifact hashes, host version, supported element count, explicit unverified list.
+- `verification.json`: independent native Blender and GLB readbacks with IDs, host/source-unit metadata, materials, world-space mesh bounds, measured per-object world-corner error and documented tolerance.
+- `receipt.json`: source-spec hash, checksums for model.blend, model.glb and verification.json, separate scene_sha256 (for scene.json), adapter and worker source hashes, host version, format statuses and known unverified scope.
 
 The renderer does not infer roofs, slabs, foundations, stairs, furniture, wall intersection topology, detailed door/window construction, structure, MEP or materials from the existing 2D source. The walls are split into solid segments to leave hosted opening gaps. Door leaves and glazing are illustrative boxes. The output is a **conceptual 3D source model** with editable Blender mesh geometry, not a fully parametric native BIM object system.
 
