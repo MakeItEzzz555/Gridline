@@ -43,3 +43,7 @@ For file/model changes, compare the result against a pre-change baseline and rep
 If a live CAD/BIM/GIS/analysis tool or MCP integration is available, inspect the current document/model and tool version before write operations. Prefer read-only inspection, dry runs, bounded samples, new output paths, and native undo/transaction mechanisms. Never claim a model or drawing was changed unless the tool confirms it.
 
 If the native application is unavailable, produce a reproducible plan, script, structured data, SVG/DXF artifact, or exact in-application procedure instead of pretending to have operated the software.
+
+## Manual Mac read-only inspector
+
+`scripts/autocad_native.py doctor` reports installed bundle metadata without claiming a live connection. `prepare --root ROOT --drawing A-101.dxf --workspace WORKSPACE` stages a private new copy and a fixed AutoLISP command. Review the returned file/path, obtain any native load approval and run `GRIDLINEINSPECT` manually. `receipt SESSION console.txt` validates captured metadata and hashes. This is manual console transport, not MCP; AUDIT/edit/plot/DWG roundtrip remain NOT_TESTED. Never change host security preferences or load it into an unrelated drawing.

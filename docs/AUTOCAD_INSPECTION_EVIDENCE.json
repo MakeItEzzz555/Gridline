@@ -1,0 +1,241 @@
+{
+  "schema": "gridline-work-package-evidence.v1",
+  "date": "2026-10-24",
+  "base_sha": "0a2e9aefa204b90b685556d1fb0c714f719d371b",
+  "scope": "AUTOCAD_MANUAL_READ_ONLY",
+  "host": {
+    "bundle": "com.autodesk.AutoCAD2027",
+    "version": "26.0.60.171",
+    "installed": true,
+    "running_process_observed": true,
+    "ui_license_banner": "EDUCATION (NON COMMERCIAL)",
+    "license_entitlement": "UNVERIFIED"
+  },
+  "sample": "A-101.dxf disposable copy",
+  "source_sha256": "49b846b5c76ed76645c09545b16386bd490fa154048535b7913fecdcfd3484dd",
+  "copy_sha256": "49b846b5c76ed76645c09545b16386bd490fa154048535b7913fecdcfd3484dd",
+  "native_open": "AUTOCAD_OPENED_UI_OBSERVED",
+  "read_probe": "READ_PROBED",
+  "edit_plot": "NOT_TESTED",
+  "dwg_dxf_roundtrip": "NOT_TESTED",
+  "blocked_action": null,
+  "opening_warnings": [
+    "simplex.shx substituted for OpenSans variants and Liberation Serif/Mono font variants"
+  ],
+  "targeted_tests": {
+    "count": 8,
+    "status": "PASS"
+  },
+  "initial_cad_required_regression": {
+    "count": 80,
+    "skips": 0,
+    "status": "PASS",
+    "wall_seconds": 79.543
+  },
+  "independent_review": "One read-only reviewer found no must-fix AutoCAD mutation/injection issue. Native interpreter exposed syntax/JSON/viewport-code defects; fixed and regression tested before final READ_PROBED receipt.",
+  "provider_usage": "Token receipts unavailable; no efficiency/savings claim.",
+  "audit_findings": {
+    "errors_found": 2,
+    "fixed": 0,
+    "erased": 0,
+    "repair_requested": false,
+    "message": "AcDbViewport(23E): Paperspace vport layer Not \"0\"; repeated in both entity passes."
+  },
+  "native_readback": {
+    "schema": "gridline-autocad-read.v1",
+    "acadver": "26.0s (LMS Tech)",
+    "platform": "macOS Version 15.7 (Arm64)",
+    "insunits": 4,
+    "dbmod_before": 17,
+    "dbmod_after": 17,
+    "model_entity_count": 149,
+    "entity_types": [
+      [
+        "CIRCLE",
+        10
+      ],
+      [
+        "DIMENSION",
+        22
+      ],
+      [
+        "LINE",
+        47
+      ],
+      [
+        "ARC",
+        4
+      ],
+      [
+        "HATCH",
+        17
+      ],
+      [
+        "LWPOLYLINE",
+        21
+      ],
+      [
+        "TEXT",
+        28
+      ]
+    ],
+    "layers": [
+      {
+        "name": "0",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "Defpoints",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-21----E-",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-22----E-",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-2-----H-",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-3-----E-",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-3-----T-",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-------E-----------GRID",
+        "flags": 0,
+        "color": 8
+      },
+      {
+        "name": "A-------T-----------GRID",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-------E-----------ROOM",
+        "flags": 0,
+        "color": 4
+      },
+      {
+        "name": "A-------T-----------ROOM",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-------D-",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-------T-----------ANNO",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-------T-----------TTLB",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-------E-----------TTLB",
+        "flags": 0,
+        "color": 7
+      },
+      {
+        "name": "A-------T-----------STMP",
+        "flags": 0,
+        "color": 1
+      },
+      {
+        "name": "A-------E-----------NPLT",
+        "flags": 0,
+        "color": 6
+      },
+      {
+        "name": "VIEWPORTS",
+        "flags": 0,
+        "color": 7
+      }
+    ],
+    "layouts": [
+      "A-101"
+    ],
+    "viewports": [
+      {
+        "layout": "A-101",
+        "paper_height": "196",
+        "view_height": "19600",
+        "flags": 16384
+      }
+    ],
+    "extmin": [
+      "-3750",
+      "-3750",
+      "0"
+    ],
+    "extmax": [
+      "15750",
+      "12750",
+      "0"
+    ]
+  },
+  "receipt_sha256": "8edf3df40c600691d2e0a63900b9178a334b9d547ad70ca1903fcf36476141d2",
+  "console_sha256": "0a27ca8031e2aab1d34feaf3f33f0a27058541e0153889c5c98778517a6f6325",
+  "audit_console_sha256": "5a2f3deb7d09b6f3f0972731cc0d254c96ecb117135e43ef923fda6e43a467d5",
+  "inspector_sha256": "ed41a4b67047e48af8e79a2d2e262b85b33664434a9bfd6e0b3687f3393db8a5",
+  "viewport_scale_hint": "196 / 19600 = 1:100; not a plotted-PDF acceptance result",
+  "initial_audit": "FAIL",
+  "audit": "PASS_ON_REGENERATED_COPIES",
+  "native_audited_files": {
+    "A-101": {
+      "sha256_before": "cbebb75d8f66a70ae8b780e9a0d6159d701925f52bafcaef4a742aa602964978",
+      "sha256_after": "cbebb75d8f66a70ae8b780e9a0d6159d701925f52bafcaef4a742aa602964978",
+      "native_audit_errors": 0,
+      "native_audit_fixed": 0,
+      "audit_console_sha256": "40597170dfb7846ad03bc5dd65e8d90b80fd6d96def1bb8802a8d2e231316b21",
+      "font_substitutions": "Known unresolved loss",
+      "hash_capture_scope": "before and after final repeated native no-repair AUDIT of the regenerated copy"
+    },
+    "A-102": {
+      "sha256_before": "2fae751b10d11f31a9901440cd0b785d396d868b85cb22eb23eebed75d745ea8",
+      "sha256_after": "2fae751b10d11f31a9901440cd0b785d396d868b85cb22eb23eebed75d745ea8",
+      "native_audit_errors": 0,
+      "native_audit_fixed": 0,
+      "audit_console_sha256": "40597170dfb7846ad03bc5dd65e8d90b80fd6d96def1bb8802a8d2e231316b21",
+      "font_substitutions": "Known unresolved loss",
+      "hash_capture_scope": "before and after final repeated native no-repair AUDIT of the regenerated copy"
+    }
+  },
+  "viewport_fix": "Generated overall paper-space viewport ID1 uses layer0; model-view viewport preserved. Checker rejects corrupted main viewport layer.",
+  "native_screenshot": {
+    "file": "A-102-native.png",
+    "sha256": "47a1e08b10ff66af10686ac905dab2a7458c0a4b7e19983c127c3f2efe189118",
+    "provenance": "Actual AutoCAD2027 window capture after native open, no-repair AUDIT and model zoom extents. Local only; not uploaded."
+  },
+  "cad_required_regression": {
+    "count": 82,
+    "skips": 0,
+    "status": "PASS",
+    "wall_seconds": 89.384
+  },
+  "code_file_sha256": {
+    "skills/autocad-dwg-workflow/scripts/autocad_native.py": "2602fad179011579ce3eb0f8dabf23824107083660ad511f84ddc36afe64d24e",
+    "skills/autocad-dwg-workflow/references/inspect.lsp.in": "b5d10c106463de549ec56dc8582694055b974da1d6bcdc7b72e2c1ff91c454fb",
+    "skills/architectural-drawing-generation/scripts/aec_cad.py": "bfa79dc4ce87deebe779d36e3db3d3efcffb7941d50c7c5572978ad86acbda30"
+  },
+  "final_full_log_sha256": "8dc34dd9d2b0db15f08255952032124b547e610978ae2aa5a80ff96443f29821"
+}

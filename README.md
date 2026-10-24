@@ -199,6 +199,8 @@ python3 skills/architectural-drawing-generation/scripts/aec_draw.py skills/archi
 
 The JSON format is documented by [aec-drawing.schema.json](skills/architectural-drawing-generation/references/aec-drawing.schema.json). The fallback never invents dimensions and stamps conceptual output **CONCEPT / NOT FOR CONSTRUCTION** by default. [Drawing-output details](docs/DRAWING_OUTPUTS.md).
 
+A bounded [AutoCAD Mac inspection adapter](docs/AUTOCAD_NATIVE_INSPECTION.md) prepares a disposable DXF copy and a manually activated read-only AutoLISP inspector. Installed status, operator-captured metadata and native AUDIT/plot/DWG roundtrip remain distinct evidence gates; this is not an MCP connection.
+
 ## CAD / BIM / AEC tools
 
 The pack knows how to route work for **Revit, pyRevit, Dynamo, Rhino, Grasshopper, AutoCAD, Civil 3D, IFC/IfcOpenShell/Bonsai, DXF/SVG, Blender and FreeCAD**. Public MCP projects also exist for Revit, Rhino/Grasshopper, AutoCAD, Archicad, Vectorworks and SketchUp.
