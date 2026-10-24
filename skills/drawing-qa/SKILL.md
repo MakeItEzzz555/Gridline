@@ -13,3 +13,11 @@ Finding format:
 Severity: Blocker prevents reliable issue/use; Major implies likely coordination/compliance/construction impact; Minor is documentation/readability.
 
 Do not label a design noncompliant without verified applicable rules.
+
+## On-demand evidence and practice references
+
+Load only the relevant reference. These are original review prompts, not binding code or full-book extraction.
+
+- [B04: section coordination](references/b04-practice.md)
+- [B06: drawing standards](references/b06-practice.md)
+- [B07: residential detail indexing](references/b07-practice.md)
