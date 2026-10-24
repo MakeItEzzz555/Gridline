@@ -55,6 +55,31 @@ class BlenderNativeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 bridge.compile_scene(model)
 
+    def test_missing_wall_endpoints_block_before_publishing(self):
+        import contextlib
+        import io
+        import sys
+        import types
+        from unittest.mock import patch
+        for key in ('start','end'):
+            model=copy.deepcopy(self.building)
+            model['walls'][0].pop(key)
+            with self.subTest(endpoint=key):
+                with self.assertRaisesRegex(ValueError,'start and end are required'):
+                    bridge.compile_scene(model)
+                with tempfile.TemporaryDirectory() as tmp:
+                    root=Path(tmp).resolve()
+                    executable=root/'Blender';executable.write_text('version probe is mocked')
+                    source=root/'source.json';source.write_text(json.dumps(model))
+                    output=root/'new-output';stderr=io.StringIO()
+                    argv=['blender_native.py','--blender',str(executable),'build',str(source),str(output)]
+                    with patch.object(sys,'argv',argv), patch.object(bridge.subprocess,'run',return_value=types.SimpleNamespace(stdout='Blender 5.2.3 LTS\n')) as run, contextlib.redirect_stderr(stderr):
+                        self.assertEqual(bridge.main(),1)
+                    self.assertIn('BLOCKED:',stderr.getvalue())
+                    self.assertNotIn('Traceback',stderr.getvalue())
+                    self.assertFalse(output.exists())
+                    self.assertEqual(run.call_count,1)  # version only; no build process
+
     def test_opening_outside_host_and_host_overlap_fail(self):
         model=copy.deepcopy(self.building)
         model["openings"][0]["width"]=100000

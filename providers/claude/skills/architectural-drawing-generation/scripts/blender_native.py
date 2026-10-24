@@ -65,7 +65,9 @@ def compile_scene(spec):
         ids.add(ident)
         if wall.get("level") not in levels:
             raise ValueError(f"wall {ident}: unknown level")
-        p1, p2 = wall["start"], wall["end"]
+        p1, p2 = wall.get("start"), wall.get("end")
+        if p1 is None or p2 is None:
+            raise ValueError(f"wall {ident}: start and end are required")
         for p in (p1, p2):
             for x in p:
                 _number(x, f"wall {ident} coordinate")
