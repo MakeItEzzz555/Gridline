@@ -1,14 +1,14 @@
 # Changelog
 
-## Unreleased — AutoCAD Mac read inspection
-
-- Add a manual, opt-in AutoLISP inspector, bounded disposable-copy preparation, bundle doctor and evidence receipts; no automatic host writes or security preference changes.
-- Fix the native-AUDIT-reproduced overall paper-space viewport layer defect; fresh A-101/A-102 copies pass native no-repair AUDIT. Native edit/plot/DWG roundtrip remains unverified.
-
 ## Unreleased — recorded skill activation evaluation (2026-10-24)
 
 - Add an offline scorer for real Codex, Claude Code and Gemini CLI activation observations, with per-skill recall, negative-control rates, SHA-256 provenance, baseline comparison and optional per-case regression gates.
 - Add 19 deterministic tests; CI discovers them automatically. This validates scoring logic, not live model activation accuracy.
+
+## Unreleased — AutoCAD Mac read inspection
+
+- Add a manual, opt-in AutoLISP inspector, bounded disposable-copy preparation, bundle doctor and evidence receipts; no automatic host writes or security preference changes.
+- Fix the native-AUDIT-reproduced overall paper-space viewport layer defect; fresh A-101/A-102 copies pass native no-repair AUDIT. Native edit/plot/DWG roundtrip remains unverified.
 
 ## Unreleased — trustworthy local drawing verification
 
