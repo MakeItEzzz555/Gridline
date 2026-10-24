@@ -1,0 +1,88 @@
+{
+  "schema": "gridline-project-brief.v1",
+  "mode": "EXACT_3D",
+  "ledger": {
+    "schema": "gridline-source-detail-ledger.v1",
+    "revision": 1,
+    "records": [
+      {
+        "key": "units",
+        "value": "mm",
+        "unit": null,
+        "status": "CONFIRMED",
+        "literal": "metric (canonical mm)",
+        "source": {
+          "kind": "user",
+          "location": "execution mission intake example"
+        },
+        "confidence": 1,
+        "targets": [
+          "project"
+        ],
+        "revision": 1,
+        "evidence": [
+          "metric confirmed in brief"
+        ],
+        "disposition": "MAPPED",
+        "approval": {
+          "by": "example user decision",
+          "record_sha256": "cee9405f32002ebe12049d5a26ae14c67d00d3b46323c563ea9a4bc5b6f152a7"
+        }
+      },
+      {
+        "key": "plot_boundary",
+        "value": null,
+        "unit": null,
+        "status": "UNKNOWN",
+        "literal": "UNKNOWN",
+        "source": {
+          "kind": "user",
+          "location": "execution mission intake example"
+        },
+        "confidence": 0,
+        "targets": [],
+        "revision": 1,
+        "evidence": [],
+        "disposition": "UNKNOWN",
+        "reason": "Not supplied; do not infer.",
+        "approval": null
+      },
+      {
+        "key": "floor_to_floor_heights",
+        "value": null,
+        "unit": null,
+        "status": "UNKNOWN",
+        "literal": "UNKNOWN",
+        "source": {
+          "kind": "user",
+          "location": "execution mission intake example"
+        },
+        "confidence": 0,
+        "targets": [],
+        "revision": 1,
+        "evidence": [],
+        "disposition": "UNKNOWN",
+        "reason": "Not supplied; do not infer.",
+        "approval": null
+      },
+      {
+        "key": "roof",
+        "value": null,
+        "unit": null,
+        "status": "UNKNOWN",
+        "literal": "UNDECIDED",
+        "source": {
+          "kind": "user",
+          "location": "execution mission intake example"
+        },
+        "confidence": 0,
+        "targets": [],
+        "revision": 1,
+        "evidence": [],
+        "disposition": "UNKNOWN",
+        "reason": "Not supplied; do not infer.",
+        "approval": null
+      }
+    ]
+  }
+}

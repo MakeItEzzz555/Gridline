@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — source-detail intake gates
+
+- Add versioned ProjectBrief/SourceDetailLedger validation, provenance-bound confirmations, prioritized missing-geometry questions and explicit concept/exact/BIM gates.
+- Add an incomplete villa fixture and adverse tests without changing the existing 2D CLI or authorizing model writes.
+
 ## Unreleased — recorded skill activation evaluation (2026-10-24)
 
 - Add an offline scorer for real Codex, Claude Code and Gemini CLI activation observations, with per-skill recall, negative-control rates, SHA-256 provenance, baseline comparison and optional per-case regression gates.

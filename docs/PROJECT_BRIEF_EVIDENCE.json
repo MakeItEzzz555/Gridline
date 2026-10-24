@@ -1,0 +1,35 @@
+{
+  "schema": "gridline-work-package-evidence.v1",
+  "date": "2026-10-24",
+  "base_sha": "0a2e9aefa204b90b685556d1fb0c714f719d371b",
+  "scope": "PROJECT_BRIEF_SOURCE_DETAIL_INTAKE",
+  "targeted_tests": {
+    "count": 10,
+    "status": "PASS"
+  },
+  "cad_required_regression": {
+    "count": 83,
+    "status": "PASS",
+    "skips": 0,
+    "wall_seconds": 60.752
+  },
+  "example_result": "NEEDS_INPUT",
+  "example_questions": [
+    "plot_boundary",
+    "floor_to_floor_heights",
+    "roof"
+  ],
+  "concept_result": "READY_CONCEPT_ONLY",
+  "native_write_authorized": false,
+  "bim_delivery": "BLOCKED_ON_SEPARATE_EVIDENCE",
+  "native_actions_performed": 0,
+  "independent_review": "Read-only reviewer found confirmed blocked-disposition and degenerate boundary false-READY paths; fixed and tested. Translation description narrowed to shape and height consistency; downstream geometry validation mandatory.",
+  "log_sha256": "dc6c42792a2e3c83ad41a502e2e2165ba8565207c0e85df4968808496c263c07",
+  "limitations": [
+    "No durable approval history/authentication or native transaction manager",
+    "Advisory intake is not yet wired into existing native authoring callers",
+    "No supplied user image; reference fidelity NOT_TESTED",
+    "No geometry generation or semantic IFC validation"
+  ],
+  "provider_usage": "Provider token receipts unavailable. No measured savings claimed."
+}
