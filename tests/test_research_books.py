@@ -45,4 +45,9 @@ class ResearchBookTests(unittest.TestCase):
         material = next(b for b in books if b['id'] == 'B14')
         self.assertEqual(material['metadata_status'], 'UNVERIFIED')
         self.assertEqual(material['contents_availability'], 'AUTHOR_OVERVIEW_ONLY')
+        claims = [json.loads(line) for line in (ROOT / 'docs/research/books/evidence-ledger.jsonl').read_text().splitlines()]
+        metadata = next(c for c in claims if c['claim_id'] == 'B14-metadata')
+        self.assertEqual(metadata['evidence_level'], 'CATALOGUE_METADATA')
+        self.assertEqual(metadata['source_url'], material['isbn_source_url'])
+        self.assertEqual(metadata['final_status'], 'UNVERIFIED')
         self.assertEqual(next(b for b in books if b['id'] == 'B02')['isbn'], '9781394279289')

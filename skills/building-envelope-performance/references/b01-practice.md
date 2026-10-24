@@ -6,7 +6,7 @@ Evidence: TOC_READ. TOC: water pp. 5–43; air 45–49; heat 51–66; vapor 67�
 
 ## Original Gridline workflow
 
-Trace water, air and thermal control through a wall-to-roof junction; record each discontinuity and request its approved detail.
+Trace water, air, vapor and thermal control through a wall-to-roof junction; record each discontinuity and request its approved detail.
 
 Return `element/source ID | revision | observed fact | proposed action | missing evidence | reviewer`. Missing evidence stays UNKNOWN; proposed changes require #15 approval and revision checks. Geometry evidence remains subject to #33 independent readback; a checklist does not replace it.
 

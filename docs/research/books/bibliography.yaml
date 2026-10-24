@@ -282,7 +282,9 @@
       "additional_sources": [
         "https://openlibrary.org/books/OL8691502M/Materials_for_Design",
         "https://perpus.petra.ac.id/catalog/site/detail?id=2284925"
-      ]
+      ],
+      "isbn_source_url": "https://openlibrary.org/books/OL8691502M/Materials_for_Design",
+      "isbn_evidence_level": "CATALOGUE_METADATA"
     },
     {
       "id": "B15",

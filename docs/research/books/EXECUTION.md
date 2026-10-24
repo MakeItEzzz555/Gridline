@@ -16,3 +16,7 @@ Validation: `python3 tests/check_repo.py`; `python3 scripts/sync-provider-skills
 Review: one bounded self-review using security-auditor, Gridline architecture-red-team and Ponytail review instructions. Checked claim provenance, edition/copyright boundaries, standalone reference links, full-folder mirror parity and tests. No independent architect, security agent or CodeRabbit approval claimed. No native host write, root move, release publication or other repository edit.
 
 Next dependency: independently resolve B14 publisher ISBN/title page and validate any technical practice against licensed exact pages and project-specific professional review. A separate standards/selector or release-candidate phase belongs in a fresh top-level session under the standing resource policy; preserve this package and use this file as verified handoff.
+
+Review follow-up: CodeRabbit completed its automated review at d272ca16f4d035ce94d8748186cb94fdce60760e. Fixed both minor findings: B14 ISBN cites catalogue metadata while publisher verification stays UNVERIFIED; B01 continuity trace includes vapor control. Connected ledger, reference, bibliography and provider copies updated. No independent professional approval claimed.
+
+Follow-up validation after both fixes: repository/provider checks pass; pinned offline CAD suite passes 125 tests, no skips, 61.822 seconds. The ISBN regression now checks that the metadata claim cites the catalogue and preserves UNVERIFIED publisher status. No external review rerun or rate-limit bypass requested.

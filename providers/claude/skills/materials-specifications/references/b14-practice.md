@@ -15,3 +15,5 @@ Counterexample: A PBR texture or catalogue image does not establish fire classif
 Limit: Publisher ISBN verification remains UNVERIFIED; Open Library reports 9781568985589 while Petra lists invalid-checksum 9781568985584. Do not confuse ISBN-10 1568985584 with ISBN-13.
 
 This is an original engineering adaptation, not an extracted book rule or legal requirement. No full book was read. Confirm jurisdiction, adopted edition and authorized professional before technical or compliance approval.
+
+ISBN evidence: [Open Library catalogue](https://openlibrary.org/books/OL8691502M/Materials_for_Design). The author overview is not the ISBN source; publisher confirmation remains UNVERIFIED.
