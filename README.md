@@ -208,6 +208,8 @@ Those integrations are **optional and not installed automatically**. A model-wri
 
 [Tool-integration policy](docs/TOOL_INTEGRATIONS.md).
 
+A dependency-free [source-detail intake gate](docs/PROJECT_BRIEF_GATE.md) records unknown dimensions and approvals before exact 3D work. The incomplete villa example blocks plot boundary, floor-to-floor heights and roof; concept remains provisional. This is an intake check, not model completeness or native-write permission.
+
 ## A real project context
 
 Copy [templates/ARCHITECTURE_PROJECT.md](templates/ARCHITECTURE_PROJECT.md) into a project root and fill only what is known. Additional reusable templates cover:

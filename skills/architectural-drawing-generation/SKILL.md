@@ -79,3 +79,7 @@ For MCP-compatible agents, an optional local read-only stdio server lives at
 explicit `GRIDLINE_MCP_PROJECT_ROOT` directory. It exposes only revision-impact
 comparison and capabilities; it does not modify drawings or connect to Autodesk.
 See repository `docs/NEXT_AEC_PHASES.md` for host/vendor adapter gates.
+
+## Source-detail intake gate
+
+Before exact 3D work, `python3 scripts/project_brief.py references/incomplete-villa.brief.json` demonstrates the versioned brief/ledger gate. Use an actual project brief: unknown plot boundary, floor-to-floor heights or roof block exact intake; concept stays explicitly provisional. Records preserve source, approvals and detail coverage. This advisory CLI never authorizes native writes and does not replace geometry/host validation or the future transaction manager.

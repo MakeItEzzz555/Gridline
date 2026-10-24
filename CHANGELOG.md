@@ -21,6 +21,11 @@
 - Retain byte-bound verification receipts, validator/dependency versions, source revision and explicit unsupported coverage. Preserve existing CLI/report keys and synchronized portable provider copies.
 - Native AutoCAD, semantic 3D, complete image/detail reconstruction, atomic output publication and professional acceptance remain separate pending gates.
 
+## Unreleased — source-detail intake gates
+
+- Add versioned ProjectBrief/SourceDetailLedger validation, provenance-bound confirmations, prioritized missing-geometry questions and explicit concept/exact/BIM gates.
+- Add an incomplete villa fixture and adverse tests without changing the existing 2D CLI or authorizing model writes.
+
 ## Unreleased — community progress documentation (2026-10-23)
 
 - Documented implemented skills, DXF/PDF/schedule generation, read-only revision-impact checks and Gridline's local MCP review tool with direct PR evidence.
