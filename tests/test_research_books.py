@@ -50,4 +50,11 @@ class ResearchBookTests(unittest.TestCase):
         self.assertEqual(metadata['evidence_level'], 'CATALOGUE_METADATA')
         self.assertEqual(metadata['source_url'], material['isbn_source_url'])
         self.assertEqual(metadata['final_status'], 'UNVERIFIED')
+        for claim_id in ('B14-scope', 'B14-practice'):
+            claim = next(c for c in claims if c['claim_id'] == claim_id)
+            self.assertEqual(claim['source_url'],
+                             'https://design.ncsu.edu/wp-content/uploads/2020/05/p_rand_MFDBriefly150.pdf')
+            self.assertIn('Author university overview', claim['source_pointer'])
+            self.assertIn('full TOC not verified', claim['source_pointer'])
+            self.assertNotIn('Publisher metadata/TOC', claim['source_pointer'])
         self.assertEqual(next(b for b in books if b['id'] == 'B02')['isbn'], '9781394279289')

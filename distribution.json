@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "gridline",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "repository": "MakeItEzzz555/Gridline",
   "channel": "stable",
   "release_qualification": "NOT_VERIFIED",
@@ -14,28 +14,29 @@
       "update_method": "claude plugin update gridline@gridline",
       "auto_update": "Third-party marketplace: off by default; user may enable in marketplace settings",
       "source": "https://code.claude.com/docs/en/discover-plugins",
-      "upgrade_runtime_test": "NOT_TESTED"
+      "upgrade_runtime_test": "PASS_ISOLATED_MACOS_LOCAL_CLI_UPDATE_AND_ROLLBACK"
     },
     "gemini-cli": {
       "manifest": "gemini-extension.json",
       "update_method": "gemini extensions update gridline",
       "auto_update": "Explicit install --auto-update opt-in; restart session after update",
       "source": "https://geminicli.com/docs/extensions/reference/",
-      "upgrade_runtime_test": "NOT_TESTED"
+      "upgrade_runtime_test": "PASS_GEMINI_0.65.0_ISOLATED_LOOPBACK_GIT_UPDATE_CONSENT_AND_ROLLBACK"
     },
     "codex-standalone": {
       "manifest": ".codex-plugin/plugin.json",
       "update_method": "Review a pinned checkout, then bash scripts/install-global.sh codex (PowerShell installer on Windows); start a fresh session",
       "auto_update": "No universal skills update service; linked skills follow their source checkout",
       "source": "docs/UPDATING.md",
-      "upgrade_runtime_test": "NOT_TESTED"
+      "upgrade_runtime_test": "PASS_MACOS_ACTUAL_SOURCE_BASH_BACKUP_ROLLBACK"
     },
     "openai-directory": {
       "manifest": "plugin.json",
       "update_method": "Maintainer uploads a new ZIP and submits it for review",
       "auto_update": "A GitHub tag alone does not update the public directory skill bundle",
       "source": "https://developers.openai.com/plugins/deploy/submission",
-      "upgrade_runtime_test": "NOT_TESTED"
+      "upgrade_runtime_test": "NOT_SUBMITTED; NEW_UPLOAD_AND_PROVIDER_REVIEW_REQUIRED"
     }
-  }
+  },
+  "qualification_receipt": "GitHub release asset release-qualification.json; source metadata alone is not approval"
 }

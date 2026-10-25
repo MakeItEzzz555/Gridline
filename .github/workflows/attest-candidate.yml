@@ -1,0 +1,58 @@
+name: Attest reviewed main candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_source_sha:
+        description: Exact reviewed main commit (40 lowercase hex characters)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  attest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Refuse unreviewed source selection
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'MakeItEzzz555/Gridline'
+          test "$GITHUB_REF" = 'refs/heads/main'
+          [[ "$EXPECTED_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$EXPECTED_SOURCE_SHA" = "$GITHUB_SHA"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.12'
+      - name: Build and verify candidate from pinned Git source
+        shell: bash
+        run: |
+          python3 scripts/build-release.py build --source-sha "$GITHUB_SHA" --out "$RUNNER_TEMP/candidate"
+          python3 scripts/build-release.py verify --source-sha "$GITHUB_SHA" --out "$RUNNER_TEMP/candidate"
+      - name: Attest build provenance (not release qualification)
+        id: provenance
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: ${{ runner.temp }}/candidate/*
+          create-storage-record: false
+      - name: Retain candidate and separate attestation bundle
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: gridline-attested-candidate-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/candidate/*
+            ${{ steps.provenance.outputs.bundle-path }}
+          if-no-files-found: error
+          retention-days: 14

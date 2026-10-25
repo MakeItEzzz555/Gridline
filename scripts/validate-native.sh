@@ -29,9 +29,14 @@ else
 fi
 
 if command -v gemini >/dev/null 2>&1; then
-  echo "Gemini CLI: extension validation"
-  gemini extensions validate "$ROOT"
-  ran=1
+  # Command support varies by Gemini CLI version; absence is not acceptance.
+  if gemini extensions --help 2>/dev/null | grep -Eq '^[[:space:]]+(gemini[[:space:]]+extensions[[:space:]]+)?validate([[:space:]]|$)'; then
+    echo "Gemini CLI: extension validation"
+    gemini extensions validate "$ROOT"
+    ran=1
+  else
+    echo "Gemini CLI: NOT_TESTED; this version advertises no extension validator. Isolated install/update/rollback acceptance is still required."
+  fi
 else
   echo "Gemini CLI: CLI not installed; native validation skipped"
 fi
