@@ -1,4 +1,5 @@
 """Pinned source, hostile ZIP and disposable installer upgrade/rollback tests."""
+import contextlib
 import importlib.util
 import io
 import json
@@ -10,6 +11,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,7 +45,7 @@ class ReleaseArtifactTests(unittest.TestCase):
         self.a = self.commit()
 
     def git(self, *args):
-        return subprocess.run(['git', '-C', str(self.repo), *args], check=True, capture_output=True).stdout.decode().strip()
+        return subprocess.run(['git', '-C', str(self.repo), *args], check=True, capture_output=True, env=builder.git_environment(), timeout=60).stdout.decode().strip()
 
     def write(self, name, content):
         path = self.repo / name
@@ -79,6 +81,38 @@ class ReleaseArtifactTests(unittest.TestCase):
                 self.assertNotIn('.env', builder.read_zip(raw))
         with self.assertRaises(FileExistsError):
             builder.build(self.repo, self.a, self.base / 'one')
+
+    def test_git_location_environment_cannot_redirect_snapshot_or_fixture(self):
+        baseline = builder.candidate(self.repo, self.a)
+        hostile = {key: str(self.base / ('unrelated-' + key)) for key in builder.GIT_LOCATION_VARS}
+        hostile['GRIDLINE_KEEP_ENV'] = 'preserved'
+        with patch.dict(os.environ, hostile):
+            self.assertEqual(builder.candidate(self.repo, self.a), baseline)
+            self.assertEqual(self.git('rev-parse', 'HEAD'), self.a)
+            self.assertEqual(builder.git_environment()['GRIDLINE_KEEP_ENV'], 'preserved')
+            self.assertTrue(all(key not in builder.git_environment() for key in builder.GIT_LOCATION_VARS))
+            self.assertTrue(all(os.environ[key] == value for key, value in hostile.items()))
+        self.assertFalse(any(self.base.glob('unrelated-*')))
+
+    def test_malformed_marketplace_returns_blocked_cli_receipt(self):
+        for index, value in enumerate([[], None, {}, {'name': 'gridline', 'plugins': [1]},
+                                      {'name': 'gridline', 'plugins': 'invalid'},
+                                      {'name': 'gridline', 'plugins': {'0': {}}}]):
+            self.write('.claude-plugin/marketplace.json', json.dumps(value))
+            sha = self.commit()
+            out = self.base / ('malformed-' + str(index))
+            with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                code = builder.main(['build', '--repo', str(self.repo), '--source-sha', sha, '--out', str(out)])
+            self.assertEqual(code, 2)
+            self.assertEqual(json.loads(stderr.getvalue())['status'], 'BLOCKED')
+            self.assertFalse(out.exists())
+
+    def test_replace_refs_cannot_change_pinned_commit_contents(self):
+        baseline = builder.candidate(self.repo, self.a)
+        self.version('1.1.0', 'replacement')
+        newer = self.commit()
+        self.git('replace', self.a, newer)
+        self.assertEqual(builder.candidate(self.repo, self.a), baseline)
 
     def test_checkout_line_endings_do_not_change_archive_bytes(self):
         baseline = builder.candidate(self.repo, self.a)
@@ -161,7 +195,7 @@ class ReleaseArtifactTests(unittest.TestCase):
         # Create a Git symlink entry without requiring OS symlink privileges on Windows.
         self.git('rm', '--cached', '-q', 'vendor')
         blob = subprocess.run(['git', '-C', str(self.repo), 'hash-object', '-w', '--stdin'],
-                              input=b'../../escape', check=True, capture_output=True).stdout.decode().strip()
+                              input=b'../../escape', check=True, capture_output=True, env=builder.git_environment(), timeout=60).stdout.decode().strip()
         self.git('update-index', '--add', '--cacheinfo', f'120000,{blob},link')
         self.git('commit', '-qm', 'link fixture')
         with self.assertRaises(ValueError):
@@ -217,7 +251,7 @@ class ReleaseArtifactTests(unittest.TestCase):
         self.assertEqual(foreign.read_text(), 'foreign survives')
 
     def test_real_repo_archives_keep_runnable_skill_and_entry_points(self):
-        sha = subprocess.run(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], check=True, capture_output=True, text=True).stdout.strip()
+        sha = subprocess.run(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], check=True, capture_output=True, text=True, env=builder.git_environment(), timeout=60).stdout.strip()
         outputs = builder.build(ROOT, sha, self.base / 'real')
         for name, raw in outputs.items():
             if not name.endswith('.zip'):

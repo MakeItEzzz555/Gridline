@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import io
 import json
+import os
 from pathlib import Path, PurePosixPath
 import re
 import stat
@@ -16,6 +17,8 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 MAX_BYTES = 32 * 1024 * 1024
 MAX_FILES = 10000
+GIT_LOCATION_VARS = {'GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_OBJECT_DIRECTORY',
+                     'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_COMMON_DIR', 'GIT_NAMESPACE', 'GIT_PREFIX'}
 SHA = re.compile(r'[0-9a-f]{40}')
 VERSION = re.compile(r'(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)')
 MANIFESTS = ('plugin.json', '.codex-plugin/plugin.json', 'gemini-extension.json',
@@ -59,9 +62,14 @@ def validate_names(names):
             raise ValueError('file/directory conflict')
 
 
+def git_environment():
+    """Keep child Git scoped to --repo without changing caller auth or configuration."""
+    return {key: value for key, value in os.environ.items() if key not in GIT_LOCATION_VARS}
+
+
 def git(repo, *args):
     """Read local Git objects only; never run source scripts or shell commands."""
-    result = subprocess.run(['git', '-c', 'core.autocrlf=false', '-c', 'core.eol=lf', '-C', str(repo), *args], capture_output=True, check=True, timeout=60)
+    result = subprocess.run(['git', '--no-replace-objects', '-c', 'core.autocrlf=false', '-c', 'core.eol=lf', '-C', str(repo), *args], capture_output=True, check=True, timeout=60, env=git_environment())
     if len(result.stdout) > MAX_BYTES:
         raise ValueError('Git snapshot exceeds 32 MiB')
     return result.stdout
@@ -113,8 +121,9 @@ def packages(files):
     """Keep root adapters in source; flatten the existing self-contained Claude plugin."""
     versions = {json.loads(files[name][0])['version'] for name in MANIFESTS}
     marketplace = json.loads(files['.claude-plugin/marketplace.json'][0])
-    entries = marketplace['plugins']
-    if (marketplace.get('name') != 'gridline' or len(entries) != 1
+    entries = marketplace.get('plugins') if isinstance(marketplace, dict) else None
+    if (not isinstance(entries, list) or len(entries) != 1 or not isinstance(entries[0], dict)
+            or marketplace.get('name') != 'gridline'
             or entries[0].get('name') != 'gridline' or entries[0].get('source') != './providers/claude'):
         raise ValueError('unexpected Claude marketplace source')
     versions.update(item['version'] for item in entries)
