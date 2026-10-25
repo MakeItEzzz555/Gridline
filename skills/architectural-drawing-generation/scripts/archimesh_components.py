@@ -18,7 +18,7 @@ from cc0_assets import verify_cache, verify_glb_textures, glb_texture_facts
 
 RUNTIME_FILES = ('components_worker.py','component_spec.py','component_mesh.py','blender_native.py',
                  'building_spec.py','wall_topology.py','mesh_qa.py','glb_qa.py',
-                 'archimesh_components.py','archimesh_doctor.py','cc0_assets.py','component_state.py','component_approval.py')
+                 'archimesh_components.py','archimesh_doctor.py','cc0_assets.py','component_state.py','component_approval.py','revision_impact.py')
 DRIVER_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 OUTPUTS = ('request.json', 'components.blend', 'components.glb', 'meshes.json', 'verification.json')
 

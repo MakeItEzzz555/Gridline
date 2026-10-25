@@ -1,0 +1,6 @@
+{
+  "scope": "Actual current-code retained-pin readback",
+  "log_sha256": "be11f0f775815238fb782e2beaa4190e414df1d7d99d680fc7cd68bb3b22da4a",
+  "published_bytes_unchanged": true,
+  "result": "PASS"
+}

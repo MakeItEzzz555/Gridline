@@ -1,0 +1,158 @@
+{
+  "baseline": "PASS",
+  "count": 30,
+  "engine": "0.9.0.post1",
+  "faults": [
+    {
+      "fault": "length_units",
+      "reason": "IFC units changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "area_units",
+      "reason": "IFC units changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "source_id",
+      "reason": "IFC source provenance lost",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "source_units",
+      "reason": "IFC typed source/material/unit data changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "source_data",
+      "reason": "IFC typed source/material/unit data changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "kind",
+      "reason": "IFC typed source/material/unit data changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "missing_property",
+      "reason": "mandatory IFC property missing",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "material",
+      "reason": "IFC material association changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "surface_quantity",
+      "reason": "IFC mesh quantity changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "vertex",
+      "reason": "changed vertex, UV, normal or face winding",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "phantom",
+      "reason": "extra/missing IFC product inventory",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "storey_datum",
+      "reason": "IFC storey datum/placement changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "storey_placement",
+      "reason": "IFC storey datum/placement changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "coordinate_context",
+      "reason": "IFC local coordinate system changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "duplicate_guid",
+      "reason": "IFC schema/EXPRESS validation failed: [{'level': 'error', 'message': \"On instance:\\n    #8=IfcBuilding('3GAEmr7n5RvhWJG_grKzVR',$,'Example House',$,$,$,$,$,$,$,$,$)\\n                   ^^^^^^^^^^^^^^^^^^^^^^^^                                     \\nRule IfcRoot.UR1:\\n    The attribute GlobalId should be unique\\nViolated by:\\n    #1149=IfcWindow('3GAEmr7n5RvhWJG_grKzVR',$,'W06',$,'window',#1169,#1164,$,0.6,0.6,.NOTDEFINED.,$,$)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^                         ",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "winding",
+      "reason": "changed vertex, UV, normal or face winding",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "raw_normals",
+      "reason": "unsupported IFC normal/closed assertion",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "unused_vertex",
+      "reason": "unused IFC mesh coordinates",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "wrong_storey",
+      "reason": "IFC element attached to wrong storey",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "wall_remap",
+      "reason": "IFC source wall remap changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "opening_host",
+      "reason": "IFC opening attached to wrong host",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "opening_filling",
+      "reason": "IFC schema/EXPRESS validation failed: [{'level': 'error', 'message': \"With inverse:\\n    FillsVoids : SET [0:1] OF IfcRelFillsElement FOR RelatedBuildingElement\\nValue:\\n    [\\n      1. #1173=IfcRelFillsElement('1fIwHpVW5OSeEb3D_UQbcw',$,$,$,#797,#1174)\\n      2. #1198=IfcRelFillsElement('0DaeYOm9XJo9GiuE6x9dfD',$,$,$,#765,#1174)\\n    ]\\nNot valid\\n\", 'type': 'schema', 'instance': #1174=IfcWindow('0TPUdnbkfTDgjdZp7tsxAA',$,'W05',$,'window',#1194,#1189,$,1.2,1.2,.NOTDEFINED.,$,$), 'attribute': 'I",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "opening_width",
+      "reason": "IFC opening assembly dimensions changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "missing_face",
+      "reason": "unused IFC mesh coordinates",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "room_profile",
+      "reason": "IFC source room profile/height changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "room_height",
+      "reason": "IFC source room profile/height changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "room_quantity",
+      "reason": "IFC room source quantities changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "room_name",
+      "reason": "IFC room name/storey changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "room_storey",
+      "reason": "IFC room name/storey changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "opening_winding",
+      "reason": "internal, extra or inverted boundary face",
+      "state": "REJECTED"
+    }
+  ],
+  "source_sha256": "c89e91742a050875748664bbdfc2bae85c9eae3c8afb63fd5144dd5500ba0b84"
+}

@@ -5,7 +5,8 @@ Gridline's ordinary source files retain the root MIT license and notices. The ne
 API acceptance harness are explicitly GPL-2.0-or-later; its
 complete corresponding source is shipped, with the full GPL text in `GPL-2.0.txt`.
 It imports MIT-licensed Gridline helpers, whose original MIT notices and grants
-remain available. The mixed distribution must not be represented as solely MIT.
+remain available; the unmodified MIT grant also ships here as `MIT.txt` so standalone
+drawing-skill copies retain it. The mixed distribution must not be represented as solely MIT.
 
 The external ARCHIMESH implementation, images and bytecode are not bundled.
 Users separately obtain the official GPL-2.0-or-later extension. Explicit source

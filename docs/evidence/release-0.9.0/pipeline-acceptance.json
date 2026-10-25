@@ -1,0 +1,510 @@
+{
+  "after": {
+    "ifc": {
+      "geometry_elements": 52,
+      "ifcopenshell_version": "0.9.0.post1",
+      "mapped_elements": 46,
+      "not_checked": [
+        "Client-app interoperability",
+        "Project IDS unless separately supplied/validated",
+        "Regulatory/structural/manufacturing compliance",
+        "IFC PBR textures; material identities are metadata only"
+      ],
+      "output": "/private/tmp/gridline-archimesh-research-20261025/pipeline-acceptance-final/after-ifc",
+      "receipt_sha256": "bae4717f9e04d441df45be66c6fbec47ea2e9cb94a8d2f7e2c480e3ee7e77e53",
+      "requirements_sha256": "20114eb9db240297c48f13bacd849e9c0391625797c98d9f572bca04055de876",
+      "schema": "IFC4",
+      "source_sha256": "6d38f47ef63404ece7b4650bf2be9bbe193f3d73392d7f6304cb8775bbca9bfb",
+      "state": "SCHEMA_SOURCE_GEOMETRY_VERIFIED"
+    },
+    "ifc_public_verify": "PASS; bytes unchanged",
+    "native": {
+      "addon_archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+      "asset_plans": [],
+      "asset_provenance": {},
+      "build_log_sha256": "c0c44d64fd095c612af875846e9cc2071954522693c4c4ee7f5529476fc396e9",
+      "canonical_owner_key_sha256": "108bcea18955aeda41ced0ec9998d346b530f378c25b3cec662440771f434bd0",
+      "canonical_state_revision": "6d38f47ef63404ece7b4650bf2be9bbe193f3d73392d7f6304cb8775bbca9bfb",
+      "driver_sha256": "752ccbe59bc6a371ac7e7c76275ea1d70730d93ea3cfde7f354ae8807eecf735",
+      "files": {
+        "components.blend": "af6d0b72c4f8920f8a12f3dfe8ec3b25f3784f25d5be075e8b7efff1ab91b3c2",
+        "components.glb": "7a31e18f31c3628d5a06f560f10f7184a35fa02a5d27b8a9a27ce473cc39cfce",
+        "meshes.json": "efb3a3c311ba6e43ec5c9d6d31a0cd073ca9996e4cb689f8ab8e2e074a2c8a1c",
+        "request.json": "6d38f47ef63404ece7b4650bf2be9bbe193f3d73392d7f6304cb8775bbca9bfb",
+        "verification.json": "d1e45816e78daa94222b68517f0c796bf72dbe854a5fb134a44f7460301b2555"
+      },
+      "host": {
+        "addon_loading": "NOT_ATTEMPTED",
+        "archimesh_compatibility": "NOT_TESTED",
+        "executable": "/Applications/Blender.app/Contents/MacOS/Blender",
+        "state": "HOST_STARTUP_VERIFIED",
+        "version": "5.2.3"
+      },
+      "output": "/private/tmp/gridline-archimesh-research-20261025/pipeline-acceptance-final/after-native",
+      "outputs_are_authoritative_project_state": false,
+      "receipt_sha256": "568a54299c9be99113d20f0816dd01cb456e24a438f37e7f958f7fce6cfbe215",
+      "request_sha256": "6d38f47ef63404ece7b4650bf2be9bbe193f3d73392d7f6304cb8775bbca9bfb",
+      "runtime_sha256": {
+        "archimesh_components.py": "752ccbe59bc6a371ac7e7c76275ea1d70730d93ea3cfde7f354ae8807eecf735",
+        "archimesh_doctor.py": "4c662af6fa83dd3cffc01b8334319a5a63bfa8210831a42017344de7c53fdda6",
+        "blender_native.py": "a1c3ca0a14953b11e8ba2e23a4b3733f118d96dd4c98b69c408020f5b6c9fe0a",
+        "building_spec.py": "7683dde9e0ba7f63b2a015b0fb67f4cff84498b1a2610705a50078b4571eb7d5",
+        "cc0_assets.py": "fda54f83e923e15f299956b40bdd2227081542f3d703948ee89b6a61f3924f8f",
+        "component_approval.py": "ca8a3ae58f22475006007cb4feed430a7b3cac5eda50fa3d4e9b5738107e09cc",
+        "component_mesh.py": "6014240e1b0c4b23c1598b2fa3f714f68054becf7bb8ebc0460976dea7710756",
+        "component_spec.py": "4834b33e43977461bcccb1d884dd0fc6bbb249a186254f67be01bc4142c4b142",
+        "component_state.py": "6566f6af25e0844e8c64b86851ddffc96a2c7583e9527edcf107a6081238fb53",
+        "components_worker.py": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4",
+        "glb_qa.py": "737ca84c5539590a2a9d31176a072af10b7d4d75d8fb2a6a327e204a269d811a",
+        "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+        "revision_impact.py": "20c91ba39e914f11f866ec44b7e9c013af417b3176a1b9c8b39d835b59c7b3a5",
+        "wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d"
+      },
+      "schema": "gridline-component-receipt.v1",
+      "state": "VERIFIED_VISUAL_COMPONENTS",
+      "texture_verification": {},
+      "unverified": [
+        "Regulatory/manufacturing acceptance",
+        "Live-host edits",
+        "IFC semantics"
+      ],
+      "worker_sha256": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4"
+    },
+    "source_sha256": "6d38f47ef63404ece7b4650bf2be9bbe193f3d73392d7f6304cb8775bbca9bfb"
+  },
+  "all_kinds": {
+    "ifc": {
+      "geometry_elements": 13,
+      "ifcopenshell_version": "0.9.0.post1",
+      "mapped_elements": 13,
+      "not_checked": [
+        "Client-app interoperability",
+        "Project IDS unless separately supplied/validated",
+        "Regulatory/structural/manufacturing compliance",
+        "IFC PBR textures; material identities are metadata only"
+      ],
+      "output": "/private/tmp/gridline-archimesh-research-20261025/pipeline-acceptance-final/all-kinds-ifc",
+      "receipt_sha256": "ea0e9f707b01521a0fa8c53ce7440d074606272f7bc9e43307305eba2a6d05f6",
+      "requirements_sha256": "33ef75957741e7338a09d142a93c8e825ad22ed6310b1cad90dd7c5670bbb5f2",
+      "schema": "IFC4",
+      "source_sha256": "687f43788b53d7a0474832d869a2d93767fa57369354b009640ea90e2620a9c9",
+      "state": "SCHEMA_SOURCE_GEOMETRY_VERIFIED"
+    },
+    "ifc_public_verify": "PASS; bytes unchanged",
+    "native": {
+      "addon_archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+      "asset_plans": [],
+      "asset_provenance": {},
+      "build_log_sha256": "45b36a92405b1ec8c2ec5f0bb711c3f82c8c921ed75453210b462b0d990b4b2c",
+      "canonical_owner_key_sha256": "108bcea18955aeda41ced0ec9998d346b530f378c25b3cec662440771f434bd0",
+      "canonical_state_revision": "687f43788b53d7a0474832d869a2d93767fa57369354b009640ea90e2620a9c9",
+      "driver_sha256": "752ccbe59bc6a371ac7e7c76275ea1d70730d93ea3cfde7f354ae8807eecf735",
+      "files": {
+        "components.blend": "87b612651654ca131a876b4b14b6da6666891a6720d837f71aa92e2fafc1ac30",
+        "components.glb": "23bda131b663b0748dd742fd9393cff32ce328f92804199f3a3ef9fa5098e6f0",
+        "meshes.json": "fec56ed4ffc6d63bbe00c25060c5fe8f05aeebf7ce7bde1adaf83bde54f3d2f9",
+        "request.json": "687f43788b53d7a0474832d869a2d93767fa57369354b009640ea90e2620a9c9",
+        "verification.json": "f7f1d713f5c69300dfcbe30210ac699a6cf73a7343c03fbbf35a227d9496f651"
+      },
+      "host": {
+        "addon_loading": "NOT_ATTEMPTED",
+        "archimesh_compatibility": "NOT_TESTED",
+        "executable": "/Applications/Blender.app/Contents/MacOS/Blender",
+        "state": "HOST_STARTUP_VERIFIED",
+        "version": "5.2.3"
+      },
+      "output": "/private/tmp/gridline-archimesh-research-20261025/pipeline-acceptance-final/all-kinds-native",
+      "outputs_are_authoritative_project_state": false,
+      "receipt_sha256": "34a4e8f0b95c3293c26a18c539819b1ccfc99cce55a979381771e36a2eff7660",
+      "request_sha256": "687f43788b53d7a0474832d869a2d93767fa57369354b009640ea90e2620a9c9",
+      "runtime_sha256": {
+        "archimesh_components.py": "752ccbe59bc6a371ac7e7c76275ea1d70730d93ea3cfde7f354ae8807eecf735",
+        "archimesh_doctor.py": "4c662af6fa83dd3cffc01b8334319a5a63bfa8210831a42017344de7c53fdda6",
+        "blender_native.py": "a1c3ca0a14953b11e8ba2e23a4b3733f118d96dd4c98b69c408020f5b6c9fe0a",
+        "building_spec.py": "7683dde9e0ba7f63b2a015b0fb67f4cff84498b1a2610705a50078b4571eb7d5",
+        "cc0_assets.py": "fda54f83e923e15f299956b40bdd2227081542f3d703948ee89b6a61f3924f8f",
+        "component_approval.py": "ca8a3ae58f22475006007cb4feed430a7b3cac5eda50fa3d4e9b5738107e09cc",
+        "component_mesh.py": "6014240e1b0c4b23c1598b2fa3f714f68054becf7bb8ebc0460976dea7710756",
+        "component_spec.py": "4834b33e43977461bcccb1d884dd0fc6bbb249a186254f67be01bc4142c4b142",
+        "component_state.py": "6566f6af25e0844e8c64b86851ddffc96a2c7583e9527edcf107a6081238fb53",
+        "components_worker.py": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4",
+        "glb_qa.py": "737ca84c5539590a2a9d31176a072af10b7d4d75d8fb2a6a327e204a269d811a",
+        "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+        "revision_impact.py": "20c91ba39e914f11f866ec44b7e9c013af417b3176a1b9c8b39d835b59c7b3a5",
+        "wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d"
+      },
+      "schema": "gridline-component-receipt.v1",
+      "state": "VERIFIED_VISUAL_COMPONENTS",
+      "texture_verification": {},
+      "unverified": [
+        "Regulatory/manufacturing acceptance",
+        "Live-host edits",
+        "IFC semantics"
+      ],
+      "worker_sha256": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4"
+    },
+    "source_sha256": "687f43788b53d7a0474832d869a2d93767fa57369354b009640ea90e2620a9c9"
+  },
+  "before": {
+    "ifc": {
+      "geometry_elements": 52,
+      "ifcopenshell_version": "0.9.0.post1",
+      "mapped_elements": 46,
+      "not_checked": [
+        "Client-app interoperability",
+        "Project IDS unless separately supplied/validated",
+        "Regulatory/structural/manufacturing compliance",
+        "IFC PBR textures; material identities are metadata only"
+      ],
+      "output": "/private/tmp/gridline-archimesh-research-20261025/pipeline-acceptance-final/before-ifc",
+      "receipt_sha256": "83014740c440f79f05cd53bd7fc036aa328174e4c3ea021b13b9bb492577b2df",
+      "requirements_sha256": "20114eb9db240297c48f13bacd849e9c0391625797c98d9f572bca04055de876",
+      "schema": "IFC4",
+      "source_sha256": "591c30824fec4e606092e1f99cb0ec6cabebd9c12ef6bd600d6eb84323b6f91a",
+      "state": "SCHEMA_SOURCE_GEOMETRY_VERIFIED"
+    },
+    "ifc_public_verify": "PASS; bytes unchanged",
+    "native": {
+      "addon_archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+      "asset_plans": [],
+      "asset_provenance": {},
+      "build_log_sha256": "0437abf3a95e7985d44122594543a3bc200db15d88ff72c9a691da3a24a32f95",
+      "canonical_owner_key_sha256": "108bcea18955aeda41ced0ec9998d346b530f378c25b3cec662440771f434bd0",
+      "canonical_state_revision": "591c30824fec4e606092e1f99cb0ec6cabebd9c12ef6bd600d6eb84323b6f91a",
+      "driver_sha256": "752ccbe59bc6a371ac7e7c76275ea1d70730d93ea3cfde7f354ae8807eecf735",
+      "files": {
+        "components.blend": "6515ae724b0de960c5d32ed3543fe55f19483304690672bf838faa1971f18024",
+        "components.glb": "b62def42130339b5a890d630b68430ac586cdc736794eace376b4f24c2d126e1",
+        "meshes.json": "9280aa50372f9ac8b1e3b8eac38a9a3b10060b411474992ff2e1ab597c13ccc0",
+        "request.json": "591c30824fec4e606092e1f99cb0ec6cabebd9c12ef6bd600d6eb84323b6f91a",
+        "verification.json": "377a3681897f0f18014d926759e2854854a2544427404f94718755b2d9b1aea7"
+      },
+      "host": {
+        "addon_loading": "NOT_ATTEMPTED",
+        "archimesh_compatibility": "NOT_TESTED",
+        "executable": "/Applications/Blender.app/Contents/MacOS/Blender",
+        "state": "HOST_STARTUP_VERIFIED",
+        "version": "5.2.3"
+      },
+      "output": "/private/tmp/gridline-archimesh-research-20261025/pipeline-acceptance-final/before-native",
+      "outputs_are_authoritative_project_state": false,
+      "receipt_sha256": "768e1cbb6a719fa13b20708ac8c865fc2eeac0f6f3028228fb6954feea7cb1e4",
+      "request_sha256": "591c30824fec4e606092e1f99cb0ec6cabebd9c12ef6bd600d6eb84323b6f91a",
+      "runtime_sha256": {
+        "archimesh_components.py": "752ccbe59bc6a371ac7e7c76275ea1d70730d93ea3cfde7f354ae8807eecf735",
+        "archimesh_doctor.py": "4c662af6fa83dd3cffc01b8334319a5a63bfa8210831a42017344de7c53fdda6",
+        "blender_native.py": "a1c3ca0a14953b11e8ba2e23a4b3733f118d96dd4c98b69c408020f5b6c9fe0a",
+        "building_spec.py": "7683dde9e0ba7f63b2a015b0fb67f4cff84498b1a2610705a50078b4571eb7d5",
+        "cc0_assets.py": "fda54f83e923e15f299956b40bdd2227081542f3d703948ee89b6a61f3924f8f",
+        "component_approval.py": "ca8a3ae58f22475006007cb4feed430a7b3cac5eda50fa3d4e9b5738107e09cc",
+        "component_mesh.py": "6014240e1b0c4b23c1598b2fa3f714f68054becf7bb8ebc0460976dea7710756",
+        "component_spec.py": "4834b33e43977461bcccb1d884dd0fc6bbb249a186254f67be01bc4142c4b142",
+        "component_state.py": "6566f6af25e0844e8c64b86851ddffc96a2c7583e9527edcf107a6081238fb53",
+        "components_worker.py": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4",
+        "glb_qa.py": "737ca84c5539590a2a9d31176a072af10b7d4d75d8fb2a6a327e204a269d811a",
+        "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+        "revision_impact.py": "20c91ba39e914f11f866ec44b7e9c013af417b3176a1b9c8b39d835b59c7b3a5",
+        "wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d"
+      },
+      "schema": "gridline-component-receipt.v1",
+      "state": "VERIFIED_VISUAL_COMPONENTS",
+      "texture_verification": {},
+      "unverified": [
+        "Regulatory/manufacturing acceptance",
+        "Live-host edits",
+        "IFC semantics"
+      ],
+      "worker_sha256": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4"
+    },
+    "source_sha256": "591c30824fec4e606092e1f99cb0ec6cabebd9c12ef6bd600d6eb84323b6f91a"
+  },
+  "network_requests": 0,
+  "not_checked": [
+    "Professional/client IDS acceptance",
+    "Revit/AutoCAD live transactions",
+    "Interactive upstream ARCHIMESH panels"
+  ],
+  "real_owner_approval": false,
+  "revision": {
+    "actual_dxf_door_width_m": [
+      1.0,
+      1.1
+    ],
+    "actual_host_wall_volumes_m3": [
+      37.49397710458551,
+      37.43097713474546
+    ],
+    "actual_ifc_door_width_m": [
+      1.0,
+      1.1
+    ],
+    "all_source_and_relationship_guids_stable": true,
+    "commit": {
+      "impact": {
+        "affected_indexed_sheets": [
+          "A-101",
+          "A-102"
+        ],
+        "changes": [
+          {
+            "after": {
+              "host_id": "E1",
+              "id": "door-01",
+              "kind": "door",
+              "level_id": "L00",
+              "material": {
+                "base_color": [
+                  0.45,
+                  0.5,
+                  0.55
+                ],
+                "id": "mat-door",
+                "metallic": 0,
+                "roughness": 0.6
+              },
+              "parameters": {
+                "depth": 0.08,
+                "frame_size": 0.05,
+                "height": 2.1,
+                "width": 1.1
+              },
+              "position_m": [
+                2.55,
+                0.0,
+                0.0
+              ],
+              "rotation_deg": 0.0,
+              "source_element_id": "D01"
+            },
+            "before": {
+              "host_id": "E1",
+              "id": "door-01",
+              "kind": "door",
+              "level_id": "L00",
+              "material": {
+                "base_color": [
+                  0.45,
+                  0.5,
+                  0.55
+                ],
+                "id": "mat-door",
+                "metallic": 0,
+                "roughness": 0.6
+              },
+              "parameters": {
+                "depth": 0.08,
+                "frame_size": 0.05,
+                "height": 2.1,
+                "width": 1.0
+              },
+              "position_m": [
+                2.5,
+                0.0,
+                0.0
+              ],
+              "rotation_deg": 0.0,
+              "source_element_id": "D01"
+            },
+            "group": "components",
+            "id": "door-01"
+          },
+          {
+            "after": {
+              "height": 2100,
+              "hinge": "start",
+              "id": "D01",
+              "kind": "door",
+              "offset": 2000,
+              "opens": "left",
+              "type": "Entrance door",
+              "wall": "E1",
+              "width": 1100
+            },
+            "before": {
+              "height": 2100,
+              "hinge": "start",
+              "id": "D01",
+              "kind": "door",
+              "offset": 2000,
+              "opens": "left",
+              "type": "Entrance door",
+              "wall": "E1",
+              "width": 1000
+            },
+            "group": "openings",
+            "id": "D01"
+          }
+        ],
+        "native_host_authorization": false,
+        "schedules_to_recheck": [
+          "door-schedule.csv"
+        ],
+        "unindexed_drawings_and_host_families": "UNKNOWN; separate review required"
+      },
+      "previous": "591c30824fec4e606092e1f99cb0ec6cabebd9c12ef6bd600d6eb84323b6f91a",
+      "proposal": "beca3ff50c2017a6aae31343a41e60c96107aa61723456cdbe8b2872d14dfd1f",
+      "rebased": false,
+      "revision": "6d38f47ef63404ece7b4650bf2be9bbe193f3d73392d7f6304cb8775bbca9bfb",
+      "state": "COMMITTED"
+    },
+    "mapped_elements": 46,
+    "proposal": {
+      "approval_payload": "{\"action\":\"APPROVE\",\"owner_key_sha256\":\"108bcea18955aeda41ced0ec9998d346b530f378c25b3cec662440771f434bd0\",\"owner_label\":\"synthetic-test-owner\",\"project_id\":\"EX-001\",\"protocol\":\"gridline-source-approval.v1\",\"target_sha256\":\"beca3ff50c2017a6aae31343a41e60c96107aa61723456cdbe8b2872d14dfd1f\"}\n",
+      "base": "591c30824fec4e606092e1f99cb0ec6cabebd9c12ef6bd600d6eb84323b6f91a",
+      "drawing_impact": {
+        "affected_indexed_sheets": [
+          "A-101",
+          "A-102"
+        ],
+        "changes": [
+          {
+            "after": {
+              "height": 2100,
+              "hinge": "start",
+              "id": "D01",
+              "kind": "door",
+              "offset": 2000,
+              "opens": "left",
+              "type": "Entrance door",
+              "wall": "E1",
+              "width": 1100
+            },
+            "before": {
+              "height": 2100,
+              "hinge": "start",
+              "id": "D01",
+              "kind": "door",
+              "offset": 2000,
+              "opens": "left",
+              "type": "Entrance door",
+              "wall": "E1",
+              "width": 1000
+            },
+            "group": "openings",
+            "id": "D01"
+          },
+          {
+            "after": {
+              "host_id": "E1",
+              "id": "door-01",
+              "kind": "door",
+              "level_id": "L00",
+              "material": {
+                "base_color": [
+                  0.45,
+                  0.5,
+                  0.55
+                ],
+                "id": "mat-door",
+                "metallic": 0,
+                "roughness": 0.6
+              },
+              "parameters": {
+                "depth": 0.08,
+                "frame_size": 0.05,
+                "height": 2.1,
+                "width": 1.1
+              },
+              "position_m": [
+                2.55,
+                0.0,
+                0.0
+              ],
+              "rotation_deg": 0.0,
+              "source_element_id": "D01"
+            },
+            "before": {
+              "host_id": "E1",
+              "id": "door-01",
+              "kind": "door",
+              "level_id": "L00",
+              "material": {
+                "base_color": [
+                  0.45,
+                  0.5,
+                  0.55
+                ],
+                "id": "mat-door",
+                "metallic": 0,
+                "roughness": 0.6
+              },
+              "parameters": {
+                "depth": 0.08,
+                "frame_size": 0.05,
+                "height": 2.1,
+                "width": 1.0
+              },
+              "position_m": [
+                2.5,
+                0.0,
+                0.0
+              ],
+              "rotation_deg": 0.0,
+              "source_element_id": "D01"
+            },
+            "group": "components",
+            "id": "door-01"
+          }
+        ],
+        "native_host_authorization": false,
+        "schedules_to_recheck": [
+          "door-schedule.csv"
+        ],
+        "unindexed_drawings_and_host_families": "UNKNOWN; separate review required"
+      },
+      "owner_key_sha256": "108bcea18955aeda41ced0ec9998d346b530f378c25b3cec662440771f434bd0",
+      "patch": {
+        "components": [
+          {
+            "host_id": "E1",
+            "id": "door-01",
+            "kind": "door",
+            "level_id": "L00",
+            "material": {
+              "base_color": [
+                0.45,
+                0.5,
+                0.55
+              ],
+              "id": "mat-door",
+              "metallic": 0,
+              "roughness": 0.6
+            },
+            "parameters": {
+              "depth": 0.08,
+              "frame_size": 0.05,
+              "height": 2.1,
+              "width": 1.1
+            },
+            "position_m": [
+              2.55,
+              0.0,
+              0.0
+            ],
+            "rotation_deg": 0.0,
+            "source_element_id": "D01"
+          }
+        ],
+        "openings": [
+          {
+            "height": 2100,
+            "hinge": "start",
+            "id": "D01",
+            "kind": "door",
+            "offset": 2000,
+            "opens": "left",
+            "type": "Entrance door",
+            "wall": "E1",
+            "width": 1100
+          }
+        ]
+      },
+      "proposal": "beca3ff50c2017a6aae31343a41e60c96107aa61723456cdbe8b2872d14dfd1f",
+      "proposed_document_sha256": "6d38f47ef63404ece7b4650bf2be9bbe193f3d73392d7f6304cb8775bbca9bfb",
+      "state": "PROPOSED"
+    },
+    "scope": "Explicit synthetic100mm revision; professional clearance/IDS/client interoperability not claimed"
+  },
+  "state": "PASS_SYNTHETIC_OFFLINE_PIPELINE",
+  "test_private_key_discarded": true
+}

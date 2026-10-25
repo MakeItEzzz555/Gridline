@@ -1,0 +1,124 @@
+{
+  "approved_maximum_bytes": 104857600,
+  "consumed_bytes_including_metadata": 49496905,
+  "schema": "gridline-approved-ifc-test-downloads.v1",
+  "scope": "temporary test environment only; existing CAD site-packages reused read-only",
+  "wheels": [
+    {
+      "bytes": 44052034,
+      "filename": "ifcopenshell-0.9.0.post1-py314-none-macosx_11_0_arm64.whl",
+      "license_expression": "LGPL-3.0-or-later",
+      "package": "ifcopenshell",
+      "requires_dist": [
+        "shapely",
+        "numpy",
+        "isodate",
+        "python-dateutil",
+        "lark",
+        "pyparsing",
+        "typing-extensions",
+        "networkx; extra == \"advanced\"",
+        "pytest; extra == \"dev\"",
+        "tabulate; extra == \"dev\"",
+        "types-networkx; extra == \"dev\""
+      ],
+      "sha256": "2b220ecbc9dfd17d9f1882193c526343da8dcfc76d7247f09b4b1f4468b5f970",
+      "source_url": "https://files.pythonhosted.org/packages/86/54/c9bba65bcac77646f0ff890b9235cae3cb83103f0de27b65f191342de6bf/ifcopenshell-0.9.0.post1-py314-none-macosx_11_0_arm64.whl",
+      "version": "0.9.0.post1"
+    },
+    {
+      "bytes": 1585345,
+      "filename": "shapely-2.2.0-cp314-cp314-macosx_11_0_arm64.whl",
+      "license_expression": "BSD-3-Clause",
+      "package": "shapely",
+      "requires_dist": [
+        "numpy>=1.26"
+      ],
+      "sha256": "0a63e6b68ec785ef3aae3935c4aa9fb8edccced94e23c79d5d85276442c60859",
+      "source_url": "https://files.pythonhosted.org/packages/a2/c8/e8117528eb96feafcd5fced50a939ecfdc6242b3782959d202755536bb9e/shapely-2.2.0-cp314-cp314-macosx_11_0_arm64.whl",
+      "version": "2.2.0"
+    },
+    {
+      "bytes": 22320,
+      "filename": "isodate-0.7.2-py3-none-any.whl",
+      "license_expression": null,
+      "package": "isodate",
+      "requires_dist": null,
+      "sha256": "28009937d8031054830160fce6d409ed342816b543597cece116d966c6d99e15",
+      "source_url": "https://files.pythonhosted.org/packages/15/aa/0aca39a37d3c7eb941ba736ede56d689e7be91cab5d9ca846bde3999eba6/isodate-0.7.2-py3-none-any.whl",
+      "version": "0.7.2"
+    },
+    {
+      "bytes": 113151,
+      "filename": "lark-1.3.1-py3-none-any.whl",
+      "license_expression": null,
+      "package": "lark",
+      "requires_dist": [
+        "regex; extra == \"regex\"",
+        "js2py; extra == \"nearley\"",
+        "atomicwrites; extra == \"atomic-cache\"",
+        "interegular<0.4.0,>=0.3.1; extra == \"interegular\""
+      ],
+      "sha256": "c629b661023a014c37da873b4ff58a817398d12635d3bbb2c5a03be7fe5d1e12",
+      "source_url": "https://files.pythonhosted.org/packages/82/3d/14ce75ef66813643812f3093ab17e46d3a206942ce7376d31ec2d36229e7/lark-1.3.1-py3-none-any.whl",
+      "version": "1.3.1"
+    },
+    {
+      "bytes": 386536,
+      "filename": "pytest-9.1.1-py3-none-any.whl",
+      "license_expression": "MIT",
+      "package": "pytest",
+      "requires_dist": [
+        "colorama>=0.4; sys_platform == \"win32\"",
+        "exceptiongroup>=1; python_version < \"3.11\"",
+        "iniconfig>=1.0.1",
+        "packaging>=22",
+        "pluggy<2,>=1.5",
+        "pygments>=2.7.2",
+        "tomli>=1; python_version < \"3.11\"",
+        "argcomplete; extra == \"dev\"",
+        "attrs>=19.2; extra == \"dev\"",
+        "hypothesis>=3.56; extra == \"dev\"",
+        "mock; extra == \"dev\"",
+        "requests; extra == \"dev\"",
+        "setuptools; extra == \"dev\"",
+        "xmlschema; extra == \"dev\""
+      ],
+      "sha256": "37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c",
+      "source_url": "https://files.pythonhosted.org/packages/24/25/1de2678b631f5a49215c6c96fff41ba892b0a34df68d6d80292b1b48aa7f/pytest-9.1.1-py3-none-any.whl",
+      "version": "9.1.1"
+    },
+    {
+      "bytes": 7552,
+      "filename": "iniconfig-2.3.1-py3-none-any.whl",
+      "license_expression": "MIT",
+      "package": "iniconfig",
+      "requires_dist": null,
+      "sha256": "9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7",
+      "source_url": "https://files.pythonhosted.org/packages/56/43/4ca9e49d27a1fcf6bece6f6aec0ea46bb9112489b93d4b688fb415457bdb/iniconfig-2.3.1-py3-none-any.whl",
+      "version": "2.3.1"
+    },
+    {
+      "bytes": 27082,
+      "filename": "pluggy-1.7.0-py3-none-any.whl",
+      "license_expression": null,
+      "package": "pluggy",
+      "requires_dist": null,
+      "sha256": "7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec",
+      "source_url": "https://files.pythonhosted.org/packages/40/9e/2b38731e0fc536806f16490e1a12d7f0dc2a1235aa8cc07bcc75416a7daa/pluggy-1.7.0-py3-none-any.whl",
+      "version": "1.7.0"
+    },
+    {
+      "bytes": 1250147,
+      "filename": "pygments-2.21.0-py3-none-any.whl",
+      "license_expression": "BSD-2-Clause",
+      "package": "pygments",
+      "requires_dist": [
+        "colorama>=0.4.6; extra == \"windows-terminal\""
+      ],
+      "sha256": "2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9",
+      "source_url": "https://files.pythonhosted.org/packages/71/46/17f022dd3e953bf20a04a028a21ec746d942f8d2af30fa0f124fa0e6a684/pygments-2.21.0-py3-none-any.whl",
+      "version": "2.21.0"
+    }
+  ]
+}

@@ -1,14 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.9.0 — 2026-10-26
 
-- Add bounded visual component recipes, independent Blender/GLB mesh/UV/normal/PBR readback, explicit source/runtime snapshots and corruption acceptance tests. Preserve the canonical Gridline wall/opening oracle and original user sessions.
-- Add detached Ed25519 owner approval for local component proposals, atomic state transactions, conflict/rebase/restore checks, and exact-head preview binding. General building/live-host transactions remain gated.
-- Add an opt-in Poly Haven texture catalog/plan/cache and offline packed PBR readback; synthetic tests are distinct from pending real public-asset acceptance. IFC semantic export is under implementation, not qualified.
-- Mark the original new Blender API worker GPL-2.0-or-later, ship corresponding source/license text and update mixed-license manifest metadata; retain existing MIT grants and exclude external add-on source/images.
-
-- Add an offline read-only ARCHIMESH source doctor, portable hash/operator inventory and bounded discovery tests. Preserve stable 0.8.1 manifests and existing Blender generation.
-- Record official 1.2.5 source/license evidence, disposable Blender 5.2.3 default-operator smoke and reproduced door/window panel gating failures. Preserve the earlier source-review evidence separately; no add-on is installed in a user profile or vendored.
+- Add13 explicit ARCHIMESH visual recipes with pinned external-source consent, disposable Blender5.2.3 generation, native/GLB geometry/UV/normal/PBR readback, bounded workload and corruption acceptance. Retain Gridline's canonical wall/opening oracle; no user-profile add-on installation or existing-host edits.
+- Add Ed25519 signed canonical source revisions and typed component/level/wall/opening/room proposals, source/host constraints, indexed drawing/schedule impacts, disjoint revalidation, stale conflicts, approved restore and complete stored transition-proof verification. Revit/AutoCAD live transaction APIs remain unsupported.
+- Add an opt-in Poly Haven catalog/plan/cache and actual approved three-channel1K JPG packed PBR/provenance readback. Preserve earlier synthetic tests separately and block interrupted/corrupted downloads.
+- Add source-bound IFC4 export and pinned public readback with actual schema/EXPRESS, project/site/building/storey/room, source ID/material/quantity, opening/host/filling and raw/evaluated geometry checks. Verify signed current state before publication; preserve stable GUIDs across a controlled before/after drawing/native/IFC revision. No certified MVD, client IDS, regulatory approval or IFC PBR texture claim.
+- Mark first-party Blender API worker/acceptance harness GPL-2.0-or-later, ship source/full license text and mixed-license metadata; preserve existing MIT grants. External ARCHIMESH source/images and optional IFC libraries are not bundled.
+- Include source-only doctor evidence separately from later qualified component evidence. Full roadmap issues#13/#15/#45 retain their unimplemented live-host/professional/general-client criteria.
 
 ### Included — 0.8.0 candidate review corrections (2026-10-25)
 

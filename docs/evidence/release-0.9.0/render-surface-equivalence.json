@@ -1,0 +1,8 @@
+{
+  "scope": "Rendered earlier real-asset fixture versus frozen-source build; identical request,complete mesh/UV/normal/PBR manifest and GLB bytes. Native serialization headers may differ.",
+  "equal": {
+    "request.json": true,
+    "meshes.json": true,
+    "components.glb": true
+  }
+}

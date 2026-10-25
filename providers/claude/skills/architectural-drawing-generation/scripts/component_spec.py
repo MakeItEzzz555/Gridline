@@ -41,6 +41,25 @@ def keys(value, expected, label):
         raise ValueError(f'{label}: expected exactly {sorted(expected)}')
 
 
+def room_polygon(points):
+    """Validate a simple source polygon (millimetres) and return its area in m²."""
+    if not isinstance(points,list) or not 3<=len(points)<=256 or any(not isinstance(p,list) or len(p)!=2 or any(type(v) not in (int,float) or not math.isfinite(v) for v in p) for p in points):
+        raise ValueError('room boundary requires3..256 finite2D points')
+    def turn(a,b,c):return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])
+    def on(a,b,p):return abs(turn(a,b,p))<=1e-8 and all(min(a[k],b[k])-1e-8<=p[k]<=max(a[k],b[k])+1e-8 for k in (0,1))
+    edges=list(zip(points,points[1:]+points[:1]))
+    for i,(a,b) in enumerate(edges):
+        if math.dist(a,b)<=1e-8:raise ValueError('room boundary has a zero edge')
+        for j in range(i+1,len(edges)):
+            if j==i+1 or (i==0 and j==len(edges)-1):continue
+            c,d=edges[j];ab=(turn(a,b,c),turn(a,b,d));cd=(turn(c,d,a),turn(c,d,b))
+            if ab[0]*ab[1]<0 and cd[0]*cd[1]<0 or any((on(a,b,c),on(a,b,d),on(c,d,a),on(c,d,b))):
+                raise ValueError('room boundary intersects/touches itself')
+    area=abs(sum(a[0]*b[1]-b[0]*a[1] for a,b in edges))/2/1e6
+    if not math.isfinite(area) or area<=1e-12:raise ValueError('room boundary has no finite area')
+    return area
+
+
 def validate(spec):
     request_keys = ('schema', 'project_id', 'units', 'components') + (('building',) if isinstance(spec,dict) and 'building' in spec else ())
     keys(spec, request_keys, 'request')
@@ -111,6 +130,14 @@ def validate(spec):
         building=spec['building']
         scene=compile_scene(building)
         geometry_entries(scene)
+        all_ids=[item['id'] for group in ('levels','grids','walls','openings','rooms') for item in building[group]]
+        if len(all_ids)!=len(set(all_ids)):raise ValueError('duplicate canonical building identity')
+        intervals=sorted((lv['elevation'],lv['elevation']+lv['height']) for lv in building['levels'])
+        if any(b[0]<a[1]-1e-7 for a,b in zip(intervals,intervals[1:])):raise ValueError('overlapping vertical level ranges unsupported')
+        for room in building['rooms']:
+            if room.get('level') not in {lv['id'] for lv in building['levels']}:raise ValueError('room refers to unknown level')
+            if not room['name'].strip():raise ValueError('explicit room name required')
+            room_polygon(room['boundary'])
         openings={o['id']:o for o in building['openings']}
         walls={w['id']:w for w in building['walls']}
         levels={level['id']:level for level in building['levels']}

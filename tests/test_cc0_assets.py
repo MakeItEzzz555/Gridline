@@ -62,5 +62,22 @@ class CC0AssetTests(unittest.TestCase):
             p=Path(tmp)/'cache'/ident/'normal.jpg';p.write_bytes(b'x'*p.stat().st_size)
             with self.assertRaises(ValueError):assets.verify_cache(p.parent,ident)
 
+    @unittest.skipUnless(importlib.util.find_spec('PIL'), 'optional Pillow not installed')
+    def test_failed_last_channel_never_publishes_partial_cache(self):
+        from PIL import Image
+        values=metadata();content={}
+        for key in assets.CHANNELS.values():
+            stream=io.BytesIO();Image.new('RGB',(1024,1024),(100,100,100)).save(stream,format='JPEG')
+            data=stream.getvalue();entry=values[key]['1k']['jpg'];entry.update(size=len(data),md5=hashlib.md5(data,usedforsecurity=False).hexdigest());content[entry['url']]=data
+        approved=assets.plan('test_fixture',values);ident=digest(approved)
+        def fetch(url,maximum):
+            if url.endswith('nor_gl.jpg'):raise OSError('simulated interrupted final channel')
+            return content[url]
+        with tempfile.TemporaryDirectory() as temporary,patch.object(assets,'fetch',side_effect=fetch):
+            cache=Path(temporary)/'cache';cache.mkdir();existing=cache/'existing-approved-entry';existing.write_bytes(b'unchanged')
+            with self.assertRaises(OSError):assets.download(approved,cache,ident)
+            self.assertFalse((cache/ident).exists());self.assertEqual(existing.read_bytes(),b'unchanged')
+            self.assertEqual(list(cache.iterdir()),[existing])
+
 
 if __name__=='__main__':unittest.main()

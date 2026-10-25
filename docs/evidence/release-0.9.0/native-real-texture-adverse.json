@@ -1,0 +1,136 @@
+{
+  "baseline": "PASS",
+  "faults": [
+    {
+      "fault": "vertex",
+      "reason": "blend: cc0-cabinet__000: changed vertex, UV, normal or face winding",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "normal",
+      "reason": "blend: cc0-cabinet__000: changed vertex, UV, normal or face winding",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "uv",
+      "reason": "blend: cc0-cabinet__000: changed vertex, UV, normal or face winding",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "material",
+      "reason": "nonmetal material has effective metallic values",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "surface_output",
+      "reason": "PBR surface output changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "emission",
+      "reason": "unsupported PBR shader parameter: Emission Strength",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "hidden",
+      "reason": "unsupported object visibility/modifier/animation: cc0-cabinet__000",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "modifier",
+      "reason": "unsupported object visibility/modifier/animation: cc0-cabinet__000",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "shape_key",
+      "reason": "unsupported mesh/visibility/modifier state: cc0-cabinet__000",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "root_id",
+      "reason": "component identity/provenance lost",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "root_host",
+      "reason": "component identity/provenance lost",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "root_pose",
+      "reason": "blend: cc0-cabinet__000: changed vertex, UV, normal or face winding",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "root_constraint",
+      "reason": "unsupported object visibility/modifier/animation: cc0-cabinet",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "root_animation",
+      "reason": "unsupported object visibility/modifier/animation: cc0-cabinet",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "extra_object",
+      "reason": "unexpected/missing scene objects",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "extra_mesh",
+      "reason": "unexpected/missing scene objects",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "missing_mesh",
+      "reason": "unexpected/missing scene objects",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "units",
+      "reason": "native unit scale changed",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "glb_identity",
+      "reason": "component identity/provenance lost",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "glb_material",
+      "reason": "nonmetal material has effective metallic values",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "glb_external_image",
+      "reason": "external/unsupported GLB image resource",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "triangle_budget",
+      "reason": "scene triangle budget exceeded",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "texture_provenance",
+      "reason": "asset provider/license/source/hash provenance lost",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "texture_unpacked",
+      "reason": "missing/unpacked PBR image",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "texture_mapping",
+      "reason": "unsupported texture coordinate/projection mapping",
+      "state": "REJECTED"
+    },
+    {
+      "fault": "normal_strength",
+      "reason": "normal-map space/strength changed",
+      "state": "REJECTED"
+    }
+  ],
+  "count": 26
+}

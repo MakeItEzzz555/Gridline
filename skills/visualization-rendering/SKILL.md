@@ -43,3 +43,19 @@ For file/model changes, compare the result against a pre-change baseline and rep
 If a live CAD/BIM/GIS/analysis tool or MCP integration is available, inspect the current document/model and tool version before write operations. Prefer read-only inspection, dry runs, bounded samples, new output paths, and native undo/transaction mechanisms. Never claim a model or drawing was changed unless the tool confirms it.
 
 If the native application is unavailable, produce a reproducible plan, script, structured data, SVG/DXF artifact, or exact in-application procedure instead of pretending to have operated the software.
+
+
+## Optional bounded component picker
+
+For explicit procedural door/window/cabinet/shelf/stair/column/tile/prop requests,
+discover the installed `architectural-drawing-generation` skill. If missing, report
+the dependency. Its `scripts/archimesh_components.py catalog` lists supported kinds
+and every required parameter; use that as the picker and collect reviewed dimensions,
+position/orientation and materials before `validate`/`build`. Do not invent missing
+sizes, treat sample fixtures as a real design, or generate executable Python from
+prose. Read that skill's limits and licensing boundary first. The optional backend
+uses a separately obtained, exact-hash-approved official source in disposable
+Blender 5.2.3 processes, with native/GLB readback and new outputs only. It does not
+install an extension or fix interactive upstream panels. For textures, use its
+separate consented CC0 plan/cache; builds are offline and require explicit UV scale.
+Frozen mesh/PBR readback does not establish manufacturing or architectural approval.

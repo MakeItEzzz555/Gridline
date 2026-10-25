@@ -75,6 +75,13 @@ class ComponentRequestTests(unittest.TestCase):
             with self.assertRaises(ValueError):model.validate(request)
         model.validate(json.loads((HERE/'references/example-two-level.components.json').read_text()))
 
+    def test_room_polygon_has_explicit_valid_geometry_in_both_windings(self):
+        boundary=[[0,0],[2000,0],[2000,1000],[1000,1000],[1000,2000],[0,2000]]
+        self.assertEqual(model.room_polygon(boundary),3)
+        self.assertEqual(model.room_polygon(list(reversed(boundary))),3)
+        for bad in ([[0,0],[1000,1000],[0,1000],[1000,0]],[[0,0],[0,0],[1000,0]],[[0,0],[1000,0],[2000,0]],[[0,0],[True,1000],[1000,0]]):
+            with self.subTest(boundary=bad),self.assertRaises(ValueError):model.room_polygon(bad)
+
     def test_secure_publication_rejects_unsafe_names_before_creating_directory(self):
         from blender_native import publish
         with tempfile.TemporaryDirectory() as tmp:
@@ -232,6 +239,100 @@ class ComponentStateTests(unittest.TestCase):
         proof=self.sign(state.initialization_payload(self.spec,'owner',self.public))
         with self.assertRaises(ValueError):state.initialize(self.path,self.spec,'owner',public_key=self.public,signature=proof)
         self.assertEqual(hashlib.sha256(self.path.read_bytes()).hexdigest(),before)
+
+    def building_state(self):
+        self.path=Path(self.temp.name)/'building.sqlite'
+        self.spec=json.loads((HERE/'references/example-two-level.components.json').read_text())
+        proof=self.sign(state.initialization_payload(self.spec,'owner',self.public))
+        self.base=state.initialize(self.path,self.spec,'owner',public_key=self.public,signature=proof)['revision']
+
+    def wall_proposal(self,index,thickness):
+        item=copy.deepcopy(self.spec['building']['walls'][index]);item['thickness']=thickness
+        return state.propose(self.path,self.base,{'walls':[item]},'agent','synthetic wall revision','explicit test dimensions')
+
+    def test_same_wall_conflicts_disjoint_walls_merge_and_restore(self):
+        self.building_state()
+        a=self.wall_proposal(0,280);b=self.wall_proposal(0,260);c=self.wall_proposal(1,280)
+        for proposal in (a,b,c):self.approve(proposal['proposal'])
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+            results=list(pool.map(lambda p:state.commit(self.path,p),[a['proposal'],b['proposal']]))
+        self.assertEqual(sorted(r['state'] for r in results),['COMMITTED','CONFLICT'])
+        self.assertTrue(state.commit(self.path,c['proposal'])['rebased'])
+        self.assertIn('A-101',a['drawing_impact']['affected_indexed_sheets'])
+        self.assertIn('window-schedule.csv',a['drawing_impact']['schedules_to_recheck'])
+        restore=state.restore_proposal(self.path,self.base,'owner','restore','synthetic dimensions')['proposal']
+        self.approve(restore);state.commit(self.path,restore)
+        self.assertEqual(state.inspect(self.path)['document'],self.spec)
+
+    def test_building_adversarial_proposals_leave_canonical_state_unchanged(self):
+        self.building_state()
+        building=self.spec['building']
+        samples=[]
+        for group,index,field,value in (('openings',0,'width',50000),('openings',0,'id','invented-window'),('openings',0,'wall','missing-wall'),('levels',0,'height',4000),('walls',0,'level','wrong-datum'),('walls',0,'thickness',True)):
+            item=copy.deepcopy(building[group][index]);item[field]=value;samples.append({group:[item]})
+        item=copy.deepcopy(building['rooms'][0]);item['boundary']=[[0,0],[100,100],[0,100],[100,0]];samples.append({'rooms':[item]})
+        item=copy.deepcopy(building['walls'][0]);item.pop('thickness');samples.append({'walls':[item]})
+        samples.extend(({'units':'m'},{'building':{}},{'walls':[]}))
+        for change in samples:
+            with self.subTest(change=change),self.assertRaises(ValueError):state.propose(self.path,self.base,change,'agent','test invalid edit','explicit synthetic fixture')
+            self.assertEqual(state.inspect(self.path)['revision'],self.base)
+        self.assertEqual(state.inspect(self.path)['document'],self.spec)
+
+    def test_hosted_source_and_component_changes_must_be_one_consistent_proposal(self):
+        self.building_state()
+        item=copy.deepcopy(self.spec['components'][0]);opening=copy.deepcopy(next(o for o in self.spec['building']['openings'] if o['id']==item['source_element_id']))
+        opening['width']+=100
+        with self.assertRaises(ValueError):state.propose(self.path,self.base,{'openings':[opening]},'agent','wider opening','test dimensions')
+        item['parameters']['width']+=.1;item['position_m'][0]+=.05
+        proposal=state.propose(self.path,self.base,{'openings':[opening],'components':[item]},'agent','coordinated wider opening','test dimensions')
+        self.approve(proposal['proposal']);result=state.commit(self.path,proposal['proposal'])
+        self.assertIn('door-schedule.csv',result['impact']['schedules_to_recheck'])
+        self.assertEqual(len(result['impact']['changes']),2)
+        self.assertEqual(state.inspect(self.path)['document']['components'][0],item)
+
+    def test_all_committed_transitions_and_historical_revisions_have_owner_proofs(self):
+        a=self.proposal(0,1.0);b=self.proposal(1,1.3)
+        for proposal in (a,b):self.approve(proposal)
+        state.commit(self.path,a);head=state.commit(self.path,b)['revision']
+        self.assertEqual(state.head_revision(self.path,self.fingerprint),head)
+        self.assertEqual(state.head_revision(self.path,self.fingerprint,self.base),self.base)
+
+    def test_forged_database_head_without_transition_proof_is_rejected(self):
+        forged=copy.deepcopy(self.spec);forged['components'][0]['parameters']['width']=1.2;ident=model.digest(forged)
+        with state.transaction(self.path) as db:
+            db.execute('INSERT INTO revisions VALUES(?,?,?,?,?,?)',(ident,2,self.base,model.encode(forged).decode(),None,None))
+            db.execute('UPDATE head SET hash=?',(ident,))
+        with self.assertRaisesRegex(ValueError,'signed transition proof'):state.head_revision(self.path,self.fingerprint)
+        with self.assertRaisesRegex(ValueError,'signed transition proof'):state.inspect(self.path)
+        with self.assertRaisesRegex(ValueError,'signed transition proof'):state.restore_proposal(self.path,ident,'owner','restore','test invalid target')
+
+    def test_genuine_signature_cannot_approve_different_revision_contents(self):
+        proposal=self.proposal(0,1.0);proof=self.proof(proposal)
+        forged=copy.deepcopy(self.spec);forged['components'][0]['parameters']['width']=1.2;ident=model.digest(forged)
+        with state.transaction(self.path) as db:
+            db.execute('INSERT INTO revisions VALUES(?,?,?,?,?,?)',(ident,2,self.base,model.encode(forged).decode(),proposal,proof))
+            db.execute('UPDATE head SET hash=?',(ident,))
+        with self.assertRaisesRegex(ValueError,'differs from approved patch'):state.head_revision(self.path,self.fingerprint)
+
+    def test_manufactured_ifc_receipt_cannot_bypass_signed_canonical_source(self):
+        import hashlib
+        import component_ifc as exchange
+        root=Path(self.temp.name);bundle=root/'forged-bundle';bundle.mkdir()
+        forged=copy.deepcopy(self.spec);forged['components'][0]['parameters']['width']=1.2
+        contents={'request.json':model.encode(forged),'components.blend':b'fake','components.glb':b'fake',
+            'meshes.json':model.encode({'request_sha256':model.digest(forged)}),
+            'verification.json':model.encode({'state':'PASS','request_sha256':model.digest(forged)})}
+        for name,data in contents.items():(bundle/name).write_bytes(data)
+        receipt={'schema':'gridline-component-receipt.v1','state':'VERIFIED_VISUAL_COMPONENTS','request_sha256':model.digest(forged),
+            'canonical_state_revision':model.digest(forged),'canonical_owner_key_sha256':self.fingerprint,
+            'files':{name:hashlib.sha256(data).hexdigest() for name,data in contents.items()}}
+        data=model.encode(receipt);(bundle/'receipt.json').write_bytes(data)
+        req=root/'requirements.json';req.write_bytes(model.encode({'schema':'gridline-ifc-requirements.v1','project_id':self.spec['project_id'],'required_properties':['SourceElementId'],'allow_unknown_materials':True}))
+        with patch.object(exchange,'engine') as engine,contextlib.redirect_stdout(io.StringIO()) as output:
+            code=exchange.main([str(bundle),str(root/'ifc'),'--state-db',str(self.path),'--requirements',str(req),
+                '--expected-bundle-receipt-sha256',hashlib.sha256(data).hexdigest(),'--expected-owner-key-sha256',self.fingerprint])
+        self.assertEqual(code,1);self.assertIn('current signed canonical state',output.getvalue());engine.assert_not_called()
+        self.assertFalse((root/'ifc').exists())
 
     def test_revision_and_audit_are_immutable(self):
         with self.assertRaises(sqlite3.IntegrityError):

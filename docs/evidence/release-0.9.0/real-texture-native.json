@@ -1,0 +1,124 @@
+{
+  "addon_archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+  "asset_plans": [
+    "7eceeed9aa48cef41c045ec2922f987bc16795361d70f1f544b53bf659adc1b0"
+  ],
+  "asset_provenance": {
+    "7eceeed9aa48cef41c045ec2922f987bc16795361d70f1f544b53bf659adc1b0": {
+      "evidence_scope": "USER_APPROVED_PLAN_AND_HASH_VERIFIED_BYTES",
+      "files": {
+        "base_color": {
+          "bytes": 834846,
+          "file": "base_color.jpg",
+          "sha256": "b2fb301f7205ce3d56b6a025dad797bb8cd8079c0fdabdfce9f9842291eb5c6a"
+        },
+        "normal": {
+          "bytes": 1211741,
+          "file": "normal.jpg",
+          "sha256": "574a41592b82b5c95b326913912df56f8a1213aac9d1e62896487613f32467c9"
+        },
+        "roughness": {
+          "bytes": 495868,
+          "file": "roughness.jpg",
+          "sha256": "b996c0f3f3e3a3c622dbf05b47765c541a10e7c9ad5f5f8e764af09df3bdd639"
+        }
+      },
+      "plan": {
+        "api_url": "https://api.polyhaven.com/files/aerial_wood_snips",
+        "asset_id": "aerial_wood_snips",
+        "attribution": "Textures from Poly Haven",
+        "bytes": 2542455,
+        "files": {
+          "base_color": {
+            "bytes": 834846,
+            "upstream_md5": "9890515d1b38b188a6346dc59210378d",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_wood_snips/aerial_wood_snips_diff_1k.jpg"
+          },
+          "normal": {
+            "bytes": 1211741,
+            "upstream_md5": "87110244e116b408cc488b29abd4b016",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_wood_snips/aerial_wood_snips_nor_gl_1k.jpg"
+          },
+          "roughness": {
+            "bytes": 495868,
+            "upstream_md5": "e792f48a2fb29da024d398752b3bc221",
+            "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_wood_snips/aerial_wood_snips_rough_1k.jpg"
+          }
+        },
+        "integrity_note": "Upstream MD5 is transport metadata, not an authenticity signature; cache records SHA256 of consumed bytes",
+        "license": "CC0-1.0",
+        "provider": "Poly Haven",
+        "resolution": "1k",
+        "schema": "gridline-cc0-plan.v1",
+        "source_url": "https://polyhaven.com/a/aerial_wood_snips"
+      }
+    }
+  },
+  "build_log_sha256": "93b97338e56c4911b1961957364059ea6514a21fe0be8c76b011c43ff4490a10",
+  "canonical_owner_key_sha256": null,
+  "canonical_state_revision": null,
+  "driver_sha256": "752ccbe59bc6a371ac7e7c76275ea1d70730d93ea3cfde7f354ae8807eecf735",
+  "files": {
+    "components.blend": "8e8a14746cc7a6c78befcd8e78294b3dbedbb104810d3985b1e6b7808a6887bc",
+    "components.glb": "772238eba146b0f7bb43d2d6643b306333fc6589893793a8a21aa1c9e86ead3c",
+    "meshes.json": "f4931218501794f9a9f259e8016e5461681d9c24e1ba72316269a41f9e3890e7",
+    "request.json": "3390cdfa7b3b61d740324dfb98ed10fc5e34d355eab1f5526003bb47e09e18a0",
+    "verification.json": "cb6e6660d96e451b2c71bf9623ef6cb190b259c38476c5967cc29ad153154caf"
+  },
+  "host": {
+    "addon_loading": "NOT_ATTEMPTED",
+    "archimesh_compatibility": "NOT_TESTED",
+    "executable": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "state": "HOST_STARTUP_VERIFIED",
+    "version": "5.2.3"
+  },
+  "output": "/private/tmp/gridline-components-real-cc0-frozen-20261026",
+  "outputs_are_authoritative_project_state": false,
+  "receipt_sha256": "24fe18d072782013f3ca9c54fe85c1d99b2997cbbfa2725baf0e4f59f97af9cd",
+  "request_sha256": "3390cdfa7b3b61d740324dfb98ed10fc5e34d355eab1f5526003bb47e09e18a0",
+  "runtime_sha256": {
+    "archimesh_components.py": "752ccbe59bc6a371ac7e7c76275ea1d70730d93ea3cfde7f354ae8807eecf735",
+    "archimesh_doctor.py": "4c662af6fa83dd3cffc01b8334319a5a63bfa8210831a42017344de7c53fdda6",
+    "blender_native.py": "a1c3ca0a14953b11e8ba2e23a4b3733f118d96dd4c98b69c408020f5b6c9fe0a",
+    "building_spec.py": "7683dde9e0ba7f63b2a015b0fb67f4cff84498b1a2610705a50078b4571eb7d5",
+    "cc0_assets.py": "fda54f83e923e15f299956b40bdd2227081542f3d703948ee89b6a61f3924f8f",
+    "component_approval.py": "ca8a3ae58f22475006007cb4feed430a7b3cac5eda50fa3d4e9b5738107e09cc",
+    "component_mesh.py": "6014240e1b0c4b23c1598b2fa3f714f68054becf7bb8ebc0460976dea7710756",
+    "component_spec.py": "4834b33e43977461bcccb1d884dd0fc6bbb249a186254f67be01bc4142c4b142",
+    "component_state.py": "6566f6af25e0844e8c64b86851ddffc96a2c7583e9527edcf107a6081238fb53",
+    "components_worker.py": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4",
+    "glb_qa.py": "737ca84c5539590a2a9d31176a072af10b7d4d75d8fb2a6a327e204a269d811a",
+    "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+    "revision_impact.py": "20c91ba39e914f11f866ec44b7e9c013af417b3176a1b9c8b39d835b59c7b3a5",
+    "wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d"
+  },
+  "schema": "gridline-component-receipt.v1",
+  "state": "VERIFIED_VISUAL_COMPONENTS",
+  "texture_verification": {
+    "real_cc0_texture_test": {
+      "base_color_pixels_sha256": "940e707ffff0a94ca7c6ee7a64ddfe039ef4aaeb300b040e6f8c172aedf5878a",
+      "base_color_size": [
+        1024,
+        1024
+      ],
+      "metallic_pixels": "ZERO_EFFECTIVE",
+      "normal_pixels_sha256": "23e0cf4fc2d23f871c738e7f212acc6d249b7de3327e658ad2e7ea44757e6e46",
+      "normal_size": [
+        1024,
+        1024
+      ],
+      "roughness_pixels_sha256": "368b785856e0a998a5d205dc18abe32f0e66f6dd28622454ff546fc7557a6584",
+      "roughness_size": [
+        1024,
+        1024
+      ],
+      "state": "EMBEDDED_PBR_READBACK"
+    }
+  },
+  "unverified": [
+    "Regulatory/manufacturing acceptance",
+    "Live-host edits",
+    "IFC semantics"
+  ],
+  "worker_sha256": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4"
+}

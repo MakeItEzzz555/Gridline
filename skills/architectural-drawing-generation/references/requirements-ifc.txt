@@ -1,0 +1,4 @@
+# Optional explicit installation only; never auto-installed by Gridline.
+# pytest is used by IfcOpenShell EXPRESS validation.
+ifcopenshell==0.9.0.post1
+pytest==9.1.1

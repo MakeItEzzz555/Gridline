@@ -1,0 +1,13 @@
+{
+  "baseline": "PASS",
+  "count": 1,
+  "engine": "0.9.0.post1",
+  "faults": [
+    {
+      "fault": "stair_count",
+      "reason": "IFC stair parameters changed",
+      "state": "REJECTED"
+    }
+  ],
+  "source_sha256": "687f43788b53d7a0474832d869a2d93767fa57369354b009640ea90e2620a9c9"
+}

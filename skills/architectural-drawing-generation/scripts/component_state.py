@@ -25,8 +25,8 @@ def transaction(path, *, new=False):
     try:
         if new:
             connection.execute('PRAGMA application_id=1196573489')
-            connection.execute('PRAGMA user_version=2')
-        elif connection.execute('PRAGMA application_id').fetchone()[0]!=1196573489 or connection.execute('PRAGMA user_version').fetchone()[0]!=2:
+            connection.execute('PRAGMA user_version=3')
+        elif connection.execute('PRAGMA application_id').fetchone()[0]!=1196573489 or connection.execute('PRAGMA user_version').fetchone()[0]!=3:
             raise ValueError('not a supported Gridline component-state database')
         connection.execute('PRAGMA foreign_keys=ON')
         connection.execute('BEGIN IMMEDIATE')
@@ -64,7 +64,7 @@ def initialize(path, document, owner, *, public_key, signature):
     try:
         with transaction(temporary,new=True) as db:
             db.executescript('''
-            CREATE TABLE revisions(hash TEXT PRIMARY KEY,seq INTEGER UNIQUE NOT NULL,parent TEXT,document TEXT NOT NULL);
+            CREATE TABLE revisions(hash TEXT PRIMARY KEY,seq INTEGER UNIQUE NOT NULL,parent TEXT,document TEXT NOT NULL,proposal TEXT,signature BLOB);
             CREATE TABLE head(id INTEGER PRIMARY KEY CHECK(id=1),hash TEXT NOT NULL REFERENCES revisions(hash),owner TEXT NOT NULL,public_key BLOB NOT NULL,key_sha256 TEXT NOT NULL,root_hash TEXT NOT NULL,initial_signature BLOB NOT NULL);
             CREATE TABLE proposals(hash TEXT PRIMARY KEY,base TEXT NOT NULL REFERENCES revisions(hash),patch TEXT NOT NULL,rationale TEXT NOT NULL,evidence TEXT NOT NULL,actor TEXT NOT NULL);
             CREATE TABLE events(seq INTEGER PRIMARY KEY,kind TEXT NOT NULL,object_hash TEXT NOT NULL,actor TEXT NOT NULL,detail TEXT NOT NULL,at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
@@ -76,7 +76,7 @@ def initialize(path, document, owner, *, public_key, signature):
             CREATE TRIGGER events_no_delete BEFORE DELETE ON events BEGIN SELECT RAISE(ABORT,'append-only audit'); END;
             ''')
             revision = digest(document)
-            db.execute('INSERT INTO revisions VALUES(?,?,?,?)',(revision,1,None,encode(document).decode()))
+            db.execute('INSERT INTO revisions VALUES(?,?,?,?,?,?)',(revision,1,None,encode(document).decode(),None,None))
             db.execute('INSERT INTO head VALUES(1,?,?,?,?,?,?)',(revision,owner,public_key,key_sha256,revision,signature))
             event(db,'INITIALIZED',revision,owner,{'scope':'key-holder-approved local source state; no native authorization','owner_key_sha256':key_sha256,'signature_b64':base64.b64encode(signature).decode()})
         os.link(temporary,path)
@@ -95,37 +95,84 @@ def document_at(db, revision):
     return document
 
 
+BUILDING_GROUPS=('levels','walls','openings','rooms')
+
+
+def patch_groups(patch):
+    groups={'components':patch} if isinstance(patch,list) else patch
+    if not isinstance(groups,dict) or not groups or set(groups)-{'components',*BUILDING_GROUPS}:
+        raise ValueError('typed patch must contain components/levels/walls/openings/rooms only')
+    if any(not isinstance(items,list) or not 1<=len(items)<=32 for items in groups.values()) or sum(map(len,groups.values()))>32:
+        raise ValueError('patch requires1..32 whole-element replacements')
+    return groups
+
+
+def elements(document,group):
+    if group=='components':return document['components']
+    if 'building' not in document:raise ValueError('building patches require an explicit canonical building')
+    return document['building'][group]
+
+
 def replace(document, patch):
-    if not isinstance(patch,list) or not 1 <= len(patch) <= 32:
-        raise ValueError('patch requires 1..32 whole-component replacements')
-    by_id = {item['id']:item for item in document['components']}
-    ids = set()
-    for item in patch:
-        if not isinstance(item,dict) or item.get('id') not in by_id or item['id'] in ids:
-            raise ValueError('unknown/duplicate target; additions and deletions require a separate reviewed intake')
-        before = by_id[item['id']]
-        if any(item.get(k) != before[k] for k in ('source_element_id','host_id','kind')):
-            raise ValueError('identity reuse or host/type reassignment forbidden')
-        by_id[item['id']] = item; ids.add(item['id'])
-    result = {**document, 'components':[by_id[item['id']] for item in document['components']]}
+    result=json.loads(encode(document))
+    for group,items in patch_groups(patch).items():
+        target=elements(result,group);by_id={item['id']:i for i,item in enumerate(target)};seen=set()
+        for item in items:
+            if not isinstance(item,dict) or item.get('id') not in by_id or item['id'] in seen:
+                raise ValueError('unknown/duplicate target; additions and deletions require reviewed intake')
+            before=target[by_id[item['id']]]
+            fixed=('source_element_id','host_id','kind') if group=='components' else ('wall','kind') if group=='openings' else ('level',) if group in ('walls','rooms') else ()
+            if set(item)!=set(before) or any(item.get(k)!=before.get(k) for k in fixed):
+                raise ValueError('required attributes/identity/host/type/level reassignment forbidden')
+            target[by_id[item['id']]]=item;seen.add(item['id'])
     return validate(result)
+
+
+def impact(before,after,patch):
+    from revision_impact import analyze
+    changes=[]
+    for group,items in patch_groups(patch).items():
+        old={i['id']:i for i in elements(before,group)}
+        changes.extend({'group':group,'id':i['id'],'before':old[i['id']],'after':i} for i in items if i!=old[i['id']])
+    indexed=analyze(before['building'],after['building']) if 'building' in before else {'affected_indexed_sheets':[],'schedules_to_recheck':[]}
+    sheets=set(indexed['affected_indexed_sheets']);schedules=set(indexed['schedules_to_recheck'])
+    if 'building' in before:
+        walls={i['id']:i for i in before['building']['walls']}
+        changed_levels={c['id'] for c in changes if c['group']=='levels'}
+        changed_walls={c['id'] for c in changes if c['group']=='walls'}|{w['id'] for w in walls.values() if w['level'] in changed_levels}
+        dependent_openings={o['id'] for o in before['building']['openings'] if o['wall'] in changed_walls}
+        if changed_walls:schedules.update(('door-schedule.csv','window-schedule.csv','room-schedule.csv'))
+        for sheet in before['building']['sheets']:
+            refs=sheet.get('references',{})
+            if changed_levels.intersection(refs.get('levels',[])) or changed_walls.intersection(refs.get('walls',[])) or dependent_openings.intersection(refs.get('openings',[])):sheets.add(sheet['number'])
+        for change in changes:
+            if change['group']!='components':continue
+            for item in (change['before'],change['after']):
+                level=walls[item['host_id']]['level'] if item['host_id'] else item['level_id']
+                for sheet in before['building']['sheets']:
+                    refs=sheet.get('references',{})
+                    if sheet.get('level')==level or item['source_element_id'] in refs.get('openings',[]) or item['host_id'] in refs.get('walls',[]):sheets.add(sheet['number'])
+    return {'changes':changes,'affected_indexed_sheets':sorted(sheets),'schedules_to_recheck':sorted(schedules),
+            'unindexed_drawings_and_host_families':'UNKNOWN; separate review required','native_host_authorization':False}
 
 
 def propose(path, base, patch, actor, rationale, evidence):
     if not all(isinstance(s,str) and 0 < len(s) <= 2000 for s in (actor,rationale,evidence)):
         raise ValueError('actor, rationale and source evidence are required')
     with transaction(path) as db:
+        authenticated_revision(db,db.execute('SELECT key_sha256 FROM head WHERE id=1').fetchone()[0],base)
         original = document_at(db,base)
         proposed = replace(original,patch)
         if proposed == original:
             raise ValueError('empty change')
         ident = digest({'base':base,'patch':patch,'actor':actor,'rationale':rationale,'evidence':evidence})
+        affected=impact(original,proposed,patch)
         if db.execute('SELECT 1 FROM proposals WHERE hash=?',(ident,)).fetchone() is None:
             db.execute('INSERT INTO proposals VALUES(?,?,?,?,?,?)',(ident,base,encode(patch).decode(),rationale,evidence,actor))
-            event(db,'PROPOSED',ident,actor,{'base':base,'affected_ids':[i['id'] for i in patch]})
+            event(db,'PROPOSED',ident,actor,{'base':base,'proposed_document_sha256':digest(proposed),'impact':affected})
         owner,key,key_sha256,message=approval_context(db,ident,'APPROVE')
     return {'state':'PROPOSED','proposal':ident,'base':base,'patch':patch,'proposed_document_sha256':digest(proposed),
-            'drawing_impact':'UNKNOWN_UNLESS_EXPLICITLY_INDEXED','approval_payload':message.decode(),'owner_key_sha256':key_sha256}
+            'drawing_impact':affected,'approval_payload':message.decode(),'owner_key_sha256':key_sha256}
 
 
 def approval_context(db, proposal, action):
@@ -153,6 +200,7 @@ def approve(path, proposal, actor, signature):
 
 def commit(path, proposal):
     with transaction(path) as db:
+        authenticated_revision(db,db.execute('SELECT key_sha256 FROM head WHERE id=1').fetchone()[0])
         previous = db.execute("SELECT detail FROM events WHERE kind='COMMITTED' AND object_hash=?",(proposal,)).fetchone()
         if previous:
             return json.loads(previous[0])
@@ -170,9 +218,10 @@ def commit(path, proposal):
         patch = json.loads(raw_patch)
         current = db.execute('SELECT hash FROM head WHERE id=1').fetchone()[0]
         original = document_at(db,base); head = document_at(db,current)
-        original_ids = {i['id']:i for i in original['components']}
-        current_ids = {i['id']:i for i in head['components']}
-        conflicts = [i['id'] for i in patch if current_ids.get(i['id']) != original_ids.get(i['id'])]
+        conflicts=[]
+        for group,items in patch_groups(patch).items():
+            original_ids={i['id']:i for i in elements(original,group)};current_ids={i['id']:i for i in elements(head,group)}
+            conflicts.extend(group+'/'+i['id'] for i in items if current_ids.get(i['id'])!=original_ids.get(i['id']))
         if conflicts:
             result={'state':'CONFLICT','proposal':proposal,'head':current,'conflicting_ids':conflicts}
             event(db,'REJECTED_CONFLICT',proposal,approved[0],result)
@@ -180,9 +229,9 @@ def commit(path, proposal):
         merged = replace(head,patch)
         revision = digest(merged)
         seq = db.execute('SELECT MAX(seq)+1 FROM revisions').fetchone()[0]
-        db.execute('INSERT OR IGNORE INTO revisions VALUES(?,?,?,?)',(revision,seq,current,encode(merged).decode()))
+        db.execute('INSERT OR IGNORE INTO revisions VALUES(?,?,?,?,?,?)',(revision,seq,current,encode(merged).decode(),proposal,signature))
         db.execute('UPDATE head SET hash=? WHERE id=1',(revision,))
-        result={'state':'COMMITTED','proposal':proposal,'revision':revision,'previous':current,'rebased':base != current}
+        result={'state':'COMMITTED','proposal':proposal,'revision':revision,'previous':current,'rebased':base != current,'impact':impact(head,merged,patch)}
         event(db,'COMMITTED',proposal,approved[0],result)
     return result
 
@@ -200,26 +249,62 @@ def reject(path, proposal, actor, signature):
 def restore_proposal(path, target, actor, rationale, evidence):
     with transaction(path) as db:
         head = db.execute('SELECT hash FROM head WHERE id=1').fetchone()[0]
-        target_document = document_at(db,target)
-    return propose(path,head,target_document['components'],actor,rationale,evidence)
+        authenticated_revision(db,db.execute('SELECT key_sha256 FROM head WHERE id=1').fetchone()[0],target)
+        target_document = document_at(db,target);current_document=document_at(db,head)
+    patch={}
+    for group in ('components',*(BUILDING_GROUPS if 'building' in target_document else ())):
+        current={i['id']:i for i in elements(current_document,group)}
+        changed=[i for i in elements(target_document,group) if i!=current.get(i['id'])]
+        if changed:patch[group]=changed
+    return propose(path,head,patch,actor,rationale,evidence)
 
 
-def head_revision(path, expected_key):
-    with transaction(path) as db:
-        current,owner,key,key_sha256,root,signature=db.execute('SELECT hash,owner,public_key,key_sha256,root_hash,initial_signature FROM head WHERE id=1').fetchone()
-        initial=document_at(db,root)
-        if key_sha256!=expected_key or verify_signature(key,signature,payload('INITIALIZE',initial['project_id'],root,key_sha256,owner))!=key_sha256:
-            raise ValueError('canonical owner key/initialization signature mismatch')
-        document_at(db,current)
-    return current
+def authenticated_revision(db, expected_key, revision=None):
+    header=db.execute('SELECT hash,owner,public_key,key_sha256,root_hash,initial_signature FROM head WHERE id=1').fetchone()
+    if header is None:raise ValueError('canonical state header is missing')
+    current,owner,key,key_sha256,root,signature=header
+    initial=document_at(db,root)
+    if key_sha256!=expected_key or verify_signature(key,signature,payload('INITIALIZE',initial['project_id'],root,key_sha256,owner))!=key_sha256:
+        raise ValueError('canonical owner key/initialization signature mismatch')
+    target=current if revision is None else revision
+    verified={root:initial};pending=[(target,False)];active=set()
+    while pending:
+        ident,ready=pending.pop()
+        if ident in verified:continue
+        row=db.execute('SELECT parent,proposal,signature FROM revisions WHERE hash=?',(ident,)).fetchone()
+        if row is None or not all(row):raise ValueError('canonical revision lacks signed transition proof')
+        parent,proposal,proof=row
+        approver,public,fingerprint,message=approval_context(db,proposal,'APPROVE')
+        base,patch=db.execute('SELECT base,patch FROM proposals WHERE hash=?',(proposal,)).fetchone();patch=json.loads(patch)
+        if not ready:
+            if ident in active:raise ValueError('canonical revision cycle')
+            active.add(ident);pending.append((ident,True))
+            pending.extend((dependency,False) for dependency in {parent,base} if dependency not in verified)
+            continue
+        if approver!=owner or fingerprint!=expected_key or verify_signature(public,proof,message)!=expected_key:raise ValueError('canonical revision signature mismatch')
+        if db.execute("SELECT 1 FROM events WHERE kind='REJECTED_OWNER' AND object_hash=?",(proposal,)).fetchone():raise ValueError('canonical revision uses a rejected proposal')
+        before,original=verified[parent],verified[base]
+        for group,items in patch_groups(patch).items():
+            old={i['id']:i for i in elements(original,group)};head={i['id']:i for i in elements(before,group)}
+            if any(head.get(i['id'])!=old.get(i['id']) for i in items):raise ValueError('canonical revision bypassed a stale conflict')
+        document=document_at(db,ident)
+        if document!=replace(before,patch) or document['project_id']!=initial['project_id']:raise ValueError('canonical revision differs from approved patch')
+        verified[ident]=document;active.remove(ident)
+    return target
+
+
+def head_revision(path, expected_key, revision=None):
+    with transaction(path) as db:return authenticated_revision(db,expected_key,revision)
 
 
 def inspect(path, audit_limit=100):
     with transaction(path) as db:
-        head, owner = db.execute('SELECT hash,owner FROM head WHERE id=1').fetchone()
+        row=db.execute('SELECT hash,owner,key_sha256 FROM head WHERE id=1').fetchone()
+        if row is None:raise ValueError('canonical state header is missing')
+        head,owner,key_sha256=row
+        authenticated_revision(db,key_sha256)
         document = document_at(db,head)
         if type(audit_limit)!=int or not 1<=audit_limit<=1000:raise ValueError('audit limit must be 1..1000')
-        key_sha256=db.execute('SELECT key_sha256 FROM head WHERE id=1').fetchone()[0]
         audit = [dict(zip(('seq','kind','hash','actor','detail','at'),r)) for r in reversed(list(db.execute('SELECT * FROM events ORDER BY seq DESC LIMIT ?',(audit_limit,))))]
         total=db.execute('SELECT COUNT(*) FROM events').fetchone()[0]
     return {'state':'LOCAL_STATE_ONLY','revision':head,'owner':owner,'document':document,'audit':audit,'audit_total':total,'audit_truncated':total>len(audit),'owner_key_sha256':key_sha256,

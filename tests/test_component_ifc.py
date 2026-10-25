@@ -45,3 +45,14 @@ class IFCInputTests(unittest.TestCase):
         self.assertEqual(exporter.stable_uuid('P','element/E1'),exporter.stable_uuid('P','element/E1'))
         self.assertNotEqual(exporter.stable_uuid('P','element/E1'),exporter.stable_uuid('Q','element/E1'))
         self.assertNotEqual(exporter.stable_uuid('P','element/E1'),exporter.stable_uuid('P','opening/E1'))
+
+    def test_native_geometry_buffers_are_materialized_only_once(self):
+        class Geometry:
+            def __init__(self):self.reads={'verts':0,'faces':0}
+            @property
+            def verts(self):self.reads['verts']+=1;return (0.,0.,0.,1.,0.,0.,0.,1.,0.)
+            @property
+            def faces(self):self.reads['faces']+=1;return (0,1,2)
+        geometry=Geometry()
+        self.assertEqual(exporter.geometry_mesh(geometry),([[0.,0.,0.],[1.,0.,0.],[0.,1.,0.]],[[0,1,2]]))
+        self.assertEqual(geometry.reads,{'verts':1,'faces':1})

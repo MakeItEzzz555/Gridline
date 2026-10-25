@@ -1,0 +1,6 @@
+{
+  "scope": "Actual current-code retained-pin readback",
+  "log_sha256": "9c2591dd000f38fd0bc1d14f7afd747a1d8b7f33d30880a9db99549b4c51167e",
+  "published_bytes_unchanged": "Public verifier uses immutable snapshots; pipeline asserts byte equality",
+  "result": "PASS"
+}
