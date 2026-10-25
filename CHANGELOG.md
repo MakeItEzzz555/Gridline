@@ -1,9 +1,11 @@
 # Changelog
 
+
 ## Unreleased — book evidence and original review references
 
 - Record all 15 ArchEyes titles with edition/ISBN/access status, claim counterexamples and explicit gaps; correct the Ching edition gap and conflicting Materials for Design ISBN.
 - Add 15 original, nonnormative on-demand practice references to existing skills, synchronized to Claude. No paid text, construction dimensions or regulatory predicates extracted.
+
 
 ## Unreleased — measured villa topology repair (2026-10-24)
 
