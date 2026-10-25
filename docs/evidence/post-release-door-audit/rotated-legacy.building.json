@@ -1,0 +1,119 @@
+{
+  "project": {
+    "name": "Example House",
+    "number": "EX-001",
+    "client": "Example Client",
+    "address": "Plot 12, Example Street",
+    "architect": "Example Architects",
+    "drawn_by": "AAS",
+    "checked_by": "",
+    "status": "CONCEPT",
+    "revision": "P01",
+    "date": "2026-10-22",
+    "north_deg": 0
+  },
+  "units": "mm",
+  "standard": "iso13567",
+  "levels": [
+    {
+      "id": "L00",
+      "name": "Ground floor",
+      "elevation": 0,
+      "height": 3000
+    }
+  ],
+  "grids": [],
+  "walls": [
+    {
+      "id": "W",
+      "level": "L00",
+      "type": "internal",
+      "start": [
+        -0.0,
+        0.0
+      ],
+      "end": [
+        -1035.2761804100835,
+        3863.7033051562735
+      ],
+      "thickness": 200
+    }
+  ],
+  "openings": [
+    {
+      "id": "D",
+      "kind": "door",
+      "wall": "W",
+      "offset": 1000,
+      "width": 900,
+      "height": 2100,
+      "hinge": "start",
+      "opens": "right",
+      "receiving_room": "BED"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "BED",
+      "name": "Bedroom",
+      "level": "L00",
+      "boundary": [
+        [
+          -96.59258262890683,
+          -25.881904510252085
+        ],
+        [
+          -1131.8687630389904,
+          3837.821400646021
+        ],
+        [
+          -3933.0536592772887,
+          3087.246169848711
+        ],
+        [
+          -2897.777478867205,
+          -776.4571353075626
+        ]
+      ]
+    },
+    {
+      "id": "HALL",
+      "name": "Hall",
+      "level": "L00",
+      "boundary": [
+        [
+          96.59258262890683,
+          25.881904510252085
+        ],
+        [
+          2897.777478867205,
+          776.4571353075626
+        ],
+        [
+          1862.5012984571215,
+          4640.1604404638365
+        ],
+        [
+          -938.6835977811767,
+          3889.5852096665258
+        ]
+      ]
+    }
+  ],
+  "sheets": [
+    {
+      "number": "A-101",
+      "title": "Ground floor plan",
+      "level": "L00",
+      "scale": 100,
+      "size": "A3"
+    },
+    {
+      "number": "A-102",
+      "title": "Ground floor plan - enlarged",
+      "level": "L00",
+      "scale": 50,
+      "size": "A1"
+    }
+  ]
+}

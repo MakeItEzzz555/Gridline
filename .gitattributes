@@ -1,0 +1,3 @@
+# Generated audit drawings are reviewed visually and by recorded hashes.
+docs/evidence/post-release-door-audit/*.dxf binary
+docs/evidence/post-release-door-audit/*.svg binary

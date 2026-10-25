@@ -1,0 +1,37 @@
+{
+  "baseline_sha": "f521969934758ac5625239ea65229190a5a6114e",
+  "scope": "Generated DXF/PDF and model-space SVG/PNG crops; no native roundtrip acceptance",
+  "observations": [
+    {
+      "state": "before",
+      "arc_span_degrees": 270.0,
+      "native_acceptance": "NOT_RUN"
+    },
+    {
+      "state": "after",
+      "arc_span_degrees": 90.00000000000001,
+      "native_acceptance": "NOT_RUN"
+    },
+    {
+      "state": "room-entry",
+      "arc_span_degrees": 90.00000000000001,
+      "native_acceptance": "NOT_RUN"
+    }
+  ],
+  "sha256": {
+    "after-door.png": "a1164df9fd1bf69627374204d9f12111f283ca703b743c78badcd9663b873bf0",
+    "after-door.svg": "bbed3c3312a1bd6f2314bf02a38a6b5b5244f94ad6a06dde3aa6c43c40d35fcf",
+    "after-plan.dxf": "7e8d4b25b6bd96fd21a1c6d2b3030a4eb60a4adec38ccc386abbd0097e27293d",
+    "after-plan.pdf": "45472a473bfa9444cf8cc3b91b43b2fb32547dcb5e584319897507af85070aaf",
+    "before-door.png": "cbd77afd57eadf7c72308553746ce549e0a940bf897e6de41bc29df76231e52d",
+    "before-door.svg": "0514d60a71dcf57e0f3bba5c6feaf62442f2ba10cc004ec42ae352f3954814a0",
+    "before-plan.dxf": "69d477f46a0b753454980df574d95d0fdd4fafe7e4808611c1c74b94c5658d74",
+    "before-plan.pdf": "6e3610310b5bb97f148280ea7149ade81b61312a2674d3f1eea0bf98db90bc40",
+    "room-entry-door.png": "41fa99901dff81c573a030209f17a5413e99c2e0d8de8e148e4e68a193ebaa9a",
+    "room-entry-door.svg": "8ce58300d348a2684e943d5344e3df5774f3c4eaaffdf3af3080c6c4e9048837",
+    "room-entry-plan.dxf": "654608835b5cef2a221027020d2f820963d99231cfc4dffa53396c716f240485",
+    "room-entry-plan.pdf": "7f9bb97ad01b9724b55184dbbd9f1bff939e9ff92eb4e7561fce87c6abf1c750",
+    "room-entry.building.json": "a2ae43169ddebb8e30a39ea0ef6461334cabb19dce1a2f10dd3479319f5c4180",
+    "rotated-legacy.building.json": "9a0ea0d64df9228e9bab549c03b9d083369135321dc69e1aa9952e8d0b564928"
+  }
+}

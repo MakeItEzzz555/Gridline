@@ -6,6 +6,15 @@
 - Serialize source-triage JSON receipts with ASCII-safe escapes so restricted terminal encodings cannot turn valid requests into false invalid-input results; preserve original Unicode on JSON decoding and Claude skill parity.
 - Read source-registry fixtures explicitly as UTF-8; add adverse ASCII-terminal and citation-provenance regressions. No new jurisdictional rules or release qualification are implied.
 
+## 0.8.1 — 2026-10-25
+
+- Correct native paper-space plotting to literal 1:1 millimetres and reject incorrect plot scales in readback.
+- Validate supplied receiving-room references for explicit legacy swings without flipping reviewed exceptions.
+- Honor nonplot layers in PDF output so room boundaries do not draw lines across door openings; keep DXF room geometry.
+- Fix rotated single-hinged doors producing a 270-degree arc instead of a quarter turn.
+- Add opt-in receiving-room door intent, sampled room-boundary diagnostics, coordinated schedule/readback and conceptual 3D metadata; preserve explicit legacy swings.
+- Record bounded post-release audit evidence and remaining native/release gates.
+
 ## 0.8.0 — 2026-10-25
 
 - Add immutable-candidate final qualification receipts with live CI, provenance verification and owner-bound approval; require distinct labelled evidence for every gate.
