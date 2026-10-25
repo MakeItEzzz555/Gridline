@@ -1,0 +1,27 @@
+{
+  "country": "CY",
+  "municipality": "Nicosia",
+  "project_type": "residential",
+  "stage": "technical-design",
+  "as_of": "2026-10-25",
+  "requested_sources": [
+    {
+      "id": "ifc4x3-add2",
+      "edition": "4.3.2.0"
+    },
+    {
+      "id": "ids",
+      "edition": "1.0.0"
+    },
+    {
+      "id": "cy-building-permit"
+    },
+    {
+      "id": "cy-eurocodes"
+    },
+    {
+      "id": "cy-ec2-na-enquiry",
+      "edition": "public-enquiry:2024-11-28"
+    }
+  ]
+}

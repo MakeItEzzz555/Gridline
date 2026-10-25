@@ -12,3 +12,7 @@ For each material control record topic, requirement, applicability, numeric valu
 Separate confirmed requirement, interpretation, project assumption, and items requiring authority/professional confirmation.
 
 Do not claim permit approval or definitive compliance. Flag planning/legal, accessibility, fire/life-safety, structural, and construction-critical conclusions for competent human review.
+
+## Offline source-edition triage
+
+For explicit jurisdiction/source-edition requests, read [source selection and limits](references/source-selection.md), then use this skill's own `scripts/select_sources.py` with a project context. Its bundled `references/source-registry.json` is citation metadata, not an approved rule pack. The command reports missing/stale/draft/wrong-jurisdiction evidence and never activates a rule or issues compliance PASS. Do not substitute drawing-profile defaults for adopted building regulations.

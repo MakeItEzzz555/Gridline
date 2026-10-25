@@ -10,6 +10,11 @@
 - Add a read-only, network-off-by-default stable release checker with strict SemVer and repository/redirect/size validation. No artifact download or install.
 - Add distribution metadata to provider version-drift checks and document real provider-specific update paths and unqualified release gates.
 
+## Unreleased — jurisdiction and source-edition triage
+
+- Add a versioned, citation-only 12-record authority/source registry and an offline selector within the portable site-regulation-research skill.
+- Reject missing, stale, draft and mismatched source evidence without activating rules; keep Cyprus adoption and professional review gaps explicit. Include adversarial and standalone-skill tests; synchronize Claude.
+
 ## Unreleased — measured villa topology repair (2026-10-24)
 
 - Scope opening voids to their host level; validate full cutaway inventories after native view-layer evaluation and reject modifiers, shape keys and hidden/excluded geometry. Add real-host corruption regressions.
