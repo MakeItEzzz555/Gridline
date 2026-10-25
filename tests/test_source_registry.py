@@ -1,6 +1,7 @@
 """Source triage false-pass regressions; these tests establish no code compliance."""
 import copy
 import hashlib
+import os
 import importlib.util
 import json
 from pathlib import Path
@@ -19,7 +20,7 @@ spec.loader.exec_module(selector)
 
 class SourceRegistryTests(unittest.TestCase):
     def setUp(self):
-        self.registry = json.loads((SKILL / 'references/source-registry.json').read_text())
+        self.registry = json.loads((SKILL / 'references/source-registry.json').read_text(encoding='utf-8'))
         self.project = dict(country='CY', municipality='Nicosia', project_type='residential',
                             stage='technical-design', as_of='2026-10-25',
                             requested_sources=[dict(id='ifc4x3-add2', edition='4.3.2.0')])
@@ -149,6 +150,27 @@ class SourceRegistryTests(unittest.TestCase):
             context.write_text('{')
             ran = subprocess.run([*command, str(context)], capture_output=True, text=True)
             self.assertEqual((ran.returncode, json.loads(ran.stdout)['status']), (2, 'UNKNOWN'))
+
+    def test_ascii_stdout_keeps_unicode_evidence_and_real_status(self):
+        """An ASCII terminal must not misreport a valid source as invalid input."""
+        with tempfile.TemporaryDirectory() as tmp:
+            context = Path(tmp) / 'context.json'
+            project = {**self.project, 'requested_sources': [
+                {'id': 'cy-eurocodes', 'edition': None}]}
+            context.write_text(json.dumps(project), encoding='utf-8')
+            env = {**os.environ, 'PYTHONIOENCODING': 'ascii:strict',
+                   'PYTHONUTF8': '0', 'LC_ALL': 'C'}
+            result = subprocess.run(
+                [sys.executable, '-X', 'utf8=0',
+                 str(SKILL / 'scripts/select_sources.py'), str(context)],
+                capture_output=True, text=True, encoding='ascii', env=env)
+            self.assertEqual(result.returncode, 2, result.stderr)
+            receipt = json.loads(result.stdout)
+            self.assertEqual(receipt['mode'], 'RESEARCH_ONLY')
+            self.assertEqual(receipt['results'][0]['id'], 'cy-eurocodes')
+            self.assertEqual(receipt['results'][0]['status'], 'UNVERIFIED')
+            self.assertIn('–', receipt['results'][0]['next_evidence'])
+            self.assertFalse(receipt['rule_activation_allowed'])
 
     def test_source_records_preserve_gaps_and_citations(self):
         selector.validate_registry(self.registry)

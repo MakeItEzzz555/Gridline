@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — 0.8.0 candidate review corrections (2026-10-25)
+
+- Correct B14 author-overview evidence pointers without implying publisher TOC or ISBN verification.
+- Serialize source-triage JSON receipts with ASCII-safe escapes so restricted terminal encodings cannot turn valid requests into false invalid-input results; preserve original Unicode on JSON decoding and Claude skill parity.
+- Read source-registry fixtures explicitly as UTF-8; add adverse ASCII-terminal and citation-provenance regressions. No new jurisdictional rules or release qualification are implied.
+
 ## 0.8.0 candidate — qualification pending
 
 - Pin CI action revisions and prepare a manual exact-main publisher-attestation workflow with hostile-source guard tests; no automatic publication.

@@ -178,7 +178,7 @@ def main(argv=None):
         registry, registry_hash = read_json(SKILL / 'references/source-registry.json')
         result = select_sources(project, registry)
         result.update(project_sha256=project_hash, registry_sha256=registry_hash)
-        print(json.dumps(result, ensure_ascii=False, allow_nan=False))
+        print(json.dumps(result, ensure_ascii=True, allow_nan=False))
         return 2 if any(r['status'] in {'UNKNOWN', 'UNVERIFIED'} for r in result['results']) else 0
     except (ValueError, OSError, KeyError, TypeError):
         print(json.dumps({'mode': 'RESEARCH_ONLY', 'status': 'UNKNOWN',
