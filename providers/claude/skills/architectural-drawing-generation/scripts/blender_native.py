@@ -196,7 +196,11 @@ def load_spec(path):
     return json.loads(source_bytes(path), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(f"invalid {x}")))
 
 
-def publish(tmp, out, receipts):
+def publish(tmp, out, receipts, *, names=("model.blend", "model.glb", "verification.json", "scene.json")):
+    if (not isinstance(names,(tuple,list)) or not names
+            or any(not isinstance(name,str) or Path(name).name != name or '\\' in name or name in ('', '.', '..', 'receipt.json') for name in names)
+            or len(set(names)) != len(names)):
+        raise ValueError('publication names must be distinct regular basenames')
     parent = os.open(out.anchor, os.O_RDONLY | os.O_DIRECTORY)
     try:
         for part in out.parts[1:-1]:
@@ -208,7 +212,7 @@ def publish(tmp, out, receipts):
     finally:
         os.close(parent)
     try:
-        for name in ("model.blend", "model.glb", "verification.json", "scene.json", "receipt.json"):
+        for name in (*names, "receipt.json"):
             dest = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=fd)
             with os.fdopen(dest, 'wb') as handle:
                 if name == 'receipt.json':

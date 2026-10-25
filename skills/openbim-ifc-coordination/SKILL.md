@@ -43,3 +43,26 @@ For file/model changes, compare the result against a pre-change baseline and rep
 If a live CAD/BIM/GIS/analysis tool or MCP integration is available, inspect the current document/model and tool version before write operations. Prefer read-only inspection, dry runs, bounded samples, new output paths, and native undo/transaction mechanisms. Never claim a model or drawing was changed unless the tool confirms it.
 
 If the native application is unavailable, produce a reproducible plan, script, structured data, SVG/DXF artifact, or exact in-application procedure instead of pretending to have operated the software.
+
+
+## Optional Gridline source-bound IFC4 exchange
+
+Discover the installed `architectural-drawing-generation` skill before invoking
+its own `scripts/component_ifc.py`; report a missing dependency rather than
+inventing a path. The bounded exporter requires IfcOpenShell 0.9.0.post1 plus pytest
+for actual EXPRESS validation, a selected signed state database, explicit matching
+project requirements and separately trusted native receipt/owner-key pins. It
+checks typed source/units/spatial/room/material/quantity/host/void/filling data,
+raw and independently evaluated geometry, and stable source mappings. Public
+`--verify` additionally requires the retained IFC receipt pin and preserves
+published bytes. Read its command help, optional requirements and source/licensing
+boundaries first; no dependency is automatically installed.
+
+Use an owner-selected persistent globally unique project identity. The accepted
+synthetic fixture and its minimal provenance requirements are not a client's IDS,
+certified MVD or regulatory brief. Unsupported requirements, unknown mandatory
+materials or missing source approvals block export. Report the actual checked
+scope and all receiving-client/IDS/professional gaps. IFC maps material identities;
+packed photographic PBR remains in Blender/GLB. This file-only pipeline grants no
+live-host edit permissions and does not close every #13/#15 interoperability or
+transaction criterion.

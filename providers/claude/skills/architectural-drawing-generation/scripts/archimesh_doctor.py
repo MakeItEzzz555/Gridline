@@ -24,9 +24,10 @@ def absolute_path(path):
     return path
 
 
-def read_file(path):
+def read_file(path, *, max_bytes=None):
     """Bound reads and reject symlinks/devices, including selected parent links."""
     path = absolute_path(path)
+    limit = MAX_FILE_BYTES if max_bytes is None else max_bytes
     if any(p.is_symlink() for p in (path, *path.parents)):
         raise ValueError("source symlinks are unsupported")
     fd = os.open(path, os.O_RDONLY | getattr(os, "O_BINARY", 0) |
@@ -34,9 +35,9 @@ def read_file(path):
     with os.fdopen(fd, "rb") as handle:
         if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
             raise ValueError("source must be a regular file")
-        data = handle.read(MAX_FILE_BYTES + 1)
-    if len(data) > MAX_FILE_BYTES:
-        raise ValueError("source file exceeds 1 MiB")
+        data = handle.read(limit + 1)
+    if len(data) > limit:
+        raise ValueError("source file exceeds byte budget")
     return data
 
 

@@ -1,0 +1,51 @@
+{
+  "addon_archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+  "asset_plans": [],
+  "asset_provenance": {},
+  "build_log_sha256": "4bbabff330fbfe1cee01fef8ce1e2f2885e1558dad779d34beb2a63d2bbcc8b1",
+  "canonical_owner_key_sha256": "d85c0edc8aa321dcb270c2d6f06d814753abf3f36205f894c6f9cc60cc8016be",
+  "canonical_state_revision": "c89e91742a050875748664bbdfc2bae85c9eae3c8afb63fd5144dd5500ba0b84",
+  "driver_sha256": "bd14eaf8972220a626f4747108e2b2f9bf9d0fca7b6fa2d0917167c6581d9ef3",
+  "files": {
+    "components.blend": "a500443eb411745d95981175aea0f89ed5fd35a1115bd27886fcd898b6992387",
+    "components.glb": "c082b0e37e467c3261c44bc38e6acfaf301e3c076e9e2235b1b884234f1ea5d1",
+    "meshes.json": "ae4b3bf0898d4f22b6f7679bb2ecb36a7dbe3978399c988a5a28c85c6a2c617f",
+    "request.json": "c89e91742a050875748664bbdfc2bae85c9eae3c8afb63fd5144dd5500ba0b84",
+    "verification.json": "06d75e07a3879756c41875101ef28c9f4e0149f9f2aab9edd4f18ab10bf946db"
+  },
+  "host": {
+    "addon_loading": "NOT_ATTEMPTED",
+    "archimesh_compatibility": "NOT_TESTED",
+    "executable": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "state": "HOST_STARTUP_VERIFIED",
+    "version": "5.2.3"
+  },
+  "output": "/private/tmp/gridline-components-bounded-two-level-20261025",
+  "outputs_are_authoritative_project_state": false,
+  "receipt_sha256": "24665a2d67ff0fb630be6584ec1a65e7ee62c2a8dcdeceffda34051e5c9829fc",
+  "request_sha256": "c89e91742a050875748664bbdfc2bae85c9eae3c8afb63fd5144dd5500ba0b84",
+  "runtime_sha256": {
+    "archimesh_components.py": "bd14eaf8972220a626f4747108e2b2f9bf9d0fca7b6fa2d0917167c6581d9ef3",
+    "archimesh_doctor.py": "4c662af6fa83dd3cffc01b8334319a5a63bfa8210831a42017344de7c53fdda6",
+    "blender_native.py": "a1c3ca0a14953b11e8ba2e23a4b3733f118d96dd4c98b69c408020f5b6c9fe0a",
+    "building_spec.py": "7683dde9e0ba7f63b2a015b0fb67f4cff84498b1a2610705a50078b4571eb7d5",
+    "cc0_assets.py": "fda54f83e923e15f299956b40bdd2227081542f3d703948ee89b6a61f3924f8f",
+    "component_approval.py": "ca8a3ae58f22475006007cb4feed430a7b3cac5eda50fa3d4e9b5738107e09cc",
+    "component_mesh.py": "6014240e1b0c4b23c1598b2fa3f714f68054becf7bb8ebc0460976dea7710756",
+    "component_spec.py": "075943729e01a84131ae132b5fac9f5a7ba93fa1f2c5e9456c155366a005f8dd",
+    "component_state.py": "5a8cc3881d4ab00f90cb711fc44c0cc2cec968100c08ea9b1aa3a9e099323405",
+    "components_worker.py": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4",
+    "glb_qa.py": "737ca84c5539590a2a9d31176a072af10b7d4d75d8fb2a6a327e204a269d811a",
+    "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+    "wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d"
+  },
+  "schema": "gridline-component-receipt.v1",
+  "state": "VERIFIED_VISUAL_COMPONENTS",
+  "texture_verification": {},
+  "unverified": [
+    "Regulatory/manufacturing acceptance",
+    "Live-host edits",
+    "IFC semantics"
+  ],
+  "worker_sha256": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4"
+}

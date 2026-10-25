@@ -1,0 +1,45 @@
+{
+  "addon_installations_in_user_profiles": 0,
+  "agent_count": 1,
+  "approved_state_fixture": "Synthetic test-owner Ed25519 key; no user-project approval implied; private fixture key discarded",
+  "asset_evidence": "SYNTHETIC first-party fixture via mocked HTTP; no real asset bytes downloaded",
+  "baseline": "0.8.1",
+  "host": "Blender 5.2.3 LTS e13b728c6880",
+  "native_adverse_count": 26,
+  "package_a_sha": "7a5a03b7961ff42e0bd54859a9f564ee27376cc2",
+  "pending": [
+    "Approval for temporary IfcOpenShell 0.9.0.post1 dependency download, capped100 MiB",
+    "Approval for real Poly Haven 3-channel1K JPG download,2.43 MiB",
+    "IFC engine/schema/geometry/spatial/GUID/requirements/negative acceptance",
+    "General #15 building/live-host transactions and full #13 P2/professional gates",
+    "Stable release qualification and actual client/IDS interoperability"
+  ],
+  "provider_token_cache_cost_receipts": "UNAVAILABLE; no savings claims",
+  "public_verifier": {
+    "log_sha256": "04aaa35bbd7a8e200f3536bbdd10bcbb14fea4c280029c9781010bb4b571571c",
+    "result": "PASS; all published bytes unchanged",
+    "source_snapshot": "bounded-all.json receipt/runtime hashes"
+  },
+  "receipts_and_external_logs": "/tmp/gridline-archimesh-research-20261025",
+  "regression": {
+    "command": "clean-cad-env/bin/python -m unittest discover -s tests -v",
+    "coverage": "CAD dependencies present; IFC engine absent,3 IFC input-boundary tests only",
+    "elapsed_seconds": 77.556,
+    "log_sha256": "b2c13e5472ca186939dd703b075049d3bdc95e0e5daa0e6805f0e84bc0c30e48",
+    "skips": 0,
+    "tests": 218
+  },
+  "repo_checker": "PASS v0.8.1;30 canonical skills;provider mirrors;manifests;bounded agents;62 activation cases",
+  "runtime_sources": {
+    "component_approval.py": "ca8a3ae58f22475006007cb4feed430a7b3cac5eda50fa3d4e9b5738107e09cc",
+    "component_ifc.py": "5813d8d6deffff0673193aad072aef0fa471057a8157afcd0ea62cc9a0bf8c2f",
+    "component_mesh.py": "6014240e1b0c4b23c1598b2fa3f714f68054becf7bb8ebc0460976dea7710756",
+    "component_spec.py": "075943729e01a84131ae132b5fac9f5a7ba93fa1f2c5e9456c155366a005f8dd",
+    "component_state.py": "5a8cc3881d4ab00f90cb711fc44c0cc2cec968100c08ea9b1aa3a9e099323405",
+    "components_worker.py": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4"
+  },
+  "schema": "gridline-component-development-evidence.v1",
+  "state": "UNRELEASED_PARTIAL_ACCEPTANCE",
+  "third_party_compatibility_patches_executed": 0,
+  "visual_inspection": "13 native detail renders inspected; one opaque material per component, open-ended faceted column surface disclosed"
+}

@@ -1,74 +1,214 @@
-# Optional ARCHIMESH: source review and read-only doctor
+# Optional ARCHIMESH components and source-bound IFC4
 
-Issue [#45](https://github.com/MakeItEzzz555/Gridline/issues/45), first separate package A. Based on released **0.8.1**, source `0e87aa52922b164235ccf277edead851b9acc000`. This adds discovery and source evidence; component adapters, installation, native/GLB acceptance and asset downloads remain blocked or not tested. Stable provider versions remain 0.8.1; this is an unreleased feature branch.
+Gridline 0.9.0 builds on released 0.8.1. Component generation is optional,
+new-output-only and qualified on the observed macOS Blender 5.2.3 LTS host with the
+exact official ARCHIMESH 1.2.5 source. It never installs/enables an extension in a
+user profile, patches source or controls an existing window. See the
+[historical source review](ARCHIMESH_SOURCE_REVIEW.md) for upstream provenance,
+operator inventory and reproduced Blender 5.2 panel defects. The doctor remains
+read-only inventory; exit 0 is not generation or licensing approval.
 
-## Run the doctor
+## Select a bounded recipe
 
-From the repository:
+From an installed `architectural-drawing-generation` skill directory (repository
+paths have the prefix `skills/architectural-drawing-generation/`):
 
 ```sh
-python3 scripts/archimesh_doctor.py
-python3 scripts/archimesh_doctor.py --addon-source /absolute/path/to/archimesh
-python3 scripts/archimesh_doctor.py --blender /absolute/path/to/blender
+python3 scripts/archimesh_components.py catalog
+python3 scripts/archimesh_components.py validate references/example-components.json
+python3 scripts/archimesh_components.py build REQUEST.json NEW_OUT \
+  --addon-source /absolute/reviewed/archimesh \
+  --approve-addon-sha256 44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87
+python3 scripts/archimesh_components.py verify NEW_OUT \
+  --expected-receipt-sha256 TRUSTED_PIN_FROM_BUILD_RESULT
 ```
 
-From an installed drawing skill, use `python3 scripts/archimesh_doctor.py` in its own directory. No third-party Python dependency is needed. The explicit source option inventories an extracted or installed directory; it does **not** assert that the source is installed. Default discovery checks standard versioned user profiles (legacy `scripts/addons/archimesh` and `extensions/<repository>/archimesh`) on macOS, Linux and Windows. Custom/system installs need an explicit source path. `NOT_FOUND_IN_DEFAULT_PATHS` is a scoped finding, not a whole-disk absence claim. Permission errors and unsafe paths return structured `BLOCKED` and exit 1.
+Use the catalog as a data picker: select a kind, obtain every required size and
+material value from reviewed source, then validate. Never translate prose into
+executable Blender Python or copy synthetic fixture dimensions into a real design.
+Choose a persistent globally unique `project_id` for a real project (a UUID is suitable);
+keep the human project number in `building.project.number`. GUID stability is scoped
+to that project namespace. Synthetic example IDs are not federation identities.
+All 13 recipes are exercised in actual native/GLB and IFC acceptance:
 
-The tool never imports an add-on, enables it, writes Preferences, opens a user model, or connects to an existing Blender window. With a trusted Blender executable it starts a separate factory/background process, disables automatic execution, selects offline mode and private temporary resources, and verifies startup only. Offline mode is Blender's setting, **not** an operating-system sandbox. The caller must trust the executable. No arbitrary Python expression/script option is exposed. Exit 0 means the inventory completed, including a missing dependency; inspect `generation: BLOCKED`, `registration: NOT_TESTED`, and `geometry_acceptance: NOT_TESTED` rather than interpreting it as integration success.
+| Kind | Meaning and independent measurement scope |
+|---|---|
+| Door, rail window, cabinet | Source frame/body anchors checked against explicit width/depth/height. Cabinet fronts and window hardware may extend outside the nominal body/frame. |
+| Shelves | Explicit body/board sizes and shelf count; frozen evaluated surface readback. No storage-load claim. |
+| Column | Radius and height measured; 12-sided, open-ended display surface with size-changing subdivision disabled. No watertight structural-solid claim. |
+| Stairs | Width, total run and rise measured against count/tread/riser inputs; tread thickness explicit. No headroom, egress or code clearance claim. |
+| Roof | Bounded decorative tile array/angle/scale/thickness controls; evaluated surface readback. No structural/weatherproof roof. |
+| Books, lamp | Bounded source controls and evaluated surfaces. No furniture schedule, photometry or electrical acceptance. |
+| Roller, Venetian, Japanese curtain | Nominal source controls; fabric/slat/rail/hardware assemblies may exceed nominal opening dimensions. No clearance/fabric-performance claim. |
+| Panel window | Explicit centimetre pane controls; assembly includes upstream frame sizes. No glazing-performance claim. |
 
-Source reads reject symlinks, special files, files over 1 MiB and trees over 128 entries. An exact match to all 19 pinned files, with no extra files except ignored `__pycache__` directories, yields `SOURCE_VERIFIED`. Any missing/modified/extra file yields `UNVERIFIED` and version `UNKNOWN`. Matching source bytes neither authorizes execution nor clears licensing. The reference JSON is a factual hash/operator inventory, not upstream Python source. No GPL add-on code, ZIP, image or bytecode is shipped.
+`schema: gridline-components.v1`, metre coordinates, project/component/source IDs,
+position, rotation, material ID/color/roughness/metallic and every catalog parameter
+are required. Counts/scales are dimensionless; `_deg` and `_cm` fields name their
+units. These are bounded recipes, not support for every upstream option or proof
+of every parameter combination. Validation rejects unknown fields and invalid
+ranges/types/relationships. Scenes are limited to 32 components, 100,000 triangles
+and 64 MiB per published artifact; excess blocks publication.
 
-## Pinned source and compatibility
+Results are editable frozen meshes with source IDs and parent assemblies, not
+working ARCHIMESH parametric panels or approved BIM families. One explicit material
+is used per component, including opaque windows. Zero-area upstream triangles are
+explicitly removed/counts recorded; nonzero source surfaces are retained.
+Rooms, auto-hole booleans, animations, external GLB resources, original-project
+writes and interactive panel repair are not exposed by the component generator.
+Blender offline mode is not an OS sandbox: executable and pinned source are trusted.
 
-The [official extension](https://extensions.blender.org/add-ons/archimesh/) advertises **1.2.5**, Community maintenance, limited support, Blender **4.2.0+**, and **GPL-2.0-or-later**. Its manifest agrees; legacy `bl_info` still says Blender 3.0.0. Use the extension manifest as the advertised floor, not as proof of Blender 5 compatibility. The downloaded 323,488-byte ZIP SHA256 is `44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87`, matching the official content-addressed link. See the portable [pin inventory](../skills/architectural-drawing-generation/references/archimesh-1.2.5.json).
+## Building and artifact bindings
 
-The archived [Blender add-ons mirror](https://github.com/blender/blender-addons/tree/b42d68627734cb18af0e6f41537063984313a284/archimesh) is a distinct historical source; this implementation pins the extension ZIP, not an assumed identical mirror tree. A secondary 1.2.6/GPL3 listing is **not accepted as the official edition**: no authoritative matching release was verified. The reported marcoo releases URL returned a challenge page, so that channel remains **UNVERIFIED**.
+Standalone requests use empty `host_id`. An embedded `building-spec.v1` retains its
+millimetre schema; component coordinates remain metres. Hosted doors/windows must
+reference an actual opening/wall and match its dimensions, level, position and
+rotation. Unhosted building props require `level_id`. Canonical wall unions and
+opening occupied/void checks remain authoritative; components replace only matching
+closed preview slabs. ARCHIMESH never cuts a source wall. Simple room polygons,
+global source identities and nonoverlapping stacked level ranges are checked;
+complex overlapping storey models are outside this bounded adapter.
 
-The [Odhexe patcher](https://github.com/Odhexe/archimesh-1.2.5-blender5-fix/blob/35e6495802bcef6d5465bbff36e0148fac4c40ca/patch_archimesh.py), pinned at `35e6495802bcef6d5465bbff36e0148fac4c40ca`, uses regex substitutions for generator-membership/panel tests. It recursively rewrites Python files and creates `.bak` files; it is not a complete tested replacement release. Static inspection does not establish callback, geometry, material, export or Blender-version compatibility. It was **not executed**, installed, or adopted, and modified source would fail the official pin. Its exact file hash is recorded in [source.json](evidence/archimesh-doctor/source.json).
+See `example-house.components.json` and `example-two-level.components.json`.
+A new output contains `request.json`, `components.blend`, `components.glb`,
+`meshes.json`, `verification.json` and a receipt published last. Existing paths
+are never overwritten. Interrupted/incomplete publication cannot be accepted as
+valid. Builds snapshot consumed add-on/runtime/request/texture bytes. Source or
+canonical-head changes during generation prevent publication.
 
-## Actual Blender 5.2.3 evidence
+Readback checks complete object/mesh inventory, source/host IDs, parents, root
+transforms, world triangles/winding/corner normals, UVs, known active PBR graphs,
+visibility, modifiers, constraints, animation, supported anchors and shell geometry.
+Position/UV tolerance is 1e-5; normal-component tolerance is 5e-5 from measured Blender
+import quantization. Public verification uses pinned private byte snapshots and
+preserves published artifacts. Retain receipt hashes separately from the output;
+recomputing a pin after an untrusted change is not an integrity check. Source
+approvals and receipt pins do not provide an OS sandbox or remote publisher identity.
 
-**TESTED_BLENDER_5_2_3, PARTIALLY_SUPPORTED:** in a new factory/background/offline process with private temporary resource directories, the hash-verified official source imported and registered. All 14 mesh generator names were present. Default door, rail window and kitchen operators returned `FINISHED`, producing 6, 7 and 5 mesh objects respectively. These counts are diagnostic observations, **not** evaluated geometry acceptance.
+## Signed canonical source revisions
 
-Both door and rail-window panel polls returned **false** while their RNA generator collections were populated. This reproduces a panel gating defect in this narrow context; it does not prove every interactive viewport state. No patch was applied. Dimension callbacks, panels in a live viewport, evaluated meshes, units/transforms, normals, UVs, material fidelity, saved `.blend` and GLB reimport remain **NOT_TESTED** for ARCHIMESH. The existing Gridline geometry validators are unchanged and cannot be assumed to accept these foreign meshes.
+`component_state.py DATABASE COMMAND` stores version 3 immutable revisions/proposals
+and append-only events in SQLite. Ed25519 owner signatures bind exact initialization
+and proposals, action, project and public-key fingerprint. OpenSSL 3 is required;
+production accepts public keys/detached signatures only. Never sign for a real owner
+or treat an actor label as approval. Keep the private key outside agent-controlled
+storage and retain the trusted public-key fingerprint separately.
 
-The native research harness stayed outside the repository, explicitly GPL-labelled, and ran only the reviewed official source in a disposable process. No extension was installed/enabled in a user profile; no existing native session or `.blend` was controlled. The shipped doctor does **not** execute this research harness or claim its observations as a fresh per-install compatibility result. See [native probe](evidence/archimesh-doctor/native-probe.json), [default discovery](evidence/archimesh-doctor/doctor-default.json), [source inspection](evidence/archimesh-doctor/doctor-source.json), and [external receipt paths/hashes](evidence/archimesh-doctor/source.json). The harness/log remain in the external research directory for reproduction; they are not portable installed-skill payloads.
+1. `prepare-init REQUEST --owner OWNER --public-key PUBLIC.pem --payload-out PAYLOAD`
+   supplies exact bytes for independent owner review/signing.
+2. `init REQUEST --owner OWNER --public-key PUBLIC.pem --signature SIGNATURE`
+   verifies proof and exclusively publishes a new database.
+3. `propose BASE_HASH PATCH.json --actor ACTOR --rationale TEXT --evidence TEXT
+   --payload-out PAYLOAD` supplies before/after diffs, indexed sheet/schedule impact
+   and signable approval bytes.
+4. After independent owner review/signing, `approve PROPOSAL_HASH --owner OWNER
+   --signature SIGNATURE`, then `commit PROPOSAL_HASH`.
+5. `restore REVISION --actor ACTOR --rationale TEXT --evidence TEXT` creates a new
+   proposal requiring approval. `prepare-rejection PROPOSAL_HASH --payload-out PAYLOAD`
+   and `reject ... --signature SIGNATURE` use distinct rejection bytes. `inspect`
+   reports the source and bounded audit.
 
-## Typed capability and side-effect inventory
+A legacy list patch replaces whole components. A typed patch contains any of
+`components`, `levels`, `walls`, `openings`, `rooms`, each a list of whole-element
+replacements; at most 32 targets total. Additions/deletions, identity/host/type/level
+reassignment, missing attributes and arbitrary unit/datum changes are rejected.
+Coordinated opening/component edits must be one geometrically consistent proposal.
+Unrelated stale edits merge only after full revalidation; same-target edits conflict.
+Root initialization and every stored transition proof are checked before a revision
+is trusted. A fabricated database head or receipt cannot authenticate an unsigned
+revision. Old unreleased database schemas fail closed; no silent migration occurs.
 
-These are **SOURCE_VERIFIED interfaces**, not Gridline request schemas or supported adapters. Names below are under `bpy.ops.mesh.`; floats follow upstream units/context and need independently measured conversion. Object property collections are edited after creation, often triggering destructive child-mesh rebuilding. Direct function calls into internal helpers are not stable public APIs.
+Changes flag indexed plans and explicit references, including dependent openings
+and schedules. Unindexed drawings, external families/types and professional
+constraints remain UNKNOWN. This does not claim a complete live BIM dependency
+graph. Database/executable storage must remain trusted; signatures do not establish
+human presence, professional credentials, external anti-rollback storage or an OS
+security boundary. `build --state-db DB --owner-key-sha256 TRUSTED_PIN` binds the
+preview to the current approved head and rechecks it under the publication lock.
+No Revit/AutoCAD live edit/transaction/rollback adapter is implemented by this ledger.
 
-| Component / operator | Typed source controls (representative) | State / side effects and unsupported cases |
-|---|---|---|
-| Room `archimesh_room` | `RoomGenerator`: `room_height`, `wall_width`: float; `wall_num`: int; `walls`: collection with `w`, `r`: float, `curved`: bool | NOT_TESTED. Wall/baseboard/floor/ceiling/shell meshes; no Gridline wall replacement or topology guarantee. |
-| Door `archimesh_door` | `DoorObjectGenerator`: `frame_width`, `frame_height`: float 0.25–10; `frame_thick`: float 0.05–0.50; `openside`, `model`, `handle`: enum | PARTIALLY_SUPPORTED: default smoke only; panel poll false. Parent empty, frame/leaf/handle and hole-control children; dimensions are frame dimensions, not certified clear opening. |
-| Rail window `archimesh_window` | `WindowObjectGenerator`: `width`, `height`, `depth`: float; `opentype`: enum; `sill`, `blind`, `blind_box`: bool | PARTIALLY_SUPPORTED: default smoke only; panel poll false. Parent/leaf/glass/sill/blind/control meshes; callbacks recreate children; no host-aperture or glazing-performance guarantee. |
-| Panel window `archimesh_winpanel` | `WindowPanelGenerator`: `gen`, `yuk`: int pane/row counts; `gnx0…7`, `gny0…4`: int sizes; `UST`, `DT2`, `DT3`: enum | NOT_TESTED. Uses upstream pane/frame sizing conventions; curved/sloped options are not bounded Gridline windows. |
-| Cabinet `archimesh_kitchen` | Operator `depth`, `height`, `thickness`: float; `cabinet_num`: int; `cabinets`: collection; each `sX`: float, `dType`: enum, `sNum`, `dNum`: int | PARTIALLY_SUPPORTED: default smoke only. Multiple carcass/door/handle/baseboard/counter meshes and SKU metadata; not BIM furniture semantics. |
-| Shelves `archimesh_shelves` | `depth`, `height`, `thickness`, `sthickness`: float; `shelves_num`: int; `shelves`: collection, `sNum`: int | NOT_TESTED. Repeated assemblies; no structural/storage capacity checks. |
-| Column `archimesh_column` | `rad_top`, `rad_mid`, `rad_bottom`, `col_height`: float; `crt_array`: bool; `array_num_x`, `array_num_y`: int | NOT_TESTED. Bases/tops/arcs/arrays and modifiers; no structural verification. |
-| Stairs `archimesh_stairs` | `step_num`: int; `max_width`, `depth`, `height`, `thickness`: float; `model`: enum; `curve`: bool | NOT_TESTED. Step/curve construction; no egress, headroom, riser or tread compliance. |
-| Roof `archimesh_roof` | `roof_width`, `roof_height`: int tile counts 1–100; `roof_angle`: float 0–70; `roof_scale`: float; `model`: enum | NOT_TESTED. Tile patches/arrays/solidify, not a complete authoritative roof or structural system. |
-| Books `archimesh_books` | `width`, `depth`, `height`: float; `num`: int; `rX`, `rY`, `rZ`, `rC`: float | NOT_TESTED. Randomized props; no deterministic source IDs or dimensions assumed. |
-| Lamp `archimesh_light` | `base_height`: float; `base_segments`, `base_rings`: int; `preset`: enum; `energy`, `opacity`: float | NOT_TESTED. Generated bases/shades and optional subdivision/materials; no photometric/electrical acceptance. |
-| Japanese curtain `archimesh_japan` | `width`, `height`: float; `num`, `palnum`: int; `open01…05`: float | NOT_TESTED. Rails/panels/curves/fabric; no material/UV export guarantee. |
-| Roller `archimesh_roller` | `width`, `height`: float; `crt_mat`: bool | NOT_TESTED. Rail/sides/fabric/curve; display prop only. |
-| Venetian `archimesh_venetian` | Object collection `width`, `height`, `depth`, `angle`: float; `ratio`: int | NOT_TESTED. Slats/cords and update callbacks; no clearance acceptance. |
+## Opt-in CC0 textures
 
-Import-time registration already creates several `bpy.types.Object` collections; importing is therefore **not** read-only. Add-on `register()` adds operators, panels, menu hooks, Scene/WindowManager properties. Generators change selection, active object, cursor-relative object placement, object mode, mesh data, parenting and materials. Many use context-dependent `bpy.ops`, edit mode, UV unwrap, merge/recalculate operations, modifiers and renderer-name gates. Background default smoke cannot validate every parameter path. `draw()` paths use `space_data.local_view`; they require a viewport context.
+`cc0_assets.py` supports Poly Haven textures: exactly 1K JPG diffuse, roughness and
+OpenGL-normal channels. No archive, model, HDRI, sprite or ambientCG backend is
+exposed. Pillow is required. Catalog access defaults to network-off; explicit
+catalog/plan network options preserve attribution/User-Agent and source metadata.
+See [Poly Haven API](https://polyhaven.com/our-api) and `cc0_assets.py --help`.
 
-`object.archimesh_cut_holes` creates boolean cuts and `object.archimesh_pencil_room` derives rooms from drawing context. Both are **BLOCKED** for Gridline host editing. Room import/export and kitchen inventory operators perform file I/O and are not exposed. Gridline retains authority over wall joins, openings, element IDs, dimensions and source state; no shell modifier or existing-project write is authorized by this doctor. Issues #15 and #33 remain in force.
+Download requests require the exact approved plan SHA256. The plan binds source,
+CC0 license, provider, URLs, lengths and upstream MD5s. HTTPS hosts/redirects are
+allowlisted; aggregate budget 8 MiB per plan and at most 4 plans per scene. JPEG
+format/dimensions, MD5 and local SHA256 are rechecked. Failed downloads preserve
+previous cache entries; corrupted content is rejected rather than silently replaced.
+MD5 metadata is not a publisher signature. Live service terms/asset rights remain
+part of source review; no legal certification is implied.
 
-## Licensing and separate assets
+Materials supply `asset_plan_sha256`, explicit `uv_tile_size_m: [WIDTH, HEIGHT]`,
+white base color, roughness 1 and metallic 0. Do not infer physical texture size from
+undocumented provider units. Builds consume `--asset-cache CACHE` offline and pack
+images into `.blend`/GLB. Native/imported shader links, UV mapping, image pixels and
+provider/license/source/hash provenance are checked. The actual approved Aerial
+Wood Snips three-channel download passed; it is a technical texture test, not a
+recommendation of wood chips as furniture finish. Synthetic fixtures stay labelled.
 
-**NEEDS_LICENSE_REVIEW:** the [Blender FAQ](https://www.blender.org/support/faq/#using-blender-8) says distributed Python scripts using Blender's API must be GPL-licensed; its external-software exception requires no Blender API calls. MIT's compatibility with GPL is not a blanket permission to redistribute a combined add-on solely as MIT. This package adds no `bpy` calls and copies no GPL implementation. The existing MIT-repository `blender_native_worker.py` uses `bpy`; its distribution/combined-work boundary needs explicit qualified license review before new API adapters or repackaging. No whole-repository license change is made or implied.
+## Source-bound IFC4
 
-The FAQ describes ordinary `.blend` output as user-owned, with caveats for embedded scripts. That is not universal clearance for third-party images, models, textures, marks or imported assets. ARCHIMESH has procedural shader helpers (diffuse/glass/glossy/brick/fabric) and **one** bundled `images/fabric_diffuse.png`; it is not a PBR/8K asset catalog. This package redistributes neither those helpers nor the image, and does not establish a separate image license.
+Explicitly install optional dependencies only in a selected environment, using
+`references/requirements-ifc.txt` (IfcOpenShell 0.9.0.post1; pytest 9.1.1 is required
+by EXPRESS validation). Gridline never automatically installs them. Publication
+requires POSIX secure directory operations and the selected signed state database:
 
-A future **separate opt-in** backend may use the [Poly Haven API](https://polyhaven.com/our-api). Its assets are CC0, while the live service requires visible Poly Haven attribution and a unique User-Agent. Recheck full service terms before implementation. The [Poly Haven Lite asset extension](https://extensions.blender.org/asset-libraries/poly-haven/) advertises Blender 5.3+, so it is not accepted on this 5.2.3 host. API content would need independent import tests, explicit download consent, per-asset URL/license/hash, bounded cache/archive handling, UV/PBR texture packing and GLB reimport validation. No Poly Haven assets were downloaded. ambientCG and sprites are outside this package.
+```sh
+python3 scripts/component_ifc.py NATIVE_OUT NEW_IFC_OUT \
+  --state-db PROJECT.sqlite --requirements REQUIREMENTS.json \
+  --expected-bundle-receipt-sha256 TRUSTED_NATIVE_RECEIPT_PIN \
+  --expected-owner-key-sha256 TRUSTED_OWNER_KEY_PIN
+python3 scripts/component_ifc.py NATIVE_OUT IFC_OUT \
+  --state-db PROJECT.sqlite --requirements REQUIREMENTS.json \
+  --expected-bundle-receipt-sha256 TRUSTED_NATIVE_RECEIPT_PIN \
+  --expected-owner-key-sha256 TRUSTED_OWNER_KEY_PIN \
+  --verify --expected-ifc-receipt-sha256 TRUSTED_IFC_RECEIPT_PIN
+```
 
-## Next gate and review
+Requirements are data: `schema: gridline-ifc-requirements.v1`, matching `project_id`,
+explicit `required_properties` chosen from SourceElementId/RequestSHA256/Kind/MaterialId,
+and boolean `allow_unknown_materials`. Unsupported requirements fail closed. The
+synthetic acceptance requirements are not a client's IDS or regulatory requirements.
 
-Package B requires a reviewed licensing/distribution decision and an explicitly approved external add-on source/version before any adapter executes it. Then implement bounded door/window/cabinet request data, new-scene-only generation, and independent evaluated `.blend`/GLB acceptance with corruption tests. The current smoke results do not satisfy that gate or close #45. Installation from Blender Preferences/Get Extensions or an official verified ZIP requires the user's approval in the chosen profile; this PR performs neither step.
+IFC4 contains project/site/building/storeys, source room spaces, physical joined
+walls with stable source-segment parts, opening voids/fillings and typed components.
+Decorative tiles become coverings, books become proxies and lamps become fixtures;
+no generic display mesh is presented as certified structural BIM. Room source area
+and explicit-level-height prism volume are labelled accordingly; mesh surface sums
+are custom visual quantities, not net usable area or construction quantities.
+Unknown source wall materials stay UNKNOWN and fail if the requirements disallow it.
+No materials are attached to voids. PBR textures remain native/GLB; IFC maps identities.
 
-One coding agent performed the bounded source/security/architecture/Ponytail self-review. No independent reviewer, counsel, or professional acceptance is implied. Apple Design's relevant nonvisual guidance is clear feedback and honest failure states; no UI, visual redesign or animation work applies. Provider mirrors and pinned manifests remain coordinated. Test commands/results are recorded in the evidence directory; external provider token/cache/cost receipts are unavailable, and no savings or benchmarks are claimed.
+Checks include schema/EXPRESS, SI units, local coordinate declaration, spatial
+membership/placement, complete products, source properties/material links/quantities,
+GUID uniqueness, opening hosts/fillings, raw indices/winding before engine repair,
+independent evaluated triangles and occupied/void/room geometry. Fixed IFC4 source
+exchange is not a certified MVD or generic client/IDS interoperability claim.
+Publication rechecks the signed current head under a transaction. Historical readback
+requires an authenticated approved revision; it does not make that revision current.
+`model.ifc`, `mapping.json`, `verification.json`, `requirements.json` and the final
+receipt bind source, runtime and consumed bytes. Native/IFC headers may contain
+legitimate serialization timestamps; source/geometry/GUID checks establish stability.
+
+## Acceptance and distribution
+
+The offline `tests/components_pipeline_acceptance.py` exercises signed source→three
+plan sheets/DXF/PDF/schedules→Blender/GLB→IFC, a coordinated 100 mm before/after door
+change, actual DXF/IFC widths, host-wall volume and source/relationship GUID stability,
+then all 13 component kinds. `components_native_acceptance.py` and
+`components_ifc_acceptance.py` seed real private corrupted copies after baseline PASS.
+They never operate on a client/live scene. See [0.9.0 qualification](RELEASE_0_9_0_QUALIFICATION.md)
+for final source-bound receipts, exact checked scope and outstanding publication gates.
+
+The first-party Blender API worker/harness are GPL-2.0-or-later with corresponding
+source and full text. Existing MIT grants are retained; metadata is mixed-license.
+External ARCHIMESH source/images/ZIP and optional IFC binaries are not bundled.
+Read the portable [licensing boundary](../skills/architectural-drawing-generation/references/BLENDER-LICENSING.md).
+Professional project approval, actual client IDS/exchange acceptance, interactive
+upstream panels and Revit/AutoCAD live transactions remain outside this release's
+qualified scope; full roadmap issues #13/#15/#45 must not be falsely closed.

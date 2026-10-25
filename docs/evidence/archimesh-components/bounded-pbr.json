@@ -1,0 +1,123 @@
+{
+  "addon_archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+  "asset_plans": [
+    "d97c73cb14094d4558ded7ef164c8f43c841f948732af99caebfae95ca4b5cca"
+  ],
+  "asset_provenance": {
+    "d97c73cb14094d4558ded7ef164c8f43c841f948732af99caebfae95ca4b5cca": {
+      "evidence_scope": "SYNTHETIC FIXTURE; HTTP mocked, no real Poly Haven asset verified",
+      "files": {
+        "base_color": {
+          "bytes": 17012,
+          "file": "base_color.jpg",
+          "sha256": "d8ea332ec7c35671afc09e870380491e85f612736b1ceea4557e2a51dbaaa8c4"
+        },
+        "normal": {
+          "bytes": 17012,
+          "file": "normal.jpg",
+          "sha256": "ad9418353afdaa521ed737270a116b2e2aa735805d7f66914c0192ded84bf279"
+        },
+        "roughness": {
+          "bytes": 17009,
+          "file": "roughness.jpg",
+          "sha256": "1e07566c474ff615c31635e532a641a17e7c7821f00ad3903c50eecafb04994b"
+        }
+      },
+      "plan": {
+        "api_url": "https://api.polyhaven.com/files/gridline_synthetic_fixture",
+        "asset_id": "gridline_synthetic_fixture",
+        "attribution": "Textures from Poly Haven",
+        "bytes": 51033,
+        "files": {
+          "base_color": {
+            "bytes": 17012,
+            "upstream_md5": "99fc93a1f56193724049bdd211cd338f",
+            "url": "https://dl.polyhaven.org/synthetic-test-fixture/Diffuse.jpg"
+          },
+          "normal": {
+            "bytes": 17012,
+            "upstream_md5": "58b789d7b9b012ec17329f4970955656",
+            "url": "https://dl.polyhaven.org/synthetic-test-fixture/nor_gl.jpg"
+          },
+          "roughness": {
+            "bytes": 17009,
+            "upstream_md5": "ca1f88d8cac0cb7066126fa1ba1d2855",
+            "url": "https://dl.polyhaven.org/synthetic-test-fixture/Rough.jpg"
+          }
+        },
+        "integrity_note": "Upstream MD5 is transport metadata, not an authenticity signature; cache records SHA256 of consumed bytes",
+        "license": "CC0-1.0",
+        "provider": "Poly Haven",
+        "resolution": "1k",
+        "schema": "gridline-cc0-plan.v1",
+        "source_url": "https://polyhaven.com/a/gridline_synthetic_fixture"
+      }
+    }
+  },
+  "build_log_sha256": "c71e07edd5b9beeaf183080cdd45bf8873ff0d2dd4554ceab549ab11930954ac",
+  "canonical_owner_key_sha256": null,
+  "canonical_state_revision": null,
+  "driver_sha256": "bd14eaf8972220a626f4747108e2b2f9bf9d0fca7b6fa2d0917167c6581d9ef3",
+  "files": {
+    "components.blend": "82fdae2141163faadc27f1e719112ea313af6361fb81bad7abbe8bd7b6aa951b",
+    "components.glb": "24609638261cee3ce026997886cbdda98b28c6682bd722c3f7e6cc78299147d3",
+    "meshes.json": "479bb0638d69f8738f5eb6d7a4a6b6867c8b58e8490327482147a6f4bd8e933c",
+    "request.json": "9dab85334bc446a472095a112828703cc96898516beefdb5da8aa9969266d767",
+    "verification.json": "68486ce8a4dfbaee5c77752a6c63a933e183e2ea3ff141e6d9f4e28ec5086d58"
+  },
+  "host": {
+    "addon_loading": "NOT_ATTEMPTED",
+    "archimesh_compatibility": "NOT_TESTED",
+    "executable": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "state": "HOST_STARTUP_VERIFIED",
+    "version": "5.2.3"
+  },
+  "output": "/private/tmp/gridline-components-bounded-pbr-20261025",
+  "outputs_are_authoritative_project_state": false,
+  "receipt_sha256": "86eab803c5cb7e06cc3dac6ed9e3046d52864cc10cafeeb0a66ffb04ab75d9b1",
+  "request_sha256": "9dab85334bc446a472095a112828703cc96898516beefdb5da8aa9969266d767",
+  "runtime_sha256": {
+    "archimesh_components.py": "bd14eaf8972220a626f4747108e2b2f9bf9d0fca7b6fa2d0917167c6581d9ef3",
+    "archimesh_doctor.py": "4c662af6fa83dd3cffc01b8334319a5a63bfa8210831a42017344de7c53fdda6",
+    "blender_native.py": "a1c3ca0a14953b11e8ba2e23a4b3733f118d96dd4c98b69c408020f5b6c9fe0a",
+    "building_spec.py": "7683dde9e0ba7f63b2a015b0fb67f4cff84498b1a2610705a50078b4571eb7d5",
+    "cc0_assets.py": "fda54f83e923e15f299956b40bdd2227081542f3d703948ee89b6a61f3924f8f",
+    "component_approval.py": "ca8a3ae58f22475006007cb4feed430a7b3cac5eda50fa3d4e9b5738107e09cc",
+    "component_mesh.py": "6014240e1b0c4b23c1598b2fa3f714f68054becf7bb8ebc0460976dea7710756",
+    "component_spec.py": "075943729e01a84131ae132b5fac9f5a7ba93fa1f2c5e9456c155366a005f8dd",
+    "component_state.py": "5a8cc3881d4ab00f90cb711fc44c0cc2cec968100c08ea9b1aa3a9e099323405",
+    "components_worker.py": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4",
+    "glb_qa.py": "737ca84c5539590a2a9d31176a072af10b7d4d75d8fb2a6a327e204a269d811a",
+    "mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+    "wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d"
+  },
+  "schema": "gridline-component-receipt.v1",
+  "state": "VERIFIED_VISUAL_COMPONENTS",
+  "texture_verification": {
+    "mat-cabinet": {
+      "base_color_pixels_sha256": "ab72282e6a3b25c4f6bb617b6188d695c79286d10c9daa17ad1dbfd9b0bd839e",
+      "base_color_size": [
+        1024,
+        1024
+      ],
+      "metallic_pixels": "ZERO_EFFECTIVE",
+      "normal_pixels_sha256": "f3d3a9d99524009d4943a62368b6b44a4e855eb71b95dae8eb715881027828e3",
+      "normal_size": [
+        1024,
+        1024
+      ],
+      "roughness_pixels_sha256": "36ff34972077a9e824cce89d6a7056a0923719b8ae884a5ed7f0ba299303534e",
+      "roughness_size": [
+        1024,
+        1024
+      ],
+      "state": "EMBEDDED_PBR_READBACK"
+    }
+  },
+  "unverified": [
+    "Regulatory/manufacturing acceptance",
+    "Live-host edits",
+    "IFC semantics"
+  ],
+  "worker_sha256": "3f3015ff46efb1753291352246020c3cb287d404becd7ffb8348e54f836b47c4"
+}

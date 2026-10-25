@@ -1,0 +1,50 @@
+{
+  "files": {
+    "base_color": {
+      "bytes": 834846,
+      "file": "base_color.jpg",
+      "sha256": "b2fb301f7205ce3d56b6a025dad797bb8cd8079c0fdabdfce9f9842291eb5c6a"
+    },
+    "normal": {
+      "bytes": 1211741,
+      "file": "normal.jpg",
+      "sha256": "574a41592b82b5c95b326913912df56f8a1213aac9d1e62896487613f32467c9"
+    },
+    "roughness": {
+      "bytes": 495868,
+      "file": "roughness.jpg",
+      "sha256": "b996c0f3f3e3a3c622dbf05b47765c541a10e7c9ad5f5f8e764af09df3bdd639"
+    }
+  },
+  "plan": {
+    "api_url": "https://api.polyhaven.com/files/aerial_wood_snips",
+    "asset_id": "aerial_wood_snips",
+    "attribution": "Textures from Poly Haven",
+    "bytes": 2542455,
+    "files": {
+      "base_color": {
+        "bytes": 834846,
+        "upstream_md5": "9890515d1b38b188a6346dc59210378d",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_wood_snips/aerial_wood_snips_diff_1k.jpg"
+      },
+      "normal": {
+        "bytes": 1211741,
+        "upstream_md5": "87110244e116b408cc488b29abd4b016",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_wood_snips/aerial_wood_snips_nor_gl_1k.jpg"
+      },
+      "roughness": {
+        "bytes": 495868,
+        "upstream_md5": "e792f48a2fb29da024d398752b3bc221",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_wood_snips/aerial_wood_snips_rough_1k.jpg"
+      }
+    },
+    "integrity_note": "Upstream MD5 is transport metadata, not an authenticity signature; cache records SHA256 of consumed bytes",
+    "license": "CC0-1.0",
+    "provider": "Poly Haven",
+    "resolution": "1k",
+    "schema": "gridline-cc0-plan.v1",
+    "source_url": "https://polyhaven.com/a/aerial_wood_snips"
+  },
+  "plan_sha256": "7eceeed9aa48cef41c045ec2922f987bc16795361d70f1f544b53bf659adc1b0",
+  "schema": "gridline-cc0-cache.v1"
+}

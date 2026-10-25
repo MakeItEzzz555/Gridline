@@ -29,6 +29,15 @@ def read_glb(path):
     buffers=doc.get('buffers',[])
     if len(buffers)!=1 or 'uri' in buffers[0] or not 0<=len(binary)-buffers[0]['byteLength']<=3:
         raise ValueError('unsupported GLB buffer')
+    for picture in doc.get('images',[]):
+        ref=picture.get('bufferView')
+        if ('uri' in picture or type(ref)!=int or not 0<=ref<len(doc.get('bufferViews',[]))
+                or picture.get('mimeType') not in ('image/png','image/jpeg')):
+            raise ValueError('external/unsupported GLB image resource')
+        view=doc['bufferViews'][ref]
+        base=view.get('byteOffset',0);length=view.get('byteLength')
+        if type(base)!=int or type(length)!=int or base<0 or length<=0 or base+length>len(binary) or view.get('buffer')!=0:
+            raise ValueError('GLB image outside buffer')
     return doc,binary
 
 

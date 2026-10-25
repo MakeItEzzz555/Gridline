@@ -1,0 +1,9 @@
+{
+  "tests": 228,
+  "elapsed_seconds": 86.552,
+  "skips": 0,
+  "command": "GRIDLINE_REQUIRE_CAD_TESTS=1 ifc-acceptance-env/bin/python -m unittest discover -s tests -v",
+  "log_sha256": "fa595a8e625a0fee71ae71bd7e16ba852228617ee48e661bcace754c06f72f3f",
+  "repo_checker": "PASS0.9.0;30 skills;whole-provider parity;manifests;62 activation cases",
+  "engine_acceptance": "Separate actual pipeline/adverse scripts; no engine acceptance inferred merely from unit test count"
+}

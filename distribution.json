@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "gridline",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "repository": "MakeItEzzz555/Gridline",
   "channel": "stable",
   "release_qualification": "NOT_VERIFIED",
@@ -14,21 +14,21 @@
       "update_method": "claude plugin update gridline@gridline",
       "auto_update": "Third-party marketplace: off by default; user may enable in marketplace settings",
       "source": "https://code.claude.com/docs/en/discover-plugins",
-      "upgrade_runtime_test": "PASS_ISOLATED_MACOS_LOCAL_CLI_UPDATE_AND_ROLLBACK"
+      "upgrade_runtime_test": "FINAL_RELEASE_QUALIFICATION_ATTACHMENT_REQUIRED; historical0.8.1 receipts retained separately"
     },
     "gemini-cli": {
       "manifest": "gemini-extension.json",
       "update_method": "gemini extensions update gridline",
       "auto_update": "Explicit install --auto-update opt-in; restart session after update",
       "source": "https://geminicli.com/docs/extensions/reference/",
-      "upgrade_runtime_test": "PASS_GEMINI_0.65.0_ISOLATED_LOOPBACK_GIT_UPDATE_CONSENT_AND_ROLLBACK"
+      "upgrade_runtime_test": "FINAL_RELEASE_QUALIFICATION_ATTACHMENT_REQUIRED; historical0.8.1 receipts retained separately"
     },
     "codex-standalone": {
       "manifest": ".codex-plugin/plugin.json",
       "update_method": "Review a pinned checkout, then bash scripts/install-global.sh codex (PowerShell installer on Windows); start a fresh session",
       "auto_update": "No universal skills update service; linked skills follow their source checkout",
       "source": "docs/UPDATING.md",
-      "upgrade_runtime_test": "PASS_MACOS_ACTUAL_SOURCE_BASH_BACKUP_ROLLBACK"
+      "upgrade_runtime_test": "FINAL_RELEASE_QUALIFICATION_ATTACHMENT_REQUIRED; historical0.8.1 receipts retained separately"
     },
     "openai-directory": {
       "manifest": "plugin.json",
