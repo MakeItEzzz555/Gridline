@@ -60,6 +60,8 @@ jobs:
           python-version: "3.12"
       - name: Portable topology, GLB, source-selection and release regressions
         run: |
+          python -m unittest discover -s tests -p test_archimesh_doctor.py -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_wall_topology.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_glb_qa.py -v

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add an offline read-only ARCHIMESH source doctor, portable hash/operator inventory and bounded discovery tests. Preserve stable 0.8.1 manifests and existing Blender generation.
+- Record official 1.2.5 source/license evidence, disposable Blender 5.2.3 default-operator smoke and reproduced door/window panel gating failures. Component adapters, licensing clearance and native/GLB acceptance remain blocked or not tested; no add-on installed or vendored.
+
 ### Included — 0.8.0 candidate review corrections (2026-10-25)
 
 - Correct B14 author-overview evidence pointers without implying publisher TOC or ISBN verification.

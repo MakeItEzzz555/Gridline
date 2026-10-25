@@ -1,0 +1,50 @@
+{
+  "schema": "gridline-archimesh-doctor.v1",
+  "state": "INVENTORY_ONLY",
+  "network": "OFFLINE",
+  "discovery": "DEFAULT_USER_PROFILES",
+  "searched_root": "/Users/makeiteasy3/Library/Application Support/Blender",
+  "dependency": "NOT_FOUND_IN_DEFAULT_PATHS",
+  "host": {
+    "state": "HOST_STARTUP_VERIFIED",
+    "version": "5.2.3",
+    "executable": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "addon_loading": "NOT_ATTEMPTED",
+    "archimesh_compatibility": "NOT_TESTED"
+  },
+  "sources": [],
+  "reference": {
+    "url": "https://extensions.blender.org/add-ons/archimesh/",
+    "archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+    "version": "1.2.5",
+    "license": "GPL-2.0-or-later",
+    "blender_version_min": "4.2.0"
+  },
+  "operators_in_reference_source": [
+    "mesh.archimesh_books",
+    "mesh.archimesh_column",
+    "mesh.archimesh_japan",
+    "mesh.archimesh_roller",
+    "mesh.archimesh_door",
+    "mesh.archimesh_kitchen",
+    "mesh.archimesh_light",
+    "object.archimesh_cut_holes",
+    "object.archimesh_pencil_room",
+    "mesh.archimesh_roof",
+    "mesh.archimesh_room",
+    "mesh.archimesh_shelves",
+    "mesh.archimesh_stairs",
+    "mesh.archimesh_venetian",
+    "mesh.archimesh_window",
+    "mesh.archimesh_winpanel"
+  ],
+  "license_boundary": "NEEDS_LICENSE_REVIEW",
+  "generation": "BLOCKED",
+  "unverified": [
+    "No live profile registration or operator availability inspected",
+    "Advertised minimum Blender version does not establish compatibility",
+    "No component dimensions, callbacks, panels, native or GLB readback validated",
+    "Custom/system installs are outside default discovery; select their source explicitly",
+    "Matching source bytes is not execution authorization or license clearance"
+  ]
+}

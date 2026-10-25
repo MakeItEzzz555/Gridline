@@ -1,0 +1,19 @@
+{
+  "baseline": "0e87aa52922b164235ccf277edead851b9acc000",
+  "baseline_version": "0.8.1",
+  "official_archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+  "official_archive_bytes": 323488,
+  "archived_blender_addons_commit": "b42d68627734cb18af0e6f41537063984313a284",
+  "community_patch_commit": "35e6495802bcef6d5465bbff36e0148fac4c40ca",
+  "community_patch_sha256": "af0f38b9b6fadaf477ce80db941285d1a4790fe6570578022b66d0fbbdfb6d04",
+  "community_patch_executed": false,
+  "probe_script_sha256": "9299d2fe7e66c534fc7422b25bd4e963cbde14f329b42ce57bde8a2684274c00",
+  "probe_log_sha256": "0941eb27704b387bb903b618266f09b88cde57519db8fbc2978ba08a35cde7ca",
+  "external_research_directory": "/tmp/gridline-archimesh-research-20261025",
+  "installed_or_enabled_in_user_profile": false,
+  "live_sessions_controlled": false,
+  "license_boundary": "NEEDS_LICENSE_REVIEW",
+  "native_geometry_and_glb_acceptance": "NOT_TESTED",
+  "independent_review": "NOT_RUN_SINGLE_AGENT",
+  "usage_receipts": "UNAVAILABLE"
+}

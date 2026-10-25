@@ -1,0 +1,82 @@
+{
+  "schema": "gridline-archimesh-doctor.v1",
+  "state": "INVENTORY_ONLY",
+  "network": "OFFLINE",
+  "discovery": "EXPLICIT_SOURCE",
+  "searched_root": null,
+  "dependency": "SOURCE_FOUND",
+  "host": {
+    "state": "HOST_STARTUP_VERIFIED",
+    "version": "5.2.3",
+    "executable": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "addon_loading": "NOT_ATTEMPTED",
+    "archimesh_compatibility": "NOT_TESTED"
+  },
+  "sources": [
+    {
+      "path": "/private/tmp/gridline-archimesh-research-20261025/official",
+      "source_state": "SOURCE_VERIFIED",
+      "version": "1.2.5",
+      "changed_or_missing": [],
+      "unexpected_files": [],
+      "file_sha256": {
+        "achm_window_panel.py": "c19723f5a4532ad0b27d23d37017703b883d84d1625c8f9b8381beb2db2a335d",
+        "achm_column_maker.py": "49d201fcec3ab0aaf14fc5ca5f3b94445d1492ba5afe48881bd8d4e069648f95",
+        "achm_stairs_maker.py": "ec3c4033c826fb4b37526b7439002d7eb95f9c089a7ffa2edc8554479c3bd601",
+        "achm_gltools.py": "0abb0e424ff32095cf41c3f6a2955bf723e1df327444870ee23fd1332e1946d5",
+        "__init__.py": "d0024030028720209494fca63129e0753a984eabd33d6a3cdab72bd7b1ab217d",
+        "achm_main_panel.py": "f135705cbf14807fe3c4c6270d61dd40e79e834291483a9f0e121a3ce86ef55f",
+        "achm_roof_maker.py": "b988f064cc321c527dab1babf93fd9087eb8eb56a709e43eef524ffb112db1da",
+        "achm_window_maker.py": "1a1037faac8ab41b497eab85565f1ed355739c009f7b6595dea5a069076e86f0",
+        "achm_room_maker.py": "d6c9d5ecfe457c1fe0397bbacda78dadb6d16ba77262cc27a7e92352cdb3df02",
+        "achm_door_maker.py": "dc80cf2c3f813be58cb49dd82ba64396055505c48b3962b4549c442579ea192b",
+        "achm_books_maker.py": "d084ec79ceb1f1bd63aed147c844ebaa8493a18385f698756911b5285333a47b",
+        "achm_kitchen_maker.py": "a49088f63730687e07cced48db5d4080d2b1932d54483e809d312773ecd2692f",
+        "achm_lamp_maker.py": "51f8df21587c166bf63c2c1be7166c896b800e20f73e30601535ba8d37c31d63",
+        "achm_curtain_maker.py": "793a528b4820d478a04a287235bf7130df246ac0bd2efc7c5b0d37e5a8f007e0",
+        "blender_manifest.toml": "ec4692d119cb93af9496e8cf98bc0d2d459af542d741c23aff3f7c4814b2cce3",
+        "achm_shelves_maker.py": "f0b4b67a3934cec995c5a0a7d78c88dfb53321f8e2e35edcb66ed4aaa3ea6ab5",
+        "achm_venetian_maker.py": "50cce2b0f944882de353d1c5a9a4b75a2b3401914133bdc4c843dcfc7a1e17ab",
+        "achm_tools.py": "3d6bf17c68e7828364c6321e1d22388214c5048bcfbbde31a3001b9452d84179",
+        "images/fabric_diffuse.png": "6867c85aa7062eab3a272977260342eb596ac5b4a2c28b61f9b25daebaff97ab"
+      },
+      "registration": "NOT_TESTED",
+      "available_operators": "NOT_TESTED",
+      "geometry_acceptance": "NOT_TESTED"
+    }
+  ],
+  "reference": {
+    "url": "https://extensions.blender.org/add-ons/archimesh/",
+    "archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+    "version": "1.2.5",
+    "license": "GPL-2.0-or-later",
+    "blender_version_min": "4.2.0"
+  },
+  "operators_in_reference_source": [
+    "mesh.archimesh_books",
+    "mesh.archimesh_column",
+    "mesh.archimesh_japan",
+    "mesh.archimesh_roller",
+    "mesh.archimesh_door",
+    "mesh.archimesh_kitchen",
+    "mesh.archimesh_light",
+    "object.archimesh_cut_holes",
+    "object.archimesh_pencil_room",
+    "mesh.archimesh_roof",
+    "mesh.archimesh_room",
+    "mesh.archimesh_shelves",
+    "mesh.archimesh_stairs",
+    "mesh.archimesh_venetian",
+    "mesh.archimesh_window",
+    "mesh.archimesh_winpanel"
+  ],
+  "license_boundary": "NEEDS_LICENSE_REVIEW",
+  "generation": "BLOCKED",
+  "unverified": [
+    "No live profile registration or operator availability inspected",
+    "Advertised minimum Blender version does not establish compatibility",
+    "No component dimensions, callbacks, panels, native or GLB readback validated",
+    "Custom/system installs are outside default discovery; select their source explicitly",
+    "Matching source bytes is not execution authorization or license clearance"
+  ]
+}

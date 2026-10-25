@@ -1,0 +1,54 @@
+{
+  "blender_version": "5.2.3 LTS",
+  "source_archive_sha256": "44745a86dd472e296e06cd45c511e002a1105512a73009cb0018c87611d18d87",
+  "registration": "PASS",
+  "cases": [
+    {
+      "operator": "mesh.archimesh_door",
+      "status": "OPERATOR_RETURNED",
+      "panel_poll": false,
+      "rna_properties_present": true,
+      "result": [
+        "FINISHED"
+      ],
+      "mesh_count": 6,
+      "geometry_validation": "NOT_TESTED"
+    },
+    {
+      "operator": "mesh.archimesh_window",
+      "status": "OPERATOR_RETURNED",
+      "panel_poll": false,
+      "rna_properties_present": true,
+      "result": [
+        "FINISHED"
+      ],
+      "mesh_count": 7,
+      "geometry_validation": "NOT_TESTED"
+    },
+    {
+      "operator": "mesh.archimesh_kitchen",
+      "status": "OPERATOR_RETURNED",
+      "result": [
+        "FINISHED"
+      ],
+      "mesh_count": 5,
+      "geometry_validation": "NOT_TESTED"
+    }
+  ],
+  "operators": {
+    "archimesh_room": true,
+    "archimesh_door": true,
+    "archimesh_window": true,
+    "archimesh_winpanel": true,
+    "archimesh_kitchen": true,
+    "archimesh_shelves": true,
+    "archimesh_column": true,
+    "archimesh_stairs": true,
+    "archimesh_roof": true,
+    "archimesh_books": true,
+    "archimesh_light": true,
+    "archimesh_japan": true,
+    "archimesh_roller": true,
+    "archimesh_venetian": true
+  }
+}
