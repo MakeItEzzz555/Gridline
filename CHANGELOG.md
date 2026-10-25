@@ -1,12 +1,15 @@
 # Changelog
 
-## Unreleased — 0.8.0 candidate review corrections (2026-10-25)
+### Included — 0.8.0 candidate review corrections (2026-10-25)
 
 - Correct B14 author-overview evidence pointers without implying publisher TOC or ISBN verification.
 - Serialize source-triage JSON receipts with ASCII-safe escapes so restricted terminal encodings cannot turn valid requests into false invalid-input results; preserve original Unicode on JSON decoding and Claude skill parity.
 - Read source-registry fixtures explicitly as UTF-8; add adverse ASCII-terminal and citation-provenance regressions. No new jurisdictional rules or release qualification are implied.
 
-## 0.8.0 candidate — qualification pending
+## 0.8.0 — 2026-10-25
+
+- Add immutable-candidate final qualification receipts with live CI, provenance verification and owner-bound approval; require distinct labelled evidence for every gate.
+- Complete isolated Gemini 0.65.0 validation/update/consent/rollback and correct full-command validator probing. Preserve source #42 provenance/ASCII fixes and all merged research/update work.
 
 - Pin CI action revisions and prepare a manual exact-main publisher-attestation workflow with hostile-source guard tests; no automatic publication.
 - Record static pip padding/header and relocatable-launcher findings, preserve unresolved installation provenance, and scope licensing gates to shipped artifacts.
@@ -14,29 +17,29 @@
 - Probe installed Gemini CLI validator support; report NOT_TESTED instead of assuming an undocumented command. Record actual isolated Claude/Codex lifecycle acceptance and dependency evidence separately from roadmap capabilities.
 
 - Integrate book evidence, provider-specific update discovery, jurisdiction/source triage and reproducible artifacts from PRs #37–#40. Synchronize seven version records.
-- Add deterministic SPDX 2.3 tracked-file SBOM with hashes and explicit dependency/license review gaps. Retain fail-closed publication status; no stable release or issue completion is implied.
+- Add deterministic SPDX 2.3 tracked-file SBOM with hashes and explicit dependency/license review gaps. Keep build-time candidate approval disabled; final stable approval is recorded separately, and roadmap issue completion is not implied.
 
-## Unreleased — book evidence and original review references
+### Included — book evidence and original review references
 
 - Record all 15 ArchEyes titles with edition/ISBN/access status, claim counterexamples and explicit gaps; correct the Ching edition gap and conflicting Materials for Design ISBN.
 - Add 15 original, nonnormative on-demand practice references to existing skills, synchronized to Claude. No paid text, construction dimensions or regulatory predicates extracted.
 
-## Unreleased — opt-in release discovery
+### Included — opt-in release discovery
 
 - Add a read-only, network-off-by-default stable release checker with strict SemVer and repository/redirect/size validation. No artifact download or install.
 - Add distribution metadata to provider version-drift checks and document real provider-specific update paths and unqualified release gates.
 
-## Unreleased — jurisdiction and source-edition triage
+### Included — jurisdiction and source-edition triage
 
 - Add a versioned, citation-only 12-record authority/source registry and an offline selector within the portable site-regulation-research skill.
 - Reject missing, stale, draft and mismatched source evidence without activating rules; keep Cyprus adoption and professional review gaps explicit. Include adversarial and standalone-skill tests; synchronize Claude.
 
-## Unreleased — reproducible unqualified candidate bundles
+### Included — reproducible unqualified candidate bundles
 
 - Build source and flattened Claude ZIPs from an exact Git commit, with deterministic metadata, SHA256SUMS, file inventory and an explicitly unqualified release manifest.
 - Verify candidate bytes against the pinned local Git source; reject archive path/mode hazards, provider drift and Git export transformations. Add disposable installer A/B/tamper/rollback tests and CI artifact retention without release publication.
 
-## Unreleased — measured villa topology repair (2026-10-24)
+### Included — measured villa topology repair (2026-10-24)
 
 - Scope opening voids to their host level; validate full cutaway inventories after native view-layer evaluation and reject modifiers, shape keys and hidden/excluded geometry. Add real-host corruption regressions.
 
@@ -44,29 +47,29 @@
 - Independently validate closed face/vertex topology, occupied volume, normals, roles and raw GLB triangles before host import. Add native and portable adversarial regression fixtures.
 - Repair the reproduced villa parapet and balcony guard intersections on a new copy, trim the buried parapet bases to the roof slab top, and publish measured before/after native evidence. The source villa is preserved; PR33 integrates the already-merged feature-branch fixes into main.
 
-## Unreleased — native Blender readback hardening
+### Included — native Blender readback hardening
 
 - Verify world mesh corners, native units, GLB identity/host properties and material assignments; prevent opening metadata from overwriting reserved identity fields.
 - Bound no-follow source reads, pin exclusive publication writes and propagate worker errors with autoexecution disabled.
 - Add deterministic security/corruption tests and a real-host adverse acceptance script.
 
-## Unreleased — Blender native-scene proof (2026-10-24)
+### Included — Blender native-scene proof (2026-10-24)
 
 - Add opt-in local Blender headless scene/export bridge for supported building-spec walls, doors and windows, with explicit millimetre-to-metre conversion, new-output-only policy, independent .blend/.glb native readback, input/artifact hashes and known coverage limitations.
 - Document that image-reference reconstruction, IFC/BIM semantics, complex detailing and AutoCAD native acceptance are still separate gates; downloadable AutoCAD installer alone is not a verified host.
 
 
-## Unreleased — recorded skill activation evaluation (2026-10-24)
+### Included — recorded skill activation evaluation (2026-10-24)
 
 - Add an offline scorer for real Codex, Claude Code and Gemini CLI activation observations, with per-skill recall, negative-control rates, SHA-256 provenance, baseline comparison and optional per-case regression gates.
 - Add 19 deterministic tests; CI discovers them automatically. This validates scoring logic, not live model activation accuracy.
 
-## Unreleased — AutoCAD Mac read inspection
+### Included — AutoCAD Mac read inspection
 
 - Add a manual, opt-in AutoLISP inspector, bounded disposable-copy preparation, bundle doctor and evidence receipts; no automatic host writes or security preference changes.
 - Fix the native-AUDIT-reproduced overall paper-space viewport layer defect; fresh A-101/A-102 copies pass native no-repair AUDIT. Native edit/plot/DWG roundtrip remains unverified.
 
-## Unreleased — trustworthy local drawing verification
+### Included — trustworthy local drawing verification
 
 - Preserve failure receipts on CSV parser errors and fail incomplete builds when any required PDF is not generated.
 
@@ -76,12 +79,12 @@
 - Retain byte-bound verification receipts, validator/dependency versions, source revision and explicit unsupported coverage. Preserve existing CLI/report keys and synchronized portable provider copies.
 - Native AutoCAD, semantic 3D, complete image/detail reconstruction, atomic output publication and professional acceptance remain separate pending gates.
 
-## Unreleased — source-detail intake gates
+### Included — source-detail intake gates
 
 - Add versioned ProjectBrief/SourceDetailLedger validation, provenance-bound confirmations, prioritized missing-geometry questions and explicit concept/exact/BIM gates.
 - Add an incomplete villa fixture and adverse tests without changing the existing 2D CLI or authorizing model writes.
 
-## Unreleased — community progress documentation (2026-10-23)
+### Included — community progress documentation (2026-10-23)
 
 - Documented implemented skills, DXF/PDF/schedule generation, read-only revision-impact checks and Gridline's local MCP review tool with direct PR evidence.
 - Published an issue-by-issue [community progress ledger](docs/COMMUNITY_PROGRESS_2026-10-23.md). Issues #10–#16 stay open because their complete acceptance criteria have **not** been met.

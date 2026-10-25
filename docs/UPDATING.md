@@ -108,3 +108,11 @@ Release qualification and next dependencies: [2026-10-25 release gap record](REL
 ## Candidate artifact verification
 
 Maintainers can build and verify pinned, reproducible source/Claude archives using [the release artifact pipeline](RELEASE_ARTIFACTS.md). These are explicitly unqualified review artifacts; neither their checksums nor a green packaging job authorizes installing or publishing a stable release.
+
+## v0.8.0 distribution and notification limits
+
+The GitHub stable release and opt-in checker expose the new version. Claude Git-marketplace users refresh the marketplace/plugin or receive native auto-updates only if their setting is enabled. Gemini users explicitly update or opt in with `--auto-update`; restart the session. The actual isolated Gemini 0.65.0 Git lifecycle and standalone/Claude/Codex receipts are linked from the qualification record. Standalone copied skills still require a reviewed reinstall; linked skills follow their checkout. No user's settings are changed remotely.
+
+GitHub watchers receive notices according to their own notification settings. A tag does not replace a public OpenAI Plugin Directory upload: that channel needs the new ZIP submitted and reviewed separately. No universal notification or forced-update mechanism is claimed. The release's `release-qualification.json` is authoritative; `distribution.json` and the build manifest are conservative source/build-time metadata.
+
+Gemini0.65.0 selects an architecture/platform-prefixed asset when available; with several generic assets it falls back to GitHub's source tarball/zipball. Gridline's separate source and Claude bundles therefore do not cause the Claude bundle to be selected as the extension. Keep the tag pinned to the qualified source and the Gemini manifest at the source root. This behavior was inspected in the pinned official CLI; post-release update checks remain a separate validation.

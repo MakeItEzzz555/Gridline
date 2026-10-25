@@ -30,7 +30,7 @@ fi
 
 if command -v gemini >/dev/null 2>&1; then
   # Command support varies by Gemini CLI version; absence is not acceptance.
-  if gemini extensions --help 2>/dev/null | grep -Eq '^[[:space:]]+validate([[:space:]]|$)'; then
+  if gemini extensions --help 2>/dev/null | grep -Eq '^[[:space:]]+(gemini[[:space:]]+extensions[[:space:]]+)?validate([[:space:]]|$)'; then
     echo "Gemini CLI: extension validation"
     gemini extensions validate "$ROOT"
     ran=1

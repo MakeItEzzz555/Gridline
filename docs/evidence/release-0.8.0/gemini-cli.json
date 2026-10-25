@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "A": "fdc678a78a48832535efc4d56977d0aafb45bca9",
+  "B": "512ba671b69539b94bf3649fb238b8fea68d2f44",
+  "B_tracked_files_verified": 280,
+  "B_auto_update": true,
+  "rollback": "advertised rollback-A ref; installed Git HEAD verified exact A",
+  "rollback_files_verified": 221,
+  "transport": "Real Gemini CLI; disposable loopback smartHTTP Git remote. No external GitHub auto-update claim.",
+  "final_loopback_bytes": 4639058,
+  "inference_or_login": "NOT_RUN",
+  "negative_controls": [
+    "local auto-update rejected",
+    "sanitized Git-config rewrite rejected",
+    "unadvertised SHA rollback rejected by fixture server"
+  ],
+  "notes": [
+    "Source update required explicit stdin consent; EOF did not update.",
+    "Prior successful B readback verified all tracked source files before uninstall."
+  ],
+  "cli_version": "0.65.0",
+  "official_release": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.65.0",
+  "bundle_sha256": "bb5e7e879608bd9b3fe261930d3886fa56aacbf471da1655f2978eb35b705a73",
+  "download_bytes": 21215960,
+  "actual_validate": "PASS; CLI advertises full-prefixed validator despite omission in online command list",
+  "profile": "Isolated user-owned profile; absent system-override paths; telemetry disabled; no existing credentials/config read",
+  "model_activation": "NOT_RUN",
+  "external_github_notification": "NOT_TESTED",
+  "negative_control_classification": "Local auto-update invalid; fixture Git config sanitization and unadvertised-object refusal are retained harness controls, not Gridline failures."
+}
