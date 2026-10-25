@@ -2,6 +2,9 @@
 
 ## 0.8.0 candidate — qualification pending
 
+- Pin CI action revisions and prepare a manual exact-main publisher-attestation workflow with hostile-source guard tests; no automatic publication.
+- Record static pip padding/header and relocatable-launcher findings, preserve unresolved installation provenance, and scope licensing gates to shipped artifacts.
+
 - Probe installed Gemini CLI validator support; report NOT_TESTED instead of assuming an undocumented command. Record actual isolated Claude/Codex lifecycle acceptance and dependency evidence separately from roadmap capabilities.
 
 - Integrate book evidence, provider-specific update discovery, jurisdiction/source triage and reproducible artifacts from PRs #37–#40. Synchronize seven version records.
