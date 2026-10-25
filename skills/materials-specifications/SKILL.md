@@ -43,3 +43,16 @@ For file/model changes, compare the result against a pre-change baseline and rep
 If a live CAD/BIM/GIS/analysis tool or MCP integration is available, inspect the current document/model and tool version before write operations. Prefer read-only inspection, dry runs, bounded samples, new output paths, and native undo/transaction mechanisms. Never claim a model or drawing was changed unless the tool confirms it.
 
 If the native application is unavailable, produce a reproducible plan, script, structured data, SVG/DXF artifact, or exact in-application procedure instead of pretending to have operated the software.
+
+## On-demand evidence and practice references
+
+Load only the relevant reference. These are original review prompts, not binding code or full-book extraction.
+
+- [B03: preliminary structure and MEP](references/b03-practice.md)
+- [B05: materials and construction sequence](references/b05-practice.md)
+- [B08: historical precedent](references/b08-practice.md)
+- [B09: timber interfaces](references/b09-practice.md)
+- [B10: glazed assemblies](references/b10-practice.md)
+- [B11: concrete coordination](references/b11-practice.md)
+- [B13: hospitality coordination](references/b13-practice.md)
+- [B14: material evidence](references/b14-practice.md)

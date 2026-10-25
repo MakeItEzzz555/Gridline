@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "source_list": "https://archeyes.com/the-ultimate-guide-to-architectural-construction-and-detail-books-top-15-picks/",
+  "books": [
+    {
+      "id": "B01",
+      "title": "Architectural Detailing: Function, Constructibility, Aesthetics",
+      "authors": [
+        "Edward Allen",
+        "Patrick Rand"
+      ],
+      "publisher": "Wiley",
+      "edition": "3rd, 2016",
+      "isbn": "9781118881996",
+      "source_url": "https://onlinelibrary.wiley.com/doi/book/10.1002/9781119193746",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "TOC_READ",
+      "observed_contents": "TOC: water pp. 5–43; air 45–49; heat 51–66; vapor 67–78; movement 89–112. Chapter bodies not read.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/building-envelope-performance/references/b01-practice.md",
+      "challenge": "IBC 2012 context is historical and primarily US; continuity QA is not a warranted assembly."
+    },
+    {
+      "id": "B02",
+      "title": "Building Construction Illustrated",
+      "authors": [
+        "Francis D. K. Ching"
+      ],
+      "publisher": "Wiley",
+      "edition": "7th, ebook December 2024; paperback February 2025",
+      "isbn": "9781394279289",
+      "source_url": "https://www.wiley.com/en-us/Building%20Construction%20Illustrated%2C%207th%20Edition-p-9781394279289",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "TOC_READ",
+      "observed_contents": "Publisher HTML TOC: site, building, foundations, floors, walls, roofs, moisture/thermal, doors/windows, special construction, finishes, MEP, materials.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/building-envelope-performance/references/b02-practice.md",
+      "challenge": "Dossier sixth-edition ISBN 9781119583165 remains valid but is not the newest edition found; seventh-edition print ISBN 9781394279272."
+    },
+    {
+      "id": "B03",
+      "title": "The Architect’s Studio Companion: Rules of Thumb for Preliminary Design",
+      "authors": [
+        "Joseph Iano",
+        "Edward Allen"
+      ],
+      "publisher": "Wiley",
+      "edition": "7th, June 2022",
+      "isbn": "9781119826798",
+      "source_url": "https://www.wiley-vch.de/en?isbn=9781119826798&option=com_eshop&view=product",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "TOC_READ",
+      "observed_contents": "Publisher TOC: structure pp. 19 onward, daylight 139 onward, MEP 159 onward, egress/accessibility 265 onward. Sample link retrieval failed.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/materials-specifications/references/b03-practice.md",
+      "challenge": "US/Canadian code context cannot approve Cyprus member sizes or accessible routes."
+    },
+    {
+      "id": "B04",
+      "title": "Manual of Section",
+      "authors": [
+        "Paul Lewis",
+        "Marc Tsurumaki",
+        "David J. Lewis"
+      ],
+      "publisher": "Princeton Architectural Press",
+      "edition": "Paperback publication 2016; edition number not stated",
+      "isbn": "9781616892555",
+      "source_url": "https://papress.com/products/manual-of-section",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "SYNOPSIS_ONLY",
+      "observed_contents": "Publisher describes seven section categories and 63 analytical drawings; full TOC not observed.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/drawing-qa/references/b04-practice.md",
+      "challenge": "Categories are analytic design tools, not statutory tests; do not assert named categories from unread chapters."
+    },
+    {
+      "id": "B05",
+      "title": "Constructing Architecture: Materials, Processes, Structures. A Handbook",
+      "authors": [
+        "Andrea Deplazes (editor)"
+      ],
+      "publisher": "Birkhäuser",
+      "edition": "English 5th, copyright 2022",
+      "isbn": "9783035626667",
+      "source_url": "https://birkhauser.com/en/book/9783035626667",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "SYNOPSIS_ONLY",
+      "observed_contents": "English fifth edition and additional sustainability coverage observed. Page also contains French fourth-edition description; do not transfer that TOC to English. ISBN identified by publisher product URL.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/materials-specifications/references/b05-practice.md",
+      "challenge": "Language-specific editions differ; absent property or lifecycle data is UNKNOWN, not zero."
+    },
+    {
+      "id": "B06",
+      "title": "Architectural Graphic Standards",
+      "authors": [
+        "American Institute of Architects",
+        "Dennis J. Hall",
+        "Nina M. Giglio (publisher listing)"
+      ],
+      "publisher": "Wiley",
+      "edition": "12th, hardcover March 2016",
+      "isbn": "9781118909508",
+      "source_url": "https://www.wiley.com/en-us/shop/general-introductory-architecture/architectural-graphic-standards-12th-edition-p-9781118909508",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "TOC_PARTIAL",
+      "observed_contents": "Publisher search index exposed TOC and format metadata; direct page unavailable. Credits require title-page confirmation; do not infer each contributor role.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/drawing-qa/references/b06-practice.md",
+      "challenge": "An industry reference is not a statute and its licensed details may not be copied."
+    },
+    {
+      "id": "B07",
+      "title": "Encyclopedia of Detail in Contemporary Residential Architecture",
+      "authors": [
+        "Virginia McLeod"
+      ],
+      "publisher": "Laurence King",
+      "edition": "Publication August 2010; edition number not stated",
+      "isbn": "9781856696920",
+      "source_url": "https://us.laurenceking.com/products/encyclopedia-of-detail-in-contemporary-residential-architecture",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "SYNOPSIS_ONLY",
+      "observed_contents": "Publisher describes keyed scaled drawings and cross-references, with product images; no full TOC read.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/drawing-qa/references/b07-practice.md",
+      "challenge": "ArchEyes truncates Architecture to Architect; source drawings are copyrighted and site-specific."
+    },
+    {
+      "id": "B08",
+      "title": "The Details of Modern Architecture, volumes 1 and 2",
+      "authors": [
+        "Edward R. Ford"
+      ],
+      "publisher": "MIT Press",
+      "edition": "Vol 1 paperback 2003 (hardcover 1990); vol 2 hardcover 1996",
+      "isbn": "9780262562010",
+      "source_url": "https://mitpress.mit.edu/9780262562010/the-details-of-modern-architecture-volume-1/",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "SYNOPSIS_ONLY",
+      "observed_contents": "Both volume publisher descriptions read: vol 1 1890–1932; vol 2 1928–1988. No chapter text or full TOC read.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/materials-specifications/references/b08-practice.md",
+      "challenge": "INSPIRATION_ONLY; second volume ISBN 9780262061858, distinct from paperback 9780262562027.",
+      "additional_sources": [
+        "https://mitpress.mit.edu/9780262061858/the-details-of-modern-architecture-volume-2/"
+      ]
+    },
+    {
+      "id": "B09",
+      "title": "Detail in Contemporary Timber Architecture",
+      "authors": [
+        "Virginia McLeod"
+      ],
+      "publisher": "Laurence King",
+      "edition": "Publication September 2015; edition number not stated",
+      "isbn": "9781780676555",
+      "source_url": "https://us.laurenceking.com/products/detail-in-contemporary-timber-architecture",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "TOC_READ",
+      "observed_contents": "Publisher-linked one-page TOC inspected: typology groups and case-study index; no project detail pages read.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/materials-specifications/references/b09-practice.md",
+      "challenge": "Fifty case studies do not approve a timber connection; engineering and adopted national rules remain required."
+    },
+    {
+      "id": "B10",
+      "title": "Detail in Contemporary Glass Architecture",
+      "authors": [
+        "Virginia McLeod"
+      ],
+      "publisher": "Laurence King",
+      "edition": "Publication September 2011; edition number not stated",
+      "isbn": "9781856697408",
+      "source_url": "https://us.laurenceking.com/products/detail-in-contemporary-glass-architecture",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "TOC_READ",
+      "observed_contents": "Publisher-linked one-page TOC inspected: case-study groups and details directory, not technical clauses.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/materials-specifications/references/b10-practice.md",
+      "challenge": "Missing visible support is a question, not automatic model failure; require source and professional review."
+    },
+    {
+      "id": "B11",
+      "title": "Detail in Contemporary Concrete Architecture",
+      "authors": [
+        "David Phillips",
+        "Megumi Yamashita"
+      ],
+      "publisher": "Laurence King / Hachette",
+      "edition": "Hardcover publication October 2012",
+      "isbn": "9781780670096",
+      "source_url": "https://www.hachette.co.uk/titles/david-phillips/detail-in-contemporary-concrete-architecture/9781780670096/",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "SYNOPSIS_ONLY",
+      "observed_contents": "Publisher synopsis describes 49 works and comparable drawings. Excerpt label alone is not excerpt access.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/materials-specifications/references/b11-practice.md",
+      "challenge": "Dossier 2025 reprint claim not verified in this pass; no cover/anchorage dimensions extracted."
+    },
+    {
+      "id": "B12",
+      "title": "Detail in Contemporary Landscape Architecture",
+      "authors": [
+        "Virginia McLeod"
+      ],
+      "publisher": "Laurence King",
+      "edition": "Publication August 2012; edition number not stated",
+      "isbn": "9781780670232",
+      "source_url": "https://us.laurenceking.com/products/detail-in-contemporary-landscape-architecture",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "SYNOPSIS_ONLY",
+      "observed_contents": "Publisher synopsis describes 40 works and site/section/details. Resource download not fetched or licensed for redistribution.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/civil-site-design/references/b12-practice.md",
+      "challenge": "A photographed landscape does not establish local drainage, retaining or accessible-route adequacy."
+    },
+    {
+      "id": "B13",
+      "title": "Detail in Contemporary Hotel Design",
+      "authors": [
+        "Drew Plunkett",
+        "Olga Reid"
+      ],
+      "publisher": "Laurence King / Hachette",
+      "edition": "Ebook publication September 2013",
+      "isbn": "9781780675077",
+      "source_url": "https://www.hachette.co.uk/titles/drew-plunkett/detail-in-contemporary-hotel-design/9781780675077/",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "SYNOPSIS_ONLY",
+      "observed_contents": "Publisher search index confirms 36 interior schemes; direct request rate-limited. No full TOC/excerpt read.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/materials-specifications/references/b13-practice.md",
+      "challenge": "Hospitality interiors are not a verified whole-hotel operational or life-safety specification."
+    },
+    {
+      "id": "B14",
+      "title": "Materials for Design",
+      "authors": [
+        "Victoria Ballard Bell",
+        "Patrick Rand"
+      ],
+      "publisher": "Princeton Architectural Press",
+      "edition": "2006; first-edition catalogue claim, title page not inspected",
+      "isbn": "9781568985589",
+      "source_url": "https://design.ncsu.edu/wp-content/uploads/2020/05/p_rand_MFDBriefly150.pdf",
+      "accessed": "2026-10-25",
+      "metadata_status": "UNVERIFIED",
+      "contents_availability": "AUTHOR_OVERVIEW_ONLY",
+      "observed_contents": "Author university overview confirms publisher and European alternate title Materials for Architectural Design. Publisher product page inaccessible; no full TOC verified.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/materials-specifications/references/b14-practice.md",
+      "challenge": "Publisher ISBN verification remains UNVERIFIED; Open Library reports 9781568985589 while Petra lists invalid-checksum 9781568985584. Do not confuse ISBN-10 1568985584 with ISBN-13.",
+      "additional_sources": [
+        "https://openlibrary.org/books/OL8691502M/Materials_for_Design",
+        "https://perpus.petra.ac.id/catalog/site/detail?id=2284925"
+      ],
+      "isbn_source_url": "https://openlibrary.org/books/OL8691502M/Materials_for_Design",
+      "isbn_evidence_level": "CATALOGUE_METADATA"
+    },
+    {
+      "id": "B15",
+      "title": "Detailing for Landscape Architects: Aesthetics, Function, Constructibility",
+      "authors": [
+        "Thomas R. Ryan",
+        "Edward Allen",
+        "Patrick J. Rand"
+      ],
+      "publisher": "Wiley",
+      "edition": "1st, March 2011",
+      "isbn": "9780470548783",
+      "source_url": "https://www.wiley-vch.de/de/fachgebiete/ingenieurwesen/detailing-for-landscape-architects-978-0-470-54878-3",
+      "accessed": "2026-10-25",
+      "metadata_status": "CONFIRMED",
+      "contents_availability": "SYNOPSIS_ONLY",
+      "observed_contents": "Publisher German storefront confirms first edition and functional/constructibility/aesthetic scope; full TOC not observed.",
+      "full_text_read": false,
+      "normativity": "NONBINDING_REFERENCE",
+      "playbook": "skills/civil-site-design/references/b15-practice.md",
+      "challenge": "No numerical runoff, ramp or joint threshold is justified by this synopsis."
+    }
+  ]
+}

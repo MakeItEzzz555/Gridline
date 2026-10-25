@@ -34,3 +34,7 @@ TuckBit, Claude Widget Kit and Codex Widget Kit informed the onboarding style: a
 ## Source-edition and jurisdiction triage (2026-10-25)
 
 The [portable source registry and offline selector](../skills/site-regulation-research/references/source-selection.md) records exact source/edition/access metadata and unresolved national/local adoption. It does not evaluate building requirements or establish compliance. All rule activation remains disabled; the existing drawing profiles are separate output conventions.
+
+## Book coverage and contradictions (2026-10-25)
+
+See [individual bibliography and access records](research/books/bibliography.yaml), [claim ledger](research/books/evidence-ledger.jsonl) and [adjudication/access gaps](research/books/contradiction-report.md). Coverage is 15 records, not 15 books read. B14 publisher ISBN remains unverified; all proposed practices need project-specific professional review. The existing skills link only their relevant original references.

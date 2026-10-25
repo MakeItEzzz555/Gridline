@@ -5,6 +5,12 @@
 - Add a versioned, citation-only 12-record authority/source registry and an offline selector within the portable site-regulation-research skill.
 - Reject missing, stale, draft and mismatched source evidence without activating rules; keep Cyprus adoption and professional review gaps explicit. Include adversarial and standalone-skill tests; synchronize Claude.
 
+## Unreleased — book evidence and original review references
+
+- Record all 15 ArchEyes titles with edition/ISBN/access status, claim counterexamples and explicit gaps; correct the Ching edition gap and conflicting Materials for Design ISBN.
+- Add 15 original, nonnormative on-demand practice references to existing skills, synchronized to Claude. No paid text, construction dimensions or regulatory predicates extracted.
+
+
 ## Unreleased — measured villa topology repair (2026-10-24)
 
 - Scope opening voids to their host level; validate full cutaway inventories after native view-layer evaluation and reject modifiers, shape keys and hidden/excluded geometry. Add real-host corruption regressions.
