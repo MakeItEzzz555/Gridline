@@ -1,0 +1,53 @@
+{
+  "baseline_sha": "f521969934758ac5625239ea65229190a5a6114e",
+  "scope": "Working-source hashes tested; final Git SHA is recorded in PR and external handoff. Not a release qualification.",
+  "checks": [
+    {
+      "command": "python3 tests/check_repo.py",
+      "status": "PASS",
+      "log": "/tmp/gridline-audit-repo-check.log"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "status": "PASS",
+      "tests": 174,
+      "skips": 0,
+      "wall_seconds": 75.705,
+      "log": "/tmp/gridline-post-release-full-tests.log"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p test_door_intent.py -v",
+      "status": "PASS",
+      "tests": 6,
+      "geometric_subcases": 48,
+      "log": "/tmp/gridline-door-after.log"
+    },
+    {
+      "command": "python3 skills/architectural-drawing-generation/scripts/blender_native.py doctor",
+      "status": "CLI_VERIFIED",
+      "version": "Blender 5.2.3 LTS",
+      "native_model_readback": "NOT_RUN"
+    }
+  ],
+  "environment": {
+    "python": "3.12",
+    "existing_environment": "/tmp/gridline-rc-reviewfix-venv-20261025",
+    "ezdxf": "1.4.5",
+    "matplotlib": "3.11.2",
+    "pypdf": "6.21.2",
+    "GRIDLINE_REQUIRE_CAD_TESTS": "1"
+  },
+  "tested_file_sha256": {
+    "skills/architectural-drawing-generation/scripts/building_spec.py": "8ae35363a8673276f0baf2349fa3c621dc5b272f6bd623d12ea09a9fca48d1a9",
+    "skills/architectural-drawing-generation/scripts/aec_cad.py": "2ceb939ef2e789a5ef5a487ebcf7901bcef4783fc8f0db31e94243dacb625889",
+    "skills/architectural-drawing-generation/scripts/aec_readback.py": "8214a34711cb42d3ce82e741c4c5ed6d70ddededb224e231fcf8bf2e9232d540",
+    "skills/architectural-drawing-generation/scripts/blender_native.py": "6b833284f97190adc46970dc1b9e1865a2b64792ad92cdd21ac1905c0c52d3e3",
+    "skills/architectural-drawing-generation/references/building-spec.v1.schema.json": "72b847d23ea9efcecbb151f1ed005ffa9fac725506e7ab2514f7338c843d1412",
+    "tests/test_door_intent.py": "998bb5b3bd9b1d2be3f6afcfa31cbb4b3bcbf72c15d2272cbd76154b267112a4",
+    "tests/test_drawing_verification.py": "d6b8a98a55d517daf7e6f6186fe32981694b593a12e77b5d0f539638fc279f62"
+  },
+  "release_decision": "NO_GO",
+  "native_acceptance": "NOT_RUN",
+  "provider_model_activation": "NOT_RUN",
+  "independent_professional_review": "NOT_RUN"
+}

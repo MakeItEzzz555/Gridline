@@ -21,7 +21,7 @@ from pathlib import Path
 
 # Installed skill bundles also support Python's isolated (-I) invocation.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from building_spec import finite, shape_errors
+from building_spec import finite, shape_errors, door_opens
 from aec_readback import geometry_check, plan_requirements, pdf_check, TOLERANCE_MM, PDF_TOLERANCE_PT
 from aec_receipt import coverage, finish
 
@@ -207,8 +207,11 @@ def validate(spec: dict, profile: dict) -> list[str]:
         if not (0 <= o.get("offset", -1) and o.get("offset", 0) + o.get("width", 0) <= frame(wall)[3]):
             errors.append(f"opening {o['id']}: does not fit inside wall {wall['id']} "
                           f"(offset {o.get('offset')} + width {o.get('width')} > length {frame(wall)[3]:.0f})")
-        if o.get("kind") == "door" and (o.get("hinge") not in ("start", "end") or o.get("opens") not in ("left", "right")):
-            errors.append(f"door {o['id']}: hinge must be start|end and opens left|right")
+        if o.get("kind") == "door":
+            try:
+                door_opens(o, wall, spec["rooms"])
+            except ValueError as exc:
+                errors.append(str(exc))
         level = next((lv for lv in spec["levels"] if lv["id"] == wall.get("level")), None)
         sill = o.get("sill") if o["kind"] == "window" else 0
         if not finite(sill) or sill < 0:
@@ -344,7 +347,7 @@ def draw_plan(msp, spec, profile, level_id, scale):
                     msp.add_line(at(start, u, n, a, d), at(start, u, n, b, d), dxfattribs={"layer": L["opening"]}).set_xdata("GRIDLINE", [(1000, o["id"])])
                 swing = None
             else:
-                side = n if o["opens"] == "left" else (-n[0], -n[1])
+                side = n if door_opens(o, w, spec["rooms"]) == "left" else (-n[0], -n[1])
                 hinge_s, free_s = (a, b) if o["hinge"] == "start" else (b, a)
                 sign = 1 if side == n else -1
                 hinge = at(start, u, n, hinge_s, sign * t / 2)
@@ -353,7 +356,7 @@ def draw_plan(msp, spec, profile, level_id, scale):
                 leaf = math.degrees(math.atan2(side[1], side[0]))
                 closed_dir = (u[0], u[1]) if free_s > hinge_s else (-u[0], -u[1])
                 closed = math.degrees(math.atan2(closed_dir[1], closed_dir[0]))
-                a1, a2 = (leaf, closed) if (closed - leaf) % 360 == 90 else (closed, leaf)
+                a1, a2 = (closed, leaf) if (free_s > hinge_s) == (sign > 0) else (leaf, closed)
                 msp.add_arc(hinge, o["width"], a1, a2, dxfattribs={"layer": L["opening"]}).set_xdata("GRIDLINE", [(1000, o["id"])])
                 swing = side
             # Tags stay off the outside (dimension chains) and clear of a door's swing.
@@ -493,6 +496,11 @@ def write_pdf(doc, layout, size, path: Path) -> bool:
     config = Configuration(background_policy=BackgroundPolicy.WHITE, color_policy=ColorPolicy.BLACK,
                            lineweight_policy=LineweightPolicy.ABSOLUTE)
     ctx = RenderContext(doc)
+    def plot_layers(layers):
+        for layer in layers:
+            if not doc.layers.get(layer.layer).dxf.plot:
+                layer.is_visible = False
+    ctx.set_layer_properties_override(plot_layers)
     ctx.set_current_layout(layout)
     Frontend(ctx, MatplotlibBackend(ax, adjust_figure=False), config=config).draw_layout(layout, finalize=True)
     ax.set_xlim(0, size[0])
@@ -546,12 +554,17 @@ def build(spec_path: Path, out: Path, standard: str | None) -> int:
               [[r["id"], r["name"], levels[r["level"]]["name"], f"{area_m2(r['boundary']):.2f}",
                 f"{sum(math.dist(a, b) for a, b in zip(r['boundary'], r['boundary'][1:] + r['boundary'][:1])) / 1000:.2f}"]
                for r in spec.get("rooms", [])])
+    room_doors = any("receiving_room" in o or o.get("opens") == "into_room" for o in spec["openings"] if o["kind"] == "door")
     for kind in ("door", "window"):
         rows = [[o["id"], o.get("type", ""), walls[o["wall"]]["level"], o["wall"], o["width"], o["height"],
                  o.get("sill", "") if kind == "window" else o.get("hinge", "")]
                 for o in spec["openings"] if o["kind"] == kind]
-        write_csv(out / f"{kind}-schedule.csv",
-                  ["id", "type", "level", "wall", "width_mm", "height_mm", "sill_mm" if kind == "window" else "hinge"], rows)
+        header = ["id", "type", "level", "wall", "width_mm", "height_mm", "sill_mm" if kind == "window" else "hinge"]
+        if kind == "door" and room_doors:
+            header += ["opens", "receiving_room", "resolved_opens"]
+            for row, o in zip(rows, (o for o in spec["openings"] if o["kind"] == "door")):
+                row += [o["opens"], o.get("receiving_room", ""), door_opens(o, walls[o["wall"]], spec["rooms"])]
+        write_csv(out / f"{kind}-schedule.csv", header, rows)
     write_csv(out / "sheet-register.csv", ["number", "title", "scale", "size", "revision", "status", "date"],
               [[s["number"], s["title"], f"1:{s['scale']}", s["size"], project["revision"], project["status"], project["date"]]
                for s in spec["sheets"]])
@@ -750,6 +763,7 @@ def check_outputs(spec, profile, outputs, gates, errors, warnings, checked):
             for room in spec.get("rooms", [])
         }
     }
+    room_doors = any("receiving_room" in o or o.get("opens") == "into_room" for o in spec["openings"] if o["kind"] == "door")
     for kind in ("door", "window"):
         expected = {}
         for opening in spec["openings"]:
@@ -764,6 +778,9 @@ def check_outputs(spec, profile, outputs, gates, errors, warnings, checked):
             row["sill_mm" if kind == "window" else "hinge"] = str(
                 opening.get("sill", "") if kind == "window" else opening.get("hinge", "")
             )
+            if kind == "door" and room_doors:
+                row.update(opens=opening["opens"], receiving_room=opening.get("receiving_room", ""),
+                           resolved_opens=door_opens(opening, walls_by_id[opening["wall"]], spec["rooms"]))
             expected[opening["id"]] = row
         expected_schedules[f"{kind}-schedule.csv"] = expected
 

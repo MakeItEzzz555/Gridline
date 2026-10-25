@@ -1,12 +1,16 @@
 """Independent measurements for Gridline's supported 2D plan primitives.
 
 No generator imports: expected geometry is derived in wall-local coordinates.
+Room-intent resolution is shared input validation, not an independent oracle;
+tests/test_door_intent.py checks swings against a separate rectangular-room oracle.
 XDATA is an association hint, never the geometric oracle or a native identity.
 """
 from __future__ import annotations
 
 import io
 import math
+
+from building_spec import door_opens
 
 TOLERANCE_MM = 0.01
 PDF_TOLERANCE_PT = 0.05
@@ -58,7 +62,7 @@ def plan_requirements(spec, profile, level):
                 for across in (-half, 0, half):
                     result.append((oid, layer, "LINE", [point(a, across), point(a + width, across)]))
             else:
-                direction = 1 if opening["opens"] == "left" else -1
+                direction = 1 if door_opens(opening, wall, spec["rooms"]) == "left" else -1
                 hinge_s = a if opening["hinge"] == "start" else a + width
                 hinge = point(hinge_s, direction * half)
                 tip = point(hinge_s, direction * (half + width))
@@ -189,8 +193,9 @@ def pdf_check(data, spec, profile, sheet, requirements, viewport):
                 (p[1] - vp.view_center_point.y) / sheet["scale"] * factor + vp.center.y * factor)
 
     measured = 0
+    plotted_layers = {layer["name"] for layer in profile["layers"].values() if layer["plot"]}
     for eid, layer, kind, coordinates in requirements:
-        if kind == "ARC":
+        if layer not in plotted_layers or kind == "ARC":
             continue
         pairs = ([coordinates] if kind == "LINE" else
                  list(zip(coordinates, coordinates[1:] + coordinates[:1])))

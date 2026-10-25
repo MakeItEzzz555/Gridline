@@ -277,11 +277,22 @@
         "opens": {
           "enum": [
             "left",
-            "right"
-          ]
+            "right",
+            "into_room"
+          ],
+          "description": "Legacy left/right is relative to the directed wall. Opt-in into_room requires receiving_room; never reinterpret approved legacy sides."
         },
         "type": {
           "type": "string"
+        },
+        "receiving_room": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Explicit served room ID on the host level; required for into_room."
+        },
+        "operation": {
+          "const": "single_hinged",
+          "description": "Only single hinged door geometry is supported. Sliding/double door geometry must use an appropriate native workflow."
         }
       },
       "additionalProperties": true,
@@ -313,6 +324,28 @@
               "hinge",
               "opens"
             ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "opens": {
+                "const": "into_room"
+              }
+            },
+            "required": [
+              "opens"
+            ]
+          },
+          "then": {
+            "required": [
+              "receiving_room"
+            ],
+            "properties": {
+              "kind": {
+                "const": "door"
+              }
+            }
           }
         }
       ]

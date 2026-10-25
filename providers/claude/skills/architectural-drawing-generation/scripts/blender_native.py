@@ -20,7 +20,7 @@ import tempfile
 HERE = Path(__file__).resolve().parent
 SHAPE_DIR = HERE
 sys.path.insert(0, str(SHAPE_DIR))
-from building_spec import shape_errors  # noqa: E402
+from building_spec import shape_errors, door_opens  # noqa: E402
 from wall_topology import geometry_entries  # noqa: E402
 
 DEFAULT_BLENDER = Path("/Applications/Blender.app/Contents/MacOS/Blender")
@@ -101,8 +101,8 @@ def compile_scene(spec):
         _, wall_height = levels[wall["level"]]
         if offset < 0 or sill < 0 or offset + width > length + 1e-6 or sill + height > wall_height + 1e-6:
             raise ValueError(f"opening {ident}: does not fit inside wall in 3D")
-        if op["kind"] == "door" and (op.get("hinge") not in ("start", "end") or op.get("opens") not in ("left", "right")):
-            raise ValueError(f"door {ident}: missing hinge/direction")
+        if op["kind"] == "door":
+            door_opens(op, wall, spec["rooms"])
         openings[host].append((offset, offset + width, sill, sill + height, op))
     boxes, elements = [], []
     def box(kind, gid, host, center, dims, angle, metadata=None):
@@ -148,11 +148,15 @@ def compile_scene(spec):
                 [right-left, min(35, thick/3), head-sill], theta,
                 {"opening_kind":op["kind"],"host_id":ident, "sill_mm":sill})
             elements.append({"id":op["id"],"kind":op["kind"],"host":ident,
-                             "width_mm":right-left,"height_mm":head-sill,"sill_mm":sill})
+                             "width_mm":right-left,"height_mm":head-sill,"sill_mm":sill,
+                             **({"hinge":op["hinge"], "opens":op["opens"],
+                                 "receiving_room":op.get("receiving_room", ""),
+                                 "resolved_opens":door_opens(op, w, spec["rooms"])} if kind == "door" else {})})
     # No guessed foundations, ceilings, roofs, furniture or site. They require separate inputs.
     unverified=["Mixed oblique joins unsupported; common rotated orthogonal walls only",
                 "Intentional material/level/joint groups are not unioned across boundaries",
                 "Materials, window and door manufacturing details are illustrative",
+                "Door slabs are closed; room intent metadata does not verify a 3D swing or collision clearance",
                 "Roofs, floors, stairs, furnishings, foundations, MEP and site are not generated",
                 "Image-reference similarity was not evaluated",
                 "Native AutoCAD/DWG and IFC BIM interoperability not tested"]

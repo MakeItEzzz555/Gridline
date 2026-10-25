@@ -20,7 +20,11 @@ SCRIPT = SKILL / "scripts/aec_cad.py"
 EXAMPLE = SKILL / "references/example-house.building.json"
 module_spec = importlib.util.spec_from_file_location("aec_readback_test", SKILL / "scripts/aec_readback.py")
 readback = importlib.util.module_from_spec(module_spec)
-module_spec.loader.exec_module(readback)
+sys.path.insert(0, str(SCRIPT.parent))
+try:
+    module_spec.loader.exec_module(readback)
+finally:
+    sys.path.pop(0)
 try:
     import ezdxf
     import matplotlib
