@@ -1,0 +1,30 @@
+{
+  "native_pdf_sha256": "a3862f64bfda1ad34759b802db868d279d1bc93a74e7e008d52752561125a20a",
+  "pages": 1,
+  "page_box": [
+    0.0,
+    0.0,
+    1191.0,
+    842.0
+  ],
+  "expected_page_pt": [
+    1190.5511811023623,
+    841.8897637795276
+  ],
+  "expected_leaf_length_pt": 25.511811023622048,
+  "measured_leaf_segments": [
+    {
+      "start": [
+        581.28,
+        523.92
+      ],
+      "end": [
+        574.68,
+        548.64
+      ],
+      "length_pt": 25.585902368296523
+    }
+  ],
+  "nonplot_room_edge_count": 0,
+  "parser_note": "Native AutoCAD PDF contains duplicate /PageMode key; measured with pypdf strict=False. Strict generated-PDF checker remains unchanged."
+}

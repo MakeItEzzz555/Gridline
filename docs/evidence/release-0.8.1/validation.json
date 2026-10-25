@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "full_tests": 176,
+  "skips": 0,
+  "wall_seconds": 107.275,
+  "cad_dependencies": {
+    "ezdxf": "1.4.5",
+    "matplotlib": "3.11.2",
+    "pypdf": "6.21.2"
+  },
+  "blender_cases": [
+    "room-entry 15-degree receiving-room scene",
+    "example house"
+  ],
+  "adversarial_cases_rejected": 11,
+  "source_note": "Final source SHA/tree is bound in the release qualification asset; tests ran on exact final runtime files before commit.",
+  "runtime_sha256": {
+    "skills/architectural-drawing-generation/scripts/aec_cad.py": "d168784214e291ce10d6e43d5eb1e8c603f007ee47b67068a83df0ee5dbdd3bc",
+    "skills/architectural-drawing-generation/scripts/building_spec.py": "7683dde9e0ba7f63b2a015b0fb67f4cff84498b1a2610705a50078b4571eb7d5",
+    "tests/test_door_intent.py": "8c2427f0b9793bc57399757b19ab1f04808b2dfd01a0061cc4e83a1901a271bd",
+    "tests/test_drawing_verification.py": "d23bb8959ac288b9394f523fd369126397295fe43891b479e84768b6943b660b"
+  },
+  "limitations": [
+    "No regulatory predicates activated",
+    "No independent professional review",
+    "Closed conceptual 3D door geometry only"
+  ]
+}

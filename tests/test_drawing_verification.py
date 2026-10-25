@@ -76,6 +76,20 @@ class DrawingVerificationTests(unittest.TestCase):
         self.assertEqual(checked.returncode, 1)
         self.assertIn('overall paper-space viewport must be on layer 0', checked.stdout)
 
+    def test_paperspace_native_plot_scale_is_one_to_one_and_tampering_fails(self):
+        path = self.out / 'A-101.dxf'
+        doc = ezdxf.readfile(path)
+        settings = doc.layouts.get('A-101').dxf_layout.dxf
+        self.assertEqual(settings.plot_paper_units, 1)
+        self.assertEqual(settings.plot_type, 5)
+        self.assertEqual(settings.scale_numerator / settings.scale_denominator, 1)
+        settings.scale_numerator = .0078125
+        settings.scale_denominator = 12
+        doc.saveas(path)
+        checked = run('check', EXAMPLE, self.out)
+        self.assertEqual(checked.returncode, 1)
+        self.assertIn('paper-space plot must use millimetres at 1:1', checked.stdout)
+
     def test_oversized_csv_field_retains_failure_receipt(self):
         for name in ("room-schedule.csv", "sheet-register.csv"):
             with self.subTest(schedule=name):

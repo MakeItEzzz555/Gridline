@@ -101,13 +101,13 @@ def door_opens(opening, wall, rooms):
     if opening.get('operation', 'single_hinged') != 'single_hinged':
         raise ValueError(f"door {opening['id']}: only single_hinged operation is supported")
     intent = opening.get('opens')
-    if intent in ('left', 'right'):
+    if intent in ('left', 'right') and 'receiving_room' not in opening:
         return intent
-    if intent != 'into_room':
+    if intent not in ('left', 'right', 'into_room'):
         raise ValueError(f"door {opening['id']}: opens must be left|right|into_room")
     receiving = [r for r in rooms if r['id'] == opening.get('receiving_room')]
     if len(receiving) != 1 or receiving[0].get('level') != wall['level']:
-        raise ValueError(f"door {opening['id']}: into_room needs one receiving_room on the host level")
+        raise ValueError(f"door {opening['id']}: needs one receiving_room on the host level")
     boundary = receiving[0].get('boundary', [])
     if len(boundary) < 3:
         raise ValueError(f"door {opening['id']}: receiving_room needs a polygon")
@@ -124,6 +124,8 @@ def door_opens(opening, wall, rooms):
     sides = [side for side in (1, -1) if inside_room(point(middle, side*(half+0.02)), boundary)]
     if len(sides) != 1 or not inside_room(point(middle, sides[0]*half), boundary):
         raise ValueError(f"door {opening['id']}: receiving_room is ambiguous or not adjacent to the opening")
+    if intent in ('left', 'right'):
+        return intent
     side = sides[0]
     hinge = opening['offset'] + (opening['width'] if opening['hinge'] == 'end' else 0)
     closed = 1 if opening['hinge'] == 'start' else -1

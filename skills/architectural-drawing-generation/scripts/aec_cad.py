@@ -419,7 +419,7 @@ def draw_sheet(doc, spec, profile, sheet, msp):
     pw, ph = profile["paper"][sheet["size"]]
     m = profile["sheet_margins_mm"]
     psp = doc.layouts.new(sheet["number"])
-    psp.page_setup(size=(pw, ph), margins=(0, 0, 0, 0), units="mm", scale=1, name=sheet["size"])
+    psp.page_setup(size=(pw, ph), margins=(0, 0, 0, 0), units="mm", scale=(1, 1), name=sheet["size"])
     # AutoCAD AUDIT requires the overall paper-space viewport (ID 1) on layer 0.
     for viewport in psp.query("VIEWPORT"):
         if viewport.dxf.id == 1:
@@ -657,6 +657,12 @@ def check_outputs(spec, profile, outputs, gates, errors, warnings, checked):
             errors.append(f"{number}: no paper-space layout named {number}")
             gates["dxf_standards"]["sheets"][number] = {"status": "FAIL"}
             continue
+        settings = psp.dxf_layout.dxf
+        if (settings.plot_paper_units != 1 or settings.plot_type != 5
+                or not finite(settings.scale_numerator) or not finite(settings.scale_denominator)
+                or settings.scale_denominator <= 0
+                or abs(settings.scale_numerator / settings.scale_denominator - 1) > 1e-9):
+            errors.append(f"{number}: paper-space plot must use millimetres at 1:1")
         msp = doc.modelspace()
         for space, layout in (("model", msp), ("paper", psp)):
             for e in layout:

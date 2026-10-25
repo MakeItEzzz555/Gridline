@@ -1,7 +1,7 @@
 {
   "name": "gridline",
   "displayName": "Gridline",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Architecture/AEC skills and specialist subagents for Claude Code.",
   "author": {
     "name": "Nicolas Savvides",

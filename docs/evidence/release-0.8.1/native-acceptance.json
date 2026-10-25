@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "scope": "Synthetic room-entry fixture; scoped native acceptance only",
+  "host": "AutoCAD Mac 2027 education/noncommercial",
+  "open_and_reopened_dwg_audit_errors": 0,
+  "tag_alignment_delta_mm": [
+    99.99999999999955,
+    0.0,
+    0.0
+  ],
+  "tag_handle_before": "A3",
+  "tag_handle_after": "A3",
+  "geometry_items_readback": 8,
+  "readback_errors": [],
+  "plot": "A3 landscape literal 1:1 mm; measured 900mm leaf at 1:100; nonplot room edge absent",
+  "limitations": [
+    "Unused setup fonts substituted; superscript glyph rendering differs",
+    "Native PDF duplicate PageMode key measured with permissive parser",
+    "First insertion-point edit normalized by native centered-text layout; corrected alignment-point edit verified in export",
+    "No professional or regulatory approval"
+  ],
+  "sha256": {
+    "A-101.dxf": "4a78466c99db17c63eb800184e8789653210c23e9b7bd25329169a361946eb33",
+    "native-edited.dwg": "a9fbe98abc152cf594b1e8a9c68ffd69ea285af3d1cf4b691b678a6e7cb1d481",
+    "native-roundtrip-v2.dxf": "5cefc2b35cb5fd7934be59c884069ad9674cbee0c85557dec466a6334dce6636",
+    "native-plot.pdf": "a3862f64bfda1ad34759b802db868d279d1bc93a74e7e008d52752561125a20a"
+  }
+}

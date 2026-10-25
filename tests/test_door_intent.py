@@ -181,3 +181,27 @@ class DoorIntentTests(unittest.TestCase):
             self.assertTrue(has(paper(1000,100), paper(1000,1000)), 'door leaf must remain visible')
             boundary_layer = self.profile['layers']['room_boundary']['name']
             self.assertEqual(len([e for e in doc.modelspace().query('LWPOLYLINE') if e.dxf.layer == boundary_layer]), 2)
+
+    def test_explicit_sides_validate_supplied_room_without_flipping_exception(self):
+        for side in ('left', 'right'):
+            for fault in ('unknown', 'wrong_level', 'nonadjacent', 'ambiguous'):
+                data = fixture()
+                data['openings'][0]['opens'] = side
+                if fault == 'unknown':
+                    data['openings'][0]['receiving_room'] = 'MISSING'
+                elif fault == 'wrong_level':
+                    data['rooms'][0]['level'] = 'OTHER'
+                elif fault == 'nonadjacent':
+                    data['rooms'][0]['boundary'] = [[0,2000],[4000,2000],[4000,3000],[0,3000]]
+                else:
+                    data['rooms'][0]['boundary'] = [[0,-3000],[4000,-3000],[4000,3000],[0,3000]]
+                with self.subTest(side=side, fault=fault):
+                    self.assertTrue(self.cad.validate(data, self.profile))
+                    with self.assertRaises(ValueError):
+                        self.blender.compile_scene(data)
+        data = fixture()
+        data['openings'][0].update(opens='right')
+        self.assertEqual(self.cad.validate(data, self.profile), [])
+        data['openings'][0].pop('receiving_room')
+        data['rooms'] = []
+        self.assertEqual(self.cad.validate(data, self.profile), [])

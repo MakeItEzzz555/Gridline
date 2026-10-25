@@ -1,5 +1,7 @@
 # Bounded post-release audit — 2026-10-25
 
+Historical checkpoint. See [0.8.1 final qualification scope](RELEASE_0_8_1_QUALIFICATION.md) and the source-bound release receipt for subsequent fixes and acceptance.
+
 **PARTIAL; release decision: NO-GO for a new stable build.** The drawing patch is reviewable; fresh native acceptance and release qualification are absent. Original main, every existing worktree, dirty checkpoints and native sessions were preserved. One coding agent, bounded self-review, no Musk-5, installations, native project writes, inference or benchmark trials.
 
 ## Baseline and scope

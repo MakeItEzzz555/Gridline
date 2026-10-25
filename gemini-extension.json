@@ -1,6 +1,6 @@
 {
   "name": "gridline",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Architecture/AEC skills and specialist subagents for Gemini CLI.",
   "contextFileName": "GEMINI.md"
 }
