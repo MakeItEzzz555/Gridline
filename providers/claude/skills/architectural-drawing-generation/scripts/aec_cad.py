@@ -659,6 +659,7 @@ def check_outputs(spec, profile, outputs, gates, errors, warnings, checked):
             continue
         settings = psp.dxf_layout.dxf
         if (settings.plot_paper_units != 1 or settings.plot_type != 5
+                or (settings.plot_layout_flags & psp.USE_STANDARD_SCALE and settings.standard_scale_type != 16)
                 or not finite(settings.scale_numerator) or not finite(settings.scale_denominator)
                 or settings.scale_denominator <= 0
                 or abs(settings.scale_numerator / settings.scale_denominator - 1) > 1e-9):

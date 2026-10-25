@@ -4,13 +4,17 @@ This patch corrects rotated 270-degree door arcs, nonplot room boundaries crossi
 
 ## Executed acceptance
 
-- Final runtime regression: **176 tests, zero skips, 107.275 seconds**, clean existing pinned CAD environment; repository and Claude parity checks PASS. Eight invalid explicit-room cases and the native scale regression failed before their fixes.
+- Initial native-finalization regression: **176 tests, zero skips, 107.275 seconds**; final standard-scale follow-up: **177 tests, zero skips, 82.463 seconds**, clean existing pinned CAD environment; repository and Claude parity checks PASS. Eight invalid explicit-room cases and the native scale regression failed before their fixes.
 - AutoCAD Mac 2027 opened the final synthetic fixture and reported **zero AUDIT errors**. Literal layout scale now displays **1 mm = 1 drawing unit**, A3 landscape. A native PDF plot measures the declared 900 mm leaf at 1:100 and omits the nonplot room boundary. The PDF was rendered and visually inspected.
 - A disposable native DWG was saved/reopened/AUDITed (zero errors), then a centered door tag's alignment point was edited by +100 mm, saved and exported to DXF. Independent readback matches all eight supported geometry primitives; tag anchor delta and handle identity are retained. An initial insertion-point-only edit was normalized by native centered-text layout; the alignment-aware edit is the measured result. No original drawing/session was edited; original active document restored.
 - Fresh Blender 5.2.3 LTS room-entry and house scenes pass independent `.blend`/GLB readback. All 11 native/GLB corruption seeds reject. No claim of an open-door 3D sweep: conceptual doors remain closed slabs with intent in scene metadata.
 - Claude strict plugin/marketplace validation and isolated Codex plugin manager install PASS. Actual pinned Gemini 0.65.0 validates the source in an isolated home. Final-source lifecycle/rollback and live publication evidence are retained in the external qualification directory and final release attachment.
 
 [Native acceptance](evidence/release-0.8.1/native-acceptance.json), [native PDF measurements](evidence/release-0.8.1/native-pdf-measurement.json), [native plot](evidence/release-0.8.1/native-plot.pdf), [plot raster](evidence/release-0.8.1/review-native-plot-1.png), [runtime test hashes](evidence/release-0.8.1/validation.json).
+
+## Native standard-scale review follow-up
+
+Final review found that a native standard-scale flag could override the custom 1:1 fields. The checker now rejects any active standard scale other than the canonical 1:1 enum (16), with a regression for a hidden 1:2 override and accepted 1:1. The [component-hash receipt](evidence/release-0.8.1/unchanged-components.json) proves drawing generation, native geometry/readback components and provider lifecycle adapters are unchanged from the fresh native/provider run; this checker-only follow-up reruns the full regression and current provider validation. Native/professional scope is unchanged.
 
 ## Honest compatibility limits
 

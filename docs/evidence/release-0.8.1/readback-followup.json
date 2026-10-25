@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "tests": 177,
+  "skips": 0,
+  "wall_seconds": 82.463,
+  "scope": "Final checker rejects active native standard-scale overrides; source generator/native/provider evidence reuse is component-hash bound in unchanged-components.json",
+  "sha256": {
+    "skills/architectural-drawing-generation/scripts/aec_cad.py": "cf595a38d1571adfd83d095ff55686378fabb3667a95b56821011ccff7e873ff",
+    "tests/test_drawing_verification.py": "cd31b6eea1c9a9679ced92a3b12c38a351a4b005a8e8e51d69c05eaeb9043b2a"
+  }
+}
