@@ -1,0 +1,366 @@
+{
+  "schema": "gridline-components.v1",
+  "project_id": "synthetic-components",
+  "units": "m",
+  "components": [
+    {
+      "id": "door-01",
+      "source_element_id": "source-door",
+      "host_id": "",
+      "kind": "door",
+      "parameters": {
+        "width": 0.9,
+        "height": 2.1,
+        "depth": 0.08,
+        "frame_size": 0.05
+      },
+      "position_m": [
+        0,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-door",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "window-01",
+      "source_element_id": "source-window",
+      "host_id": "",
+      "kind": "window",
+      "parameters": {
+        "width": 1.2,
+        "height": 1.4,
+        "depth": 0.1,
+        "frame_size": 0.06
+      },
+      "position_m": [
+        3,
+        0,
+        0
+      ],
+      "rotation_deg": 15,
+      "material": {
+        "id": "mat-window",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "cabinet-01",
+      "source_element_id": "source-cabinet",
+      "host_id": "",
+      "kind": "cabinet",
+      "parameters": {
+        "width": 0.6,
+        "height": 0.85,
+        "depth": 0.6,
+        "thickness": 0.018
+      },
+      "position_m": [
+        6,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-cabinet",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "shelves-01",
+      "source_element_id": "source-shelves",
+      "host_id": "",
+      "kind": "shelves",
+      "parameters": {
+        "width": 0.8,
+        "height": 1.8,
+        "depth": 0.3,
+        "shelf_count": 4,
+        "side_thickness": 0.03,
+        "shelf_thickness": 0.03
+      },
+      "position_m": [
+        9,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-shelves",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "column-01",
+      "source_element_id": "source-column",
+      "host_id": "",
+      "kind": "column",
+      "parameters": {
+        "radius": 0.2,
+        "height": 2.8
+      },
+      "position_m": [
+        12,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-column",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "stairs-01",
+      "source_element_id": "source-stairs",
+      "host_id": "",
+      "kind": "stairs",
+      "parameters": {
+        "width": 1.1,
+        "tread_depth": 0.28,
+        "riser_height": 0.16,
+        "step_count": 8,
+        "tread_thickness": 0.03
+      },
+      "position_m": [
+        15,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-stairs",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "roof-01",
+      "source_element_id": "source-roof",
+      "host_id": "",
+      "kind": "roof",
+      "parameters": {
+        "tiles_x": 3,
+        "tiles_y": 3,
+        "tile_scale": 0.5,
+        "angle_deg": 20,
+        "thickness": 0.012
+      },
+      "position_m": [
+        18,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-roof",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "books-01",
+      "source_element_id": "source-books",
+      "host_id": "",
+      "kind": "books",
+      "parameters": {
+        "width": 0.04,
+        "height": 0.3,
+        "depth": 0.22,
+        "count": 3
+      },
+      "position_m": [
+        21,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-books",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "lamp-01",
+      "source_element_id": "source-lamp",
+      "host_id": "",
+      "kind": "lamp",
+      "parameters": {
+        "base_height": 0.4,
+        "shade_height": 0.25
+      },
+      "position_m": [
+        24,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-lamp",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "roller-01",
+      "source_element_id": "source-roller",
+      "host_id": "",
+      "kind": "roller",
+      "parameters": {
+        "width": 1.2,
+        "height": 1.5
+      },
+      "position_m": [
+        27,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-roller",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "venetian-01",
+      "source_element_id": "source-venetian",
+      "host_id": "",
+      "kind": "venetian",
+      "parameters": {
+        "width": 1.2,
+        "height": 1.5,
+        "depth": 0.04,
+        "angle_deg": 25
+      },
+      "position_m": [
+        30,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-venetian",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "curtain-01",
+      "source_element_id": "source-curtain",
+      "host_id": "",
+      "kind": "curtain",
+      "parameters": {
+        "width": 1.5,
+        "height": 2,
+        "panels": 2
+      },
+      "position_m": [
+        33,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-curtain",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "window_panel-01",
+      "source_element_id": "source-window_panel",
+      "host_id": "",
+      "kind": "window_panel",
+      "parameters": {
+        "pane_width_cm": 90,
+        "pane_height_cm": 120
+      },
+      "position_m": [
+        36,
+        0,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-window_panel",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      }
+    }
+  ]
+}

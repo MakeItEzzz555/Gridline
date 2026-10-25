@@ -2,8 +2,13 @@
 
 ## Unreleased
 
+- Add bounded visual component recipes, independent Blender/GLB mesh/UV/normal/PBR readback, explicit source/runtime snapshots and corruption acceptance tests. Preserve the canonical Gridline wall/opening oracle and original user sessions.
+- Add detached Ed25519 owner approval for local component proposals, atomic state transactions, conflict/rebase/restore checks, and exact-head preview binding. General building/live-host transactions remain gated.
+- Add an opt-in Poly Haven texture catalog/plan/cache and offline packed PBR readback; synthetic tests are distinct from pending real public-asset acceptance. IFC semantic export is under implementation, not qualified.
+- Mark the original new Blender API worker GPL-2.0-or-later, ship corresponding source/license text and update mixed-license manifest metadata; retain existing MIT grants and exclude external add-on source/images.
+
 - Add an offline read-only ARCHIMESH source doctor, portable hash/operator inventory and bounded discovery tests. Preserve stable 0.8.1 manifests and existing Blender generation.
-- Record official 1.2.5 source/license evidence, disposable Blender 5.2.3 default-operator smoke and reproduced door/window panel gating failures. Component adapters, licensing clearance and native/GLB acceptance remain blocked or not tested; no add-on installed or vendored.
+- Record official 1.2.5 source/license evidence, disposable Blender 5.2.3 default-operator smoke and reproduced door/window panel gating failures. Preserve the earlier source-review evidence separately; no add-on is installed in a user profile or vendored.
 
 ### Included — 0.8.0 candidate review corrections (2026-10-25)
 

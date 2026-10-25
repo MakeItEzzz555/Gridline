@@ -9,7 +9,7 @@
 [![validate](https://github.com/MakeItEzzz555/Gridline/actions/workflows/ci.yml/badge.svg)](https://github.com/MakeItEzzz555/Gridline/actions/workflows/ci.yml)
 ![Agent Skills](https://img.shields.io/badge/Agent%20Skills-portable-2563eb)
 ![AEC](https://img.shields.io/badge/AEC-architecture%20%2B%20BIM%20%2B%20civil-475569)
-[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![license](https://img.shields.io/badge/license-MIT%20%2B%20GPL--2.0--or--later-blue)](skills/architectural-drawing-generation/references/BLENDER-LICENSING.md)
 
 **[Copy the install prompt](#install-with-your-ai-agent-copy-once)** · **[Current status](#what-gridline-actually-ships--october-2026)** · **[Skills](#the-30-superpowers)** · **[Drawings](#coordinated-cad-drawings)** · **[Tools](#cad--bim--aec-tools)** · **[Research](docs/RESEARCH.md)**
 
@@ -35,7 +35,7 @@ Gridline combines **30 portable AEC skills and 12 specialist agents** with runna
 | Local read-only MCP server | Optional **Gridline-owned** stdio MCP review server exposes revision comparison and capability discovery. It **does not connect to or edit** AutoCAD, Revit or other native applications ([PR #9](https://github.com/MakeItEzzz555/Gridline/pull/9)) |
 | Professional host integration | Revit, AutoCAD, Rhino/Grasshopper, IFC/Bonsai and related **workflow guidance** exists in skills. Native MCP tool connections, host acceptance testing and controlled model writes are **not yet shipped** ([issue #12](https://github.com/MakeItEzzz555/Gridline/issues/12)) |
 | Local Blender 3D proof (experimental) | `scripts/blender_native.py` can generate a **new** native .blend + .glb from supported building-spec walls/levels/doors/windows and independently reopen/measure outputs in a locally installed Blender version. Does **not** create detailed roofs/interiors or reconstruct architecture from a reference photo; this is a CLI bridge, **not a native Blender MCP** ([scope and usage](docs/BLENDER_NATIVE_BRIDGE.md)) |
-| Optional ARCHIMESH inventory (unreleased) | `python3 scripts/archimesh_doctor.py` reports scoped discovery, pinned source hashes and isolated host startup. No add-on loading or installation; component generation is BLOCKED pending licensing and geometry acceptance ([evidence and limits](docs/ARCHIMESH_INTEGRATION.md)). |
+| Optional ARCHIMESH components (unreleased) | Typed component catalog, explicit pinned-source execution, disposable Blender 5.2.3 native/GLB readback, signed local proposals and opt-in CC0 texture cache. IFC and real asset acceptance remain gated ([usage, evidence and limits](docs/ARCHIMESH_INTEGRATION.md)). |
 
 ### Verified limitations and next engineering gates
 

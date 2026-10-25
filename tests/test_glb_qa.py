@@ -55,3 +55,14 @@ class RawGlbTests(unittest.TestCase):
                          lambda d:d['meshes'][0]['primitives'][0].update(indices=-1)):
             bad=copy.deepcopy(doc);mutation(bad)
             with self.assertRaises(ValueError):self.check(bad,binary)
+
+    def test_image_resources_are_embedded_and_bounded_before_import(self):
+        doc,binary=fixture()
+        for picture in ({'uri':'file:///private/secret','mimeType':'image/jpeg'},
+                        {'uri':'https://example.invalid/image.jpg','bufferView':0,'mimeType':'image/jpeg'},
+                        {'bufferView':-1,'mimeType':'image/png'},
+                        {'bufferView':0,'mimeType':'image/svg+xml'},
+                        {'bufferView':0,'mimeType':'image/jpeg'}):
+            bad=copy.deepcopy(doc);bad['images']=[picture]
+            if picture=={'bufferView':0,'mimeType':'image/jpeg'}:bad['bufferViews'][0]['byteLength']=len(binary)+1
+            with self.subTest(picture=picture),self.assertRaises(ValueError):self.check(bad,binary)

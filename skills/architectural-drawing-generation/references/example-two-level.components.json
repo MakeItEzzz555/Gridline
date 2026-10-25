@@ -1,0 +1,879 @@
+{
+  "schema": "gridline-components.v1",
+  "project_id": "EX-001",
+  "units": "m",
+  "components": [
+    {
+      "id": "door-01",
+      "source_element_id": "D01",
+      "host_id": "E1",
+      "kind": "door",
+      "parameters": {
+        "width": 1.0,
+        "height": 2.1,
+        "depth": 0.08,
+        "frame_size": 0.05
+      },
+      "position_m": [
+        2.5,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": 0.0,
+      "material": {
+        "id": "mat-door",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      },
+      "level_id": "L00"
+    },
+    {
+      "id": "window-01",
+      "source_element_id": "W01",
+      "host_id": "E1",
+      "kind": "window",
+      "parameters": {
+        "width": 2.0,
+        "height": 1.5,
+        "depth": 0.1,
+        "frame_size": 0.06
+      },
+      "position_m": [
+        5.2,
+        0.0,
+        0.9
+      ],
+      "rotation_deg": 0.0,
+      "material": {
+        "id": "mat-window",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      },
+      "level_id": "L00"
+    },
+    {
+      "id": "cabinet-01",
+      "source_element_id": "source-cabinet",
+      "host_id": "",
+      "kind": "cabinet",
+      "parameters": {
+        "width": 0.6,
+        "height": 0.85,
+        "depth": 0.6,
+        "thickness": 0.018
+      },
+      "position_m": [
+        3,
+        3,
+        0
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-cabinet",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      },
+      "level_id": "L00"
+    },
+    {
+      "id": "UP_door-01",
+      "source_element_id": "UP_D01",
+      "host_id": "UP_E1",
+      "kind": "door",
+      "parameters": {
+        "width": 1.0,
+        "height": 2.1,
+        "depth": 0.08,
+        "frame_size": 0.05
+      },
+      "position_m": [
+        2.5,
+        0.0,
+        3.0
+      ],
+      "rotation_deg": 0.0,
+      "material": {
+        "id": "mat-door",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      },
+      "level_id": "L01"
+    },
+    {
+      "id": "UP_window-01",
+      "source_element_id": "UP_W01",
+      "host_id": "UP_E1",
+      "kind": "window",
+      "parameters": {
+        "width": 2.0,
+        "height": 1.5,
+        "depth": 0.1,
+        "frame_size": 0.06
+      },
+      "position_m": [
+        5.2,
+        0.0,
+        3.9
+      ],
+      "rotation_deg": 0.0,
+      "material": {
+        "id": "mat-window",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      },
+      "level_id": "L01"
+    },
+    {
+      "id": "UP_cabinet-01",
+      "source_element_id": "UP_source-cabinet",
+      "host_id": "",
+      "kind": "cabinet",
+      "parameters": {
+        "width": 0.6,
+        "height": 0.85,
+        "depth": 0.6,
+        "thickness": 0.018
+      },
+      "position_m": [
+        3,
+        3,
+        3
+      ],
+      "rotation_deg": 0,
+      "material": {
+        "id": "mat-cabinet",
+        "base_color": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "roughness": 0.6,
+        "metallic": 0
+      },
+      "level_id": "L01"
+    }
+  ],
+  "building": {
+    "project": {
+      "name": "Example House",
+      "number": "EX-001",
+      "client": "Example Client",
+      "address": "Plot 12, Example Street",
+      "architect": "Example Architects",
+      "drawn_by": "AAS",
+      "checked_by": "",
+      "status": "CONCEPT",
+      "revision": "P01",
+      "date": "2026-10-22",
+      "north_deg": 0
+    },
+    "units": "mm",
+    "standard": "iso13567",
+    "levels": [
+      {
+        "id": "L00",
+        "name": "Ground floor",
+        "elevation": 0,
+        "height": 3000
+      },
+      {
+        "id": "L01",
+        "name": "Synthetic upper level",
+        "elevation": 3000,
+        "height": 3000
+      }
+    ],
+    "grids": [
+      {
+        "id": "1",
+        "start": [
+          0,
+          -1500
+        ],
+        "end": [
+          0,
+          10500
+        ]
+      },
+      {
+        "id": "2",
+        "start": [
+          7000,
+          -1500
+        ],
+        "end": [
+          7000,
+          10500
+        ]
+      },
+      {
+        "id": "3",
+        "start": [
+          12000,
+          -1500
+        ],
+        "end": [
+          12000,
+          10500
+        ]
+      },
+      {
+        "id": "A",
+        "start": [
+          -1500,
+          0
+        ],
+        "end": [
+          13500,
+          0
+        ]
+      },
+      {
+        "id": "B",
+        "start": [
+          -1500,
+          9000
+        ],
+        "end": [
+          13500,
+          9000
+        ]
+      }
+    ],
+    "walls": [
+      {
+        "id": "E1",
+        "level": "L00",
+        "type": "external",
+        "start": [
+          0,
+          0
+        ],
+        "end": [
+          12000,
+          0
+        ],
+        "thickness": 300
+      },
+      {
+        "id": "E2",
+        "level": "L00",
+        "type": "external",
+        "start": [
+          12000,
+          0
+        ],
+        "end": [
+          12000,
+          9000
+        ],
+        "thickness": 300
+      },
+      {
+        "id": "E3",
+        "level": "L00",
+        "type": "external",
+        "start": [
+          12000,
+          9000
+        ],
+        "end": [
+          0,
+          9000
+        ],
+        "thickness": 300
+      },
+      {
+        "id": "E4",
+        "level": "L00",
+        "type": "external",
+        "start": [
+          0,
+          9000
+        ],
+        "end": [
+          0,
+          0
+        ],
+        "thickness": 300
+      },
+      {
+        "id": "I1",
+        "level": "L00",
+        "type": "internal",
+        "start": [
+          7000,
+          0
+        ],
+        "end": [
+          7000,
+          9000
+        ],
+        "thickness": 100
+      },
+      {
+        "id": "I2",
+        "level": "L00",
+        "type": "internal",
+        "start": [
+          7000,
+          3000
+        ],
+        "end": [
+          12000,
+          3000
+        ],
+        "thickness": 100
+      },
+      {
+        "id": "I3",
+        "level": "L00",
+        "type": "internal",
+        "start": [
+          7000,
+          6000
+        ],
+        "end": [
+          12000,
+          6000
+        ],
+        "thickness": 100
+      },
+      {
+        "id": "UP_E1",
+        "level": "L01",
+        "type": "external",
+        "start": [
+          0,
+          0
+        ],
+        "end": [
+          12000,
+          0
+        ],
+        "thickness": 300
+      },
+      {
+        "id": "UP_E2",
+        "level": "L01",
+        "type": "external",
+        "start": [
+          12000,
+          0
+        ],
+        "end": [
+          12000,
+          9000
+        ],
+        "thickness": 300
+      },
+      {
+        "id": "UP_E3",
+        "level": "L01",
+        "type": "external",
+        "start": [
+          12000,
+          9000
+        ],
+        "end": [
+          0,
+          9000
+        ],
+        "thickness": 300
+      },
+      {
+        "id": "UP_E4",
+        "level": "L01",
+        "type": "external",
+        "start": [
+          0,
+          9000
+        ],
+        "end": [
+          0,
+          0
+        ],
+        "thickness": 300
+      },
+      {
+        "id": "UP_I1",
+        "level": "L01",
+        "type": "internal",
+        "start": [
+          7000,
+          0
+        ],
+        "end": [
+          7000,
+          9000
+        ],
+        "thickness": 100
+      },
+      {
+        "id": "UP_I2",
+        "level": "L01",
+        "type": "internal",
+        "start": [
+          7000,
+          3000
+        ],
+        "end": [
+          12000,
+          3000
+        ],
+        "thickness": 100
+      },
+      {
+        "id": "UP_I3",
+        "level": "L01",
+        "type": "internal",
+        "start": [
+          7000,
+          6000
+        ],
+        "end": [
+          12000,
+          6000
+        ],
+        "thickness": 100
+      }
+    ],
+    "openings": [
+      {
+        "id": "D01",
+        "kind": "door",
+        "wall": "E1",
+        "offset": 2000,
+        "width": 1000,
+        "height": 2100,
+        "hinge": "start",
+        "opens": "left",
+        "type": "Entrance door"
+      },
+      {
+        "id": "D02",
+        "kind": "door",
+        "wall": "I1",
+        "offset": 1500,
+        "width": 800,
+        "height": 2100,
+        "hinge": "start",
+        "opens": "right",
+        "type": "Internal door"
+      },
+      {
+        "id": "D03",
+        "kind": "door",
+        "wall": "I1",
+        "offset": 4000,
+        "width": 800,
+        "height": 2100,
+        "hinge": "start",
+        "opens": "right",
+        "type": "Internal door"
+      },
+      {
+        "id": "D04",
+        "kind": "door",
+        "wall": "I1",
+        "offset": 7000,
+        "width": 800,
+        "height": 2100,
+        "hinge": "start",
+        "opens": "right",
+        "type": "Internal door"
+      },
+      {
+        "id": "W01",
+        "kind": "window",
+        "wall": "E1",
+        "offset": 4200,
+        "width": 2000,
+        "height": 1500,
+        "sill": 900,
+        "type": "Casement"
+      },
+      {
+        "id": "W02",
+        "kind": "window",
+        "wall": "E4",
+        "offset": 2500,
+        "width": 2400,
+        "height": 2100,
+        "sill": 0,
+        "type": "Sliding"
+      },
+      {
+        "id": "W03",
+        "kind": "window",
+        "wall": "E3",
+        "offset": 1000,
+        "width": 1500,
+        "height": 1200,
+        "sill": 900,
+        "type": "Casement"
+      },
+      {
+        "id": "W04",
+        "kind": "window",
+        "wall": "E3",
+        "offset": 7000,
+        "width": 2000,
+        "height": 1500,
+        "sill": 900,
+        "type": "Casement"
+      },
+      {
+        "id": "W05",
+        "kind": "window",
+        "wall": "E2",
+        "offset": 4000,
+        "width": 1200,
+        "height": 1200,
+        "sill": 900,
+        "type": "Casement"
+      },
+      {
+        "id": "W06",
+        "kind": "window",
+        "wall": "E2",
+        "offset": 1000,
+        "width": 600,
+        "height": 600,
+        "sill": 1500,
+        "type": "Top-hung"
+      },
+      {
+        "id": "UP_D01",
+        "kind": "door",
+        "wall": "UP_E1",
+        "offset": 2000,
+        "width": 1000,
+        "height": 2100,
+        "hinge": "start",
+        "opens": "left",
+        "type": "Entrance door"
+      },
+      {
+        "id": "UP_D02",
+        "kind": "door",
+        "wall": "UP_I1",
+        "offset": 1500,
+        "width": 800,
+        "height": 2100,
+        "hinge": "start",
+        "opens": "right",
+        "type": "Internal door"
+      },
+      {
+        "id": "UP_D03",
+        "kind": "door",
+        "wall": "UP_I1",
+        "offset": 4000,
+        "width": 800,
+        "height": 2100,
+        "hinge": "start",
+        "opens": "right",
+        "type": "Internal door"
+      },
+      {
+        "id": "UP_D04",
+        "kind": "door",
+        "wall": "UP_I1",
+        "offset": 7000,
+        "width": 800,
+        "height": 2100,
+        "hinge": "start",
+        "opens": "right",
+        "type": "Internal door"
+      },
+      {
+        "id": "UP_W01",
+        "kind": "window",
+        "wall": "UP_E1",
+        "offset": 4200,
+        "width": 2000,
+        "height": 1500,
+        "sill": 900,
+        "type": "Casement"
+      },
+      {
+        "id": "UP_W02",
+        "kind": "window",
+        "wall": "UP_E4",
+        "offset": 2500,
+        "width": 2400,
+        "height": 2100,
+        "sill": 0,
+        "type": "Sliding"
+      },
+      {
+        "id": "UP_W03",
+        "kind": "window",
+        "wall": "UP_E3",
+        "offset": 1000,
+        "width": 1500,
+        "height": 1200,
+        "sill": 900,
+        "type": "Casement"
+      },
+      {
+        "id": "UP_W04",
+        "kind": "window",
+        "wall": "UP_E3",
+        "offset": 7000,
+        "width": 2000,
+        "height": 1500,
+        "sill": 900,
+        "type": "Casement"
+      },
+      {
+        "id": "UP_W05",
+        "kind": "window",
+        "wall": "UP_E2",
+        "offset": 4000,
+        "width": 1200,
+        "height": 1200,
+        "sill": 900,
+        "type": "Casement"
+      },
+      {
+        "id": "UP_W06",
+        "kind": "window",
+        "wall": "UP_E2",
+        "offset": 1000,
+        "width": 600,
+        "height": 600,
+        "sill": 1500,
+        "type": "Top-hung"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "R01",
+        "level": "L00",
+        "name": "Living / kitchen",
+        "boundary": [
+          [
+            150,
+            150
+          ],
+          [
+            6950,
+            150
+          ],
+          [
+            6950,
+            8850
+          ],
+          [
+            150,
+            8850
+          ]
+        ]
+      },
+      {
+        "id": "R02",
+        "level": "L00",
+        "name": "Bathroom",
+        "boundary": [
+          [
+            7050,
+            150
+          ],
+          [
+            11850,
+            150
+          ],
+          [
+            11850,
+            2950
+          ],
+          [
+            7050,
+            2950
+          ]
+        ]
+      },
+      {
+        "id": "R03",
+        "level": "L00",
+        "name": "Bedroom 1",
+        "boundary": [
+          [
+            7050,
+            3050
+          ],
+          [
+            11850,
+            3050
+          ],
+          [
+            11850,
+            5950
+          ],
+          [
+            7050,
+            5950
+          ]
+        ]
+      },
+      {
+        "id": "R04",
+        "level": "L00",
+        "name": "Bedroom 2",
+        "boundary": [
+          [
+            7050,
+            6050
+          ],
+          [
+            11850,
+            6050
+          ],
+          [
+            11850,
+            8850
+          ],
+          [
+            7050,
+            8850
+          ]
+        ]
+      },
+      {
+        "id": "UP_R01",
+        "level": "L01",
+        "name": "Living / kitchen",
+        "boundary": [
+          [
+            150,
+            150
+          ],
+          [
+            6950,
+            150
+          ],
+          [
+            6950,
+            8850
+          ],
+          [
+            150,
+            8850
+          ]
+        ]
+      },
+      {
+        "id": "UP_R02",
+        "level": "L01",
+        "name": "Bathroom",
+        "boundary": [
+          [
+            7050,
+            150
+          ],
+          [
+            11850,
+            150
+          ],
+          [
+            11850,
+            2950
+          ],
+          [
+            7050,
+            2950
+          ]
+        ]
+      },
+      {
+        "id": "UP_R03",
+        "level": "L01",
+        "name": "Bedroom 1",
+        "boundary": [
+          [
+            7050,
+            3050
+          ],
+          [
+            11850,
+            3050
+          ],
+          [
+            11850,
+            5950
+          ],
+          [
+            7050,
+            5950
+          ]
+        ]
+      },
+      {
+        "id": "UP_R04",
+        "level": "L01",
+        "name": "Bedroom 2",
+        "boundary": [
+          [
+            7050,
+            6050
+          ],
+          [
+            11850,
+            6050
+          ],
+          [
+            11850,
+            8850
+          ],
+          [
+            7050,
+            8850
+          ]
+        ]
+      }
+    ],
+    "sheets": [
+      {
+        "number": "A-101",
+        "title": "Ground floor plan",
+        "level": "L00",
+        "scale": 100,
+        "size": "A3"
+      },
+      {
+        "number": "A-102",
+        "title": "Ground floor plan - enlarged",
+        "level": "L00",
+        "scale": 50,
+        "size": "A1"
+      }
+    ]
+  }
+}

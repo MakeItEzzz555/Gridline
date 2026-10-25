@@ -65,7 +65,38 @@ The bundled `scripts/blender_native.py` may generate a NEW Blender `.blend` plus
 
 ## Verification and boundaries
 
-For optional ARCHIMESH discovery, run `python3 scripts/archimesh_doctor.py` from this skill directory. It inventories standard user profiles or an explicit `--addon-source DIRECTORY` without importing/installing/enabling the add-on. Host startup, source hash match and registration/geometry acceptance are separate states; exit 0 is inventory completion only. Generation stays BLOCKED and licensing NEEDS_LICENSE_REVIEW. The pinned 1.2.5 source inventory is `references/archimesh-1.2.5.json`; repository users can read `docs/ARCHIMESH_INTEGRATION.md`. No component adapter, host boolean edit, asset download or Blender 5.x compatibility guarantee is provided.
+For optional ARCHIMESH source discovery, use `python3 scripts/archimesh_doctor.py`;
+exit 0 means inventory completion, not geometry acceptance or licensing clearance.
+An explicit, hash-approved official 1.2.5 source can be used with
+`python3 scripts/archimesh_components.py catalog|validate|build|verify`. The component
+adapter is qualified only on Blender 5.2.3 and POSIX new-output publication. Pick a
+bounded kind from the catalog and obtain **all** dimensions, position, orientation
+and materials from reviewed source data. See `references/example-components.json`
+for synthetic fixtures and `references/example-house.components.json` for exact
+canonical opening bindings. Do not copy fixture dimensions into a real design.
+Build requires `--addon-source` and `--approve-addon-sha256`; it uses disposable
+factory/background processes and never installs/enables an add-on in a user profile.
+Frozen meshes, hierarchy, identity, UV/normals, source anchors and native/GLB
+readback are checked; parametric panels, rooms, host cuts and live edits remain
+unsupported. Retain the separately reported receipt hash for later `verify
+--expected-receipt-sha256 PIN`. No original model is overwritten.
+
+`component_state.py` supplies an optional local signed component-proposal ledger;
+OpenSSL verifies detached Ed25519 owner signatures. Never accept an owner label as
+approval or sign on the owner's behalf. `build --state-db DB --owner-key-sha256 PIN`
+requires the selected committed head. This limited source ledger does not complete
+the general building/live-host transaction manager. Full drawing impact, arbitrary
+wall changes and live native writes remain gated by #15.
+
+`cc0_assets.py` provides an explicitly enabled Poly Haven texture catalog and
+bounded three-channel 1K JPG cache. Never download without network consent and the
+exact approved plan hash. Builds consume local verified cache bytes only; explicit
+physical UV tile sizes are required. Preserve provider/CC0/source/hash provenance;
+synthetic fixture acceptance is distinct from real downloaded asset acceptance.
+The IFC adapter is under implementation and lacks engine acceptance; do not claim
+accepted IFC/BIM from it. Detailed repository usage/gates are in
+`docs/ARCHIMESH_INTEGRATION.md`. The new API worker is GPL-2.0-or-later; read
+`references/BLENDER-LICENSING.md`. Other MIT grants remain preserved.
 
 - Report the files produced, the standard used, the `check` result and the warnings, and every assumption you made.
 - A generated drawing is a drafted proposal. It needs review by a qualified architect before it is issued, permitted or built from.
