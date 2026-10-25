@@ -77,3 +77,7 @@ Individual skill names and agent names have not changed.
   Your checkout folder does not need to change.
 - Old tags, Git commit history, external URLs and existing backup directories
   are intentionally not rewritten.
+
+## Candidate artifact verification
+
+Maintainers can build and verify pinned, reproducible source/Claude archives using [the release artifact pipeline](RELEASE_ARTIFACTS.md). These are explicitly unqualified review artifacts; neither their checksums nor a green packaging job authorizes installing or publishing a stable release.

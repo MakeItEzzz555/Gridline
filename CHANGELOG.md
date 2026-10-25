@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — reproducible unqualified candidate bundles
+
+- Build source and flattened Claude ZIPs from an exact Git commit, with deterministic metadata, SHA256SUMS, file inventory and an explicitly unqualified release manifest.
+- Verify candidate bytes against the pinned local Git source; reject archive path/mode hazards, provider drift and Git export transformations. Add disposable installer A/B/tamper/rollback tests and CI artifact retention without release publication.
+
 ## Unreleased — measured villa topology repair (2026-10-24)
 
 - Scope opening voids to their host level; validate full cutaway inventories after native view-layer evaluation and reject modifiers, shape keys and hidden/excluded geometry. Add real-host corruption regressions.

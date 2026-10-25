@@ -36,6 +36,21 @@ jobs:
           test "$(find "$T/home/.claude/skills" -name SKILL.md | wc -l)" -eq "$EXPECTED_SKILLS"
           test "$(find "$T/home/.gemini/skills" -name SKILL.md | wc -l)" -eq "$EXPECTED_SKILLS"
 
+
+      - name: Build and verify unqualified candidate bundles
+        shell: bash
+        run: |
+          python3 scripts/build-release.py build --source-sha "$(git rev-parse HEAD)" --out "$RUNNER_TEMP/gridline-candidate"
+          python3 scripts/build-release.py verify --source-sha "$(git rev-parse HEAD)" --out "$RUNNER_TEMP/gridline-candidate"
+      - name: Retain candidate bundles for review (not a release)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: gridline-unqualified-${{ github.sha }}
+          path: ${{ runner.temp }}/gridline-candidate/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
   windows-installer:
     runs-on: windows-latest
     steps:
@@ -43,11 +58,13 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Portable topology and raw GLB regressions
+      - name: Portable topology, GLB and release-artifact regressions
         run: |
           python -m unittest discover -s tests -p test_wall_topology.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_glb_qa.py -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p test_release_artifacts.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Smoke test PowerShell installer
         shell: pwsh
