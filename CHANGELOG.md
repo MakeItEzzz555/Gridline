@@ -5,6 +5,11 @@
 - Record all 15 ArchEyes titles with edition/ISBN/access status, claim counterexamples and explicit gaps; correct the Ching edition gap and conflicting Materials for Design ISBN.
 - Add 15 original, nonnormative on-demand practice references to existing skills, synchronized to Claude. No paid text, construction dimensions or regulatory predicates extracted.
 
+## Unreleased — opt-in release discovery
+
+- Add a read-only, network-off-by-default stable release checker with strict SemVer and repository/redirect/size validation. No artifact download or install.
+- Add distribution metadata to provider version-drift checks and document real provider-specific update paths and unqualified release gates.
+
 ## Unreleased — measured villa topology repair (2026-10-24)
 
 - Scope opening voids to their host level; validate full cutaway inventories after native view-layer evaluation and reject modifiers, shape keys and hidden/excluded geometry. Add real-host corruption regressions.
