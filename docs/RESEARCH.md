@@ -30,3 +30,7 @@ These sources inform capability coverage. They do not replace the actual project
 ## Repository-design lesson
 
 TuckBit, Claude Widget Kit and Codex Widget Kit informed the onboarding style: a clear hero/value proposition, copyable agent-install prompt, exact verification, honest capability boundaries, native-provider paths and evidence-driven validation.
+
+## Book coverage and contradictions (2026-10-25)
+
+See [individual bibliography and access records](research/books/bibliography.yaml), [claim ledger](research/books/evidence-ledger.jsonl) and [adjudication/access gaps](research/books/contradiction-report.md). Coverage is 15 records, not 15 books read. B14 publisher ISBN remains unverified; all proposed practices need project-specific professional review. The existing skills link only their relevant original references.
