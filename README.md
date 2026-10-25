@@ -35,6 +35,7 @@ Gridline combines **30 portable AEC skills and 12 specialist agents** with runna
 | Local read-only MCP server | Optional **Gridline-owned** stdio MCP review server exposes revision comparison and capability discovery. It **does not connect to or edit** AutoCAD, Revit or other native applications ([PR #9](https://github.com/MakeItEzzz555/Gridline/pull/9)) |
 | Professional host integration | Revit, AutoCAD, Rhino/Grasshopper, IFC/Bonsai and related **workflow guidance** exists in skills. Native MCP tool connections, host acceptance testing and controlled model writes are **not yet shipped** ([issue #12](https://github.com/MakeItEzzz555/Gridline/issues/12)) |
 | Local Blender 3D proof (experimental) | `scripts/blender_native.py` can generate a **new** native .blend + .glb from supported building-spec walls/levels/doors/windows and independently reopen/measure outputs in a locally installed Blender version. Does **not** create detailed roofs/interiors or reconstruct architecture from a reference photo; this is a CLI bridge, **not a native Blender MCP** ([scope and usage](docs/BLENDER_NATIVE_BRIDGE.md)) |
+| Optional ARCHIMESH inventory (unreleased) | `python3 scripts/archimesh_doctor.py` reports scoped discovery, pinned source hashes and isolated host startup. No add-on loading or installation; component generation is BLOCKED pending licensing and geometry acceptance ([evidence and limits](docs/ARCHIMESH_INTEGRATION.md)). |
 
 ### Verified limitations and next engineering gates
 

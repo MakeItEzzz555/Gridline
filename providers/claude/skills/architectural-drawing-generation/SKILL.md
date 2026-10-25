@@ -65,6 +65,8 @@ The bundled `scripts/blender_native.py` may generate a NEW Blender `.blend` plus
 
 ## Verification and boundaries
 
+For optional ARCHIMESH discovery, run `python3 scripts/archimesh_doctor.py` from this skill directory. It inventories standard user profiles or an explicit `--addon-source DIRECTORY` without importing/installing/enabling the add-on. Host startup, source hash match and registration/geometry acceptance are separate states; exit 0 is inventory completion only. Generation stays BLOCKED and licensing NEEDS_LICENSE_REVIEW. The pinned 1.2.5 source inventory is `references/archimesh-1.2.5.json`; repository users can read `docs/ARCHIMESH_INTEGRATION.md`. No component adapter, host boolean edit, asset download or Blender 5.x compatibility guarantee is provided.
+
 - Report the files produced, the standard used, the `check` result and the warnings, and every assumption you made.
 - A generated drawing is a drafted proposal. It needs review by a qualified architect before it is issued, permitted or built from.
 - For file or model changes in a native host, compare the result against a pre-change baseline and report changed, skipped and failed items. Never claim the host changed something unless it confirms it.

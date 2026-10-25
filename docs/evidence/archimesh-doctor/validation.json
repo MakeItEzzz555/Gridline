@@ -1,0 +1,37 @@
+{
+  "state": "PASS_BOUNDED_DOCTOR_PACKAGE",
+  "command": "GRIDLINE_REQUIRE_CAD_TESTS=1 /private/tmp/gridline-qualification-followup-20261025/clean-cad-env/bin/python -m unittest discover -s tests -v",
+  "tests": 188,
+  "skips": 0,
+  "wall_seconds": 71.353,
+  "cad_dependencies": {
+    "ezdxf": "1.4.5",
+    "matplotlib": "3.11.2",
+    "pypdf": "6.21.2"
+  },
+  "dependency_installs": 0,
+  "targeted_doctor_tests": 11,
+  "repo_validator": "PASS v0.8.1; 30 skills; 62 activation cases",
+  "provider_parity": "PASS",
+  "full_log_path": "/tmp/gridline-archimesh-research-20261025/final-tests.log",
+  "full_log_sha256": "21d7c52834c3ebc40a746c213bd6c529c20ee49322ca46ad1f3d2b0b7389ba72",
+  "tested_file_sha256": {
+    "skills/architectural-drawing-generation/scripts/archimesh_doctor.py": "f465b2b2626cca47eecff4fc28051f89dd4c2629f621d2c0960b5c1f02c34de0",
+    "skills/architectural-drawing-generation/references/archimesh-1.2.5.json": "368dbe564072ad662ca48ef79598dae8280b07e4fc302040e54c811dedcbf607",
+    "tests/test_archimesh_doctor.py": "0b08041369643f5a7a2d85857e9fc418284091bcf989eae6307c30e118a17901",
+    ".github/workflows/ci.yml": "885fc219280c2a8f3e0562d620ebe9265553bdcd6bac63c496f0ef8ba0aad2fe"
+  },
+  "bounded_self_review": {
+    "scope": "Doctor entrypoints, source/hash trust boundary, native process isolation, standalone-skill packaging, tests, docs, mirror sync and Windows workflow",
+    "findings_fixed": [
+      "Refuse unreadable directory traversal instead of silently skipping it",
+      "Accept trusted blender.exe and preserve binary file reads on Windows"
+    ],
+    "independent_review": "NOT_RUN_SINGLE_AGENT",
+    "legal_clearance": "NEEDS_LICENSE_REVIEW",
+    "geometry_glb_acceptance": "NOT_TESTED"
+  },
+  "native_ui_screenshots": "NOT_APPLICABLE_READ_ONLY_CLI; viewport panels not accepted",
+  "release_or_merge": "NOT_AUTHORIZED",
+  "provider_usage_receipts": "UNAVAILABLE; no cost or savings claim"
+}
