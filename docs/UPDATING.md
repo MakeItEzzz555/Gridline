@@ -104,3 +104,7 @@ Statuses: UNKNOWN (not requested, offline or invalid evidence), UPDATE_AVAILABLE
 Stop new provider sessions, preserve the current installed item in a separate recovery folder, and restore the matching item from its timestamped backup. Validate it and start a fresh session. Restore all intended items from the same reviewed revision; the existing installer is atomic per item, **not an all-items transaction**. Do not remove ownership ledgers or foreign skills. Existing tests exercise interrupted replacement and backup restoration in temporary homes. A complete real-provider version A → B → rollback acceptance remains NOT_TESTED; this read-only checker does not implement an updater.
 
 Release qualification and next dependencies: [2026-10-25 release gap record](RELEASE_GATES_2026-10-25.md).
+
+## Candidate artifact verification
+
+Maintainers can build and verify pinned, reproducible source/Claude archives using [the release artifact pipeline](RELEASE_ARTIFACTS.md). These are explicitly unqualified review artifacts; neither their checksums nor a green packaging job authorizes installing or publishing a stable release.
