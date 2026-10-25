@@ -61,7 +61,7 @@ def validate_names(names):
 
 def git(repo, *args):
     """Read local Git objects only; never run source scripts or shell commands."""
-    result = subprocess.run(['git', '-C', str(repo), *args], capture_output=True, check=True, timeout=60)
+    result = subprocess.run(['git', '-c', 'core.autocrlf=false', '-c', 'core.eol=lf', '-C', str(repo), *args], capture_output=True, check=True, timeout=60)
     if len(result.stdout) > MAX_BYTES:
         raise ValueError('Git snapshot exceeds 32 MiB')
     return result.stdout
@@ -164,7 +164,9 @@ def read_zip(data):
         entries = archive.infolist()
         if not 1 <= len(entries) <= MAX_FILES:
             raise ValueError('ZIP file count out of bounds')
-        validate_names([entry.filename for entry in entries])
+        validate_names([entry.orig_filename for entry in entries])
+        if any(entry.filename != entry.orig_filename for entry in entries):
+            raise ValueError('ZIP filename normalization refused')
         if sum(entry.file_size for entry in entries) > MAX_BYTES:
             raise ValueError('ZIP payload exceeds 32 MiB')
         for entry in entries:

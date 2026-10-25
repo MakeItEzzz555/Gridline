@@ -80,6 +80,12 @@ class ReleaseArtifactTests(unittest.TestCase):
         with self.assertRaises(FileExistsError):
             builder.build(self.repo, self.a, self.base / 'one')
 
+    def test_checkout_line_endings_do_not_change_archive_bytes(self):
+        baseline = builder.candidate(self.repo, self.a)
+        self.git('config', 'core.autocrlf', 'true')
+        self.git('config', 'core.eol', 'crlf')
+        self.assertEqual(builder.candidate(self.repo, self.a), baseline)
+
     def test_manifest_and_mirror_drift_block_before_output_creation(self):
         self.write('gemini-extension.json', '{"name":"gridline","version":"1.1.0"}')
         sha = self.commit()
@@ -118,12 +124,15 @@ class ReleaseArtifactTests(unittest.TestCase):
             output = io.BytesIO()
             with zipfile.ZipFile(output, 'w') as archive:
                 for name in names:
-                    info = zipfile.ZipInfo(name)
+                    info = zipfile.ZipInfo(name.replace('\\', '/'))
                     info.create_system = 3
                     info.external_attr = (stat.S_IFREG | 0o644) << 16
                     archive.writestr(info, b'x')
+            raw = output.getvalue()
+            if len(names) == 1 and '\\' in names[0]:
+                raw = raw.replace(names[0].replace('\\', '/').encode(), names[0].encode())
             with self.subTest(names=names), self.assertRaises(ValueError):
-                builder.read_zip(output.getvalue())
+                builder.read_zip(raw)
         output = io.BytesIO()
         with zipfile.ZipFile(output, 'w') as archive:
             info = zipfile.ZipInfo('link')
