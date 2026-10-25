@@ -8,6 +8,7 @@
 
 ## 0.8.1 — 2026-10-25
 
+- Reject active native standard-scale overrides that contradict the canonical paper-space 1:1 setting.
 - Correct native paper-space plotting to literal 1:1 millimetres and reject incorrect plot scales in readback.
 - Validate supplied receiving-room references for explicit legacy swings without flipping reviewed exceptions.
 - Honor nonplot layers in PDF output so room boundaries do not draw lines across door openings; keep DXF room geometry.

@@ -90,6 +90,23 @@ class DrawingVerificationTests(unittest.TestCase):
         self.assertEqual(checked.returncode, 1)
         self.assertIn('paper-space plot must use millimetres at 1:1', checked.stdout)
 
+    def test_native_standard_scale_override_cannot_hide_behind_custom_one_to_one(self):
+        path = self.out / 'A-101.dxf'
+        doc = ezdxf.readfile(path)
+        layout = doc.layouts.get('A-101')
+        settings = layout.dxf_layout.dxf
+        layout.use_standard_scale(True)
+        settings.standard_scale_type = 17  # Native 1:2 overrides custom numerator/denominator.
+        self.assertEqual(settings.scale_numerator / settings.scale_denominator, 1)
+        doc.saveas(path)
+        checked = run('check', EXAMPLE, self.out)
+        self.assertEqual(checked.returncode, 1)
+        self.assertIn('paper-space plot must use millimetres at 1:1', checked.stdout)
+        settings.standard_scale_type = 16
+        doc.saveas(path)
+        checked = run('check', EXAMPLE, self.out)
+        self.assertEqual(checked.returncode, 0, checked.stdout)
+
     def test_oversized_csv_field_retains_failure_receipt(self):
         for name in ("room-schedule.csv", "sheet-register.csv"):
             with self.subTest(schedule=name):
