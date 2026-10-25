@@ -43,3 +43,10 @@ For file/model changes, compare the result against a pre-change baseline and rep
 If a live CAD/BIM/GIS/analysis tool or MCP integration is available, inspect the current document/model and tool version before write operations. Prefer read-only inspection, dry runs, bounded samples, new output paths, and native undo/transaction mechanisms. Never claim a model or drawing was changed unless the tool confirms it.
 
 If the native application is unavailable, produce a reproducible plan, script, structured data, SVG/DXF artifact, or exact in-application procedure instead of pretending to have operated the software.
+
+## On-demand evidence and practice references
+
+Load only the relevant reference. These are original review prompts, not binding code or full-book extraction.
+
+- [B01: envelope continuity](references/b01-practice.md)
+- [B02: system completeness](references/b02-practice.md)
