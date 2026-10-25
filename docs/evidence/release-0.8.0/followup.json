@@ -1,0 +1,131 @@
+{
+  "reviewed_sha": "bb215149ad3eebe6a7c75c666cd57a3cd9d5f3c4",
+  "status": "PARTIAL_UNQUALIFIED",
+  "provider_acceptance": {
+    "claude": "PASS actual CLI local marketplace A0.7->B0.8 update->uninstall/reinstall A0.7; B cache85 files match source",
+    "codex_plugin": "PASS actual CLI local install A0.7->remove/add B0.8->remove/add A0.7; list/version readback; model activation NOT_RUN",
+    "codex_standalone": "PASS actual A/B installer and manual backup rollback;71 B skill files match; customization and foreign skill preserved",
+    "gemini": "NOT_TESTED; absent; isolated installation authorization requested",
+    "openai_directory": "NOT_RUN; separate upload/review required; no package submitted"
+  },
+  "dependencies": {
+    "scope": "Local macOS CPython3.14.7 optional CAD test environment, not universal lock or bundled dependencies",
+    "packages": [
+      {
+        "name": "contourpy",
+        "version": "1.4.0",
+        "license_expression": "BSD-3-Clause"
+      },
+      {
+        "name": "cycler",
+        "version": "0.12.1",
+        "license_expression": null
+      },
+      {
+        "name": "ezdxf",
+        "version": "1.4.5",
+        "license_expression": null
+      },
+      {
+        "name": "fonttools",
+        "version": "4.67.0",
+        "license_expression": null
+      },
+      {
+        "name": "kiwisolver",
+        "version": "1.5.1",
+        "license_expression": null
+      },
+      {
+        "name": "matplotlib",
+        "version": "3.11.2",
+        "license_expression": null
+      },
+      {
+        "name": "numpy",
+        "version": "2.5.4",
+        "license_expression": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0"
+      },
+      {
+        "name": "packaging",
+        "version": "26.3",
+        "license_expression": "Apache-2.0 OR BSD-2-Clause"
+      },
+      {
+        "name": "pillow",
+        "version": "13.0.0",
+        "license_expression": "MIT-CMU"
+      },
+      {
+        "name": "pyparsing",
+        "version": "3.3.3",
+        "license_expression": "MIT"
+      },
+      {
+        "name": "pypdf",
+        "version": "6.21.2",
+        "license_expression": "BSD-3-Clause"
+      },
+      {
+        "name": "python-dateutil",
+        "version": "3.0.0",
+        "license_expression": null
+      },
+      {
+        "name": "six",
+        "version": "1.17.0",
+        "license_expression": null
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0",
+        "license_expression": "PSF-2.0"
+      },
+      {
+        "name": "tzdata",
+        "version": "2026.5",
+        "license_expression": null
+      }
+    ],
+    "osv": "PASS point-in-time no matching advisories for 16 installed distributions; no pagination returned; includes pip tooling separately",
+    "record_integrity": {
+      "clean_env_distributions": 15,
+      "clean_env_hashed_files": 3272,
+      "clean_env_mismatches": 0
+    },
+    "tooling_counterexample": "Original pip26.2.1 environment has three launcher RECORD mismatches and six distlib EXE mismatches, confirmed against hash-verified PyPI wheel. Unexplained, not repaired or executed. Not bundled in Gridline; clean CAD environment excludes pip."
+  },
+  "licensing": "Root MIT plus installed dependency license-file inventory reviewed; no vendored runtime dependencies; individual authored-file/copyright rights and legal signoff not certified",
+  "source_authenticity": "Local commit matches GitHub PR/commit and prior exact-head CI artifact; candidate integrity reverified. Commit unsigned, no publisher attestation; same-channel consistency is not independent publisher authentication.",
+  "secret_scan": {
+    "scope": "Tracked working-tree files; narrow high-signal patterns only, no history scan or entropy scanner",
+    "checked_files": 275,
+    "findings": [],
+    "not_checked": [
+      "arbitrary passwords/tokens",
+      "history",
+      "external services"
+    ],
+    "patterns": [
+      "private_key",
+      "github_token",
+      "aws_access_key"
+    ]
+  },
+  "independent_review": "No submitted PR41 reviews; CodeRabbit prior attempt rate limited, REVIEW_NOT_RUN. One extra reviewer authorization pending.",
+  "native_compatibility": "Existing native Blender orthogonal-only receipts retained; no new native execution needed for unchanged geometry modules. Native AutoCAD/DWG, IFC/IDS, curved/mixed-oblique claims unsupported and remain roadmap work.",
+  "no_merge_tag_publish": true,
+  "final_checks": {
+    "suite": "PASS 158 tests; zero skips;65.248s; clean pip-free CAD environment",
+    "repository": "PASS v0.8.0;30skills;62activationcases",
+    "provider_sync": "PASS",
+    "shell_syntax": "PASS",
+    "native_provider_script": "PASS Claude strict validators/Codex isolated install; Gemini absent explicitly skipped",
+    "independent_review": "NOT_RUN; no additional agent authorization received",
+    "remaining_authorization": [
+      "One additional independent reviewer with stated scope/usage",
+      "Isolated pinned Gemini CLI download or approved release-compatibility exclusion",
+      "Reviewed merge decision; trusted publisher attestation and final qualified publication approval"
+    ]
+  }
+}

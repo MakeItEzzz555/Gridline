@@ -19,7 +19,7 @@ The direct installer copies canonical skills into the current user's Codex skill
 Claude Code supports personal skills, user-level subagents, and plugins. This repository is a Claude marketplace whose plugin lives in `providers/claude`. `scripts/validate-native.sh` runs Claude's strict plugin and marketplace validators when the CLI is available.
 
 ## Gemini CLI
-The repository root is a Gemini CLI extension. Gemini discovers root `skills/` and `agents/` components. Canonical skills can also be copied into user scope. When Gemini CLI is installed, `scripts/validate-native.sh` runs `gemini extensions validate` against the repository.
+The repository root is a Gemini CLI extension. Gemini discovers root `skills/` and `agents/` components. Canonical skills can also be copied into user scope. When Gemini CLI is installed, `scripts/validate-native.sh` probes its extension-command help before invoking an advertised `validate` command. The [current official reference](https://geminicli.com/docs/extensions/reference/) lists install/update/link commands but no standalone validator. Missing validator support is reported as NOT_TESTED; it does not establish extension installation, activation or rollback acceptance.
 
 ## Other agents
 Canonical `skills/<name>/SKILL.md` directories follow the open Agent Skills pattern: YAML frontmatter plus Markdown instructions. Compatible tools can import or copy these directories.

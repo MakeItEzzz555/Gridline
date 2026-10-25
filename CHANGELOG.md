@@ -2,6 +2,8 @@
 
 ## 0.8.0 candidate — qualification pending
 
+- Probe installed Gemini CLI validator support; report NOT_TESTED instead of assuming an undocumented command. Record actual isolated Claude/Codex lifecycle acceptance and dependency evidence separately from roadmap capabilities.
+
 - Integrate book evidence, provider-specific update discovery, jurisdiction/source triage and reproducible artifacts from PRs #37–#40. Synchronize seven version records.
 - Add deterministic SPDX 2.3 tracked-file SBOM with hashes and explicit dependency/license review gaps. Retain fail-closed publication status; no stable release or issue completion is implied.
 
