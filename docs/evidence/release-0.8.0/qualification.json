@@ -1,0 +1,86 @@
+{
+  "status": "PARTIAL_UNQUALIFIED_CANDIDATE",
+  "integrated_base_sha": "8627ab7fd8cbf49f9a4da074767ba7ce418992b7",
+  "blender": "5.2.3 LTS e13b728c6880",
+  "native_villa": {
+    "status": "PASS",
+    "mesh_count": 442,
+    "generated_sha256": {
+      "Villa.blend": "5c6762595572dd3bb9a462602e6b37b03d6690875933b0897f321e6ad04f755f",
+      "Villa.glb": "6899ad693ee7371956c99bacde69749522b8c4771c81f03202c76f2c4bfe4753",
+      "villa.scene.json": "b4ed769737c9653705387dd8ca48c85835ed872d94527ed3abe050a2d9f69184",
+      "topology-readback.json": "0be8453f67bf58b30eb8173340b2cd0584c00d0088773017cfcb4b47ef972eb6"
+    },
+    "original_source_sha256": {
+      "Villa.blend": "96715017d899a505a7c6266b5cd620e0b329760ab4365576fd4ce48d31065f93",
+      "Villa.glb": "a93ae79951ee362785f3d2352ca86ff0e777d3ac4018dbdb746ef6e222f96e1f",
+      "villa.scene.json": "d22d35e9adcbdcf3a024e28e48c75e0b31eeb9bfd8e206f69c0d3d6209aaac95",
+      "villa.building.json": "bef06a6190a13a2821d89dda47bc6b40b322f4114fb41455f2f0eb91bdefe460",
+      "prepare.py": "96534e11e04b328558b4a9cf4c8c382bbfe8424e70f1f0e2d474105f110c35eb",
+      "build_blender.py": "c82b3089038ad345dfd16b20404d23537e30a24dd070dc0a6a3806832265ed09"
+    },
+    "original_files_rechecked": 6,
+    "adversarial": [
+      {
+        "fault": "modifier",
+        "status": "REJECTED",
+        "reason": "unsupported modifier/constraint/visibility/shape keys: joined_wall_002"
+      },
+      {
+        "fault": "shape_key",
+        "status": "REJECTED",
+        "reason": "unsupported modifier/constraint/visibility/shape keys: joined_wall_002"
+      },
+      {
+        "fault": "hidden_render",
+        "status": "REJECTED",
+        "reason": "unsupported modifier/constraint/visibility/shape keys: joined_wall_002"
+      },
+      {
+        "fault": "excluded_collection",
+        "status": "REJECTED",
+        "reason": "unsupported modifier/constraint/visibility/shape keys: joined_wall_002"
+      },
+      {
+        "fault": "extra_cutaway_fragment",
+        "status": "REJECTED",
+        "reason": "extra/orphan/missing cutaway mesh inventory"
+      },
+      {
+        "fault": "missing_cutaway_member",
+        "status": "REJECTED",
+        "reason": "extra/orphan/missing cutaway mesh inventory"
+      },
+      {
+        "fault": "cutaway_modifier",
+        "status": "REJECTED",
+        "reason": "unsupported modifier/constraint/visibility/shape keys: Cutaway Ground joined_wall_000"
+      }
+    ],
+    "code_sha256": {
+      "tests/villa_topology_acceptance.py": "84842d49cde239859d017b813231dc3f1a0ae6fbbded8a7620607fdf498b1353",
+      "tests/villa_readback_adversarial.py": "599c57bacbab53563e62ef1e6215c1247ac9cc44fb9c06938eff678fa902a068",
+      "skills/architectural-drawing-generation/scripts/wall_topology.py": "7ed93173b20b9c4bcefae115680c5591dfa69d33274f0cf50203c3a484bbb81d",
+      "skills/architectural-drawing-generation/scripts/mesh_qa.py": "80cd8bfebee4f55b396fa38290053ca25888572333c97bb3e1d12462266bf547",
+      "skills/architectural-drawing-generation/scripts/glb_qa.py": "d8c418b1748f553cda0c5bd0d47172328a32ce3860cbb7619d9d1bb12ddecc20"
+    }
+  },
+  "portable_tests": {
+    "status": "PASS",
+    "tests": 156,
+    "skips": 0,
+    "seconds": 66.223,
+    "command": "GRIDLINE_REQUIRE_CAD_TESTS=1 uv run --offline --with ezdxf==1.4.5 --with matplotlib==3.11.2 --with pypdf==6.21.2 python -m unittest discover -s tests -v",
+    "warnings": [
+      "Existing test_aec_cad.py CSV reader emits ResourceWarning; no test failures."
+    ]
+  },
+  "spdx_schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.3/schemas/spdx-schema.json",
+  "spdx_schema_sha256": "239208b7ac287b3cf5d9a9af23f9d69863971102a5e1587a27a398b43490b89b",
+  "scope_limits": [
+    "No fresh visual captures; existing on/off/render captures remain historical evidence.",
+    "No native AutoCAD, IFC/IDS, Gemini activation or real-provider A/B upgrade acceptance.",
+    "No independent final-head approval, attestation or complete dependency/license/secret review."
+  ],
+  "publication_allowed": false
+}

@@ -1,6 +1,6 @@
 # Reproducible candidate artifacts
 
-This maintainer pipeline builds **UNQUALIFIED_CANDIDATE** bundles from an exact, locally available Git commit. It does not create a Git tag, GitHub Release, marketplace upload, attestation, automatic update or publication approval. Current manifests remain 0.7.0; these archives do not claim a new stable version.
+This maintainer pipeline builds **UNQUALIFIED_CANDIDATE** bundles from an exact, locally available Git commit. It does not create a Git tag, GitHub Release, marketplace upload, attestation, automatic update or publication approval. The integrated 0.8.0 candidate is a proposed version; it is not a published stable release.
 
 ## Build and verify
 
@@ -22,8 +22,9 @@ Stable three-part manifest versions are currently supported. Do not bump a versi
 - `gridline-VERSION-SHAPREFIX-source.zip`: complete tracked source tree, with required root README, LICENSE, portable plugin.json, Codex compatibility/marketplace, Gemini extension/context, skills, agents, documentation and standalone installers. This preserves existing entry points instead of moving root files.
 - `gridline-VERSION-SHAPREFIX-claude.zip`: `providers/claude` placed at the ZIP root, plus the root LICENSE. The Claude plugin remains self-contained. Its synchronized skill folders must exactly match canonical skill folders; the root skill registry is not itself a mirrored skill.
 - `file-inventory.json`: per-archive file path, byte size, SHA256 and executable mode. This is a file inventory, **not a dependency SBOM or license audit**.
+- `sbom.spdx.json`: SPDX 2.3 file-level SBOM for the exact tracked source (including the nested Claude mirror), with SHA1/SHA256, package verification code and containment relationships. It excludes external runtime dependencies and host/client software; license fields remain NOASSERTION pending review. Creation time is the source commit timestamp, not build wall time. Format references: [SPDX creation information](https://spdx.github.io/spdx-spec/v2.3.1/document-creation-information/), [package information](https://spdx.github.io/spdx-spec/v2.3.1/package-information/), [official JSON schema](https://github.com/spdx/spdx-spec/blob/v2.3/schemas/spdx-schema.json).
 - `release-manifest.json`: product/version, exact source commit/tree, artifact hashes/sizes, inventory hash and explicit unresolved qualification gates. `publish_allowed` is always false.
-- `SHA256SUMS`: hashes of the two ZIPs, inventory and manifest. It does not hash itself.
+- `SHA256SUMS`: hashes of the two ZIPs, inventory, SBOM and manifest. It does not hash itself.
 
 ZIP members are sorted, stored without compression, and use fixed timestamps and explicit regular-file modes. This avoids clock, filesystem order, timezone and zlib-version differences. The source ZIP serves the existing Codex/Gemini/standalone entry points; duplicate identical ZIPs per client are unnecessary.
 
@@ -41,7 +42,7 @@ The existing CI validation job runs the regression suite, builds/verifies candid
 
 Tests cover byte-identical builds, dirty/untracked exclusion, version/provider-mirror drift, altered payload/checksum/manifest, malicious ZIP entries, Git links/submodules/export transforms, and runnable drawing engines from real source/Claude archives. A disposable POSIX filesystem fixture uses the existing trusted Bash installer for version A → B, blocks tampered B before installation, preserves a foreign skill, and restores A plus its local customization from the install backup. This is not a real Claude/Codex/Gemini activation/update qualification. The Bash upgrade fixture is explicitly skipped on Windows; Windows runs package tests and the existing PowerShell installer smoke separately.
 
-Before stable publication, independently complete professional/security review, source/release approval, secret/license/SBOM review, publisher attestation, final native Blender and authorized AutoCAD copy acceptance, real provider clean install/update/rollback and final-head CI. The manifest leaves all these gates unresolved. Do not change its gate fields to approve publication; the verifier rejects metadata differing from the pinned-source candidate contract.
+Before stable publication, independently complete professional/security review, source/release approval, secret/license/SBOM review, publisher attestation, final native Blender and authorized AutoCAD copy acceptance, real provider clean install/update/rollback and final-head CI. The manifest records file-level SBOM generation; dependency completeness and all other qualification gates remain unresolved. Do not change its gate fields to approve publication; the verifier rejects metadata differing from the pinned-source candidate contract.
 
 ## Rollback boundary
 

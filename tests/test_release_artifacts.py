@@ -2,6 +2,7 @@
 import contextlib
 import importlib.util
 import io
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -81,6 +82,36 @@ class ReleaseArtifactTests(unittest.TestCase):
                 self.assertNotIn('.env', builder.read_zip(raw))
         with self.assertRaises(FileExistsError):
             builder.build(self.repo, self.a, self.base / 'one')
+
+    def test_sbom_covers_exact_tracked_files_and_manifest_binds_it(self):
+        outputs = builder.candidate(self.repo, self.a)
+        sbom = json.loads(outputs['sbom.spdx.json'])
+        source, _tree = builder.snapshot(self.repo, self.a)
+        records = {row['fileName'][2:]: row for row in sbom['files']}
+        self.assertEqual(set(records), set(source))
+        sha1s = []
+        for name, (content, _mode) in source.items():
+            row = records[name]
+            expected = {'SHA1': hashlib.sha1(content).hexdigest(), 'SHA256': builder.digest(content)}
+            self.assertEqual({c['algorithm']: c['checksumValue'] for c in row['checksums']}, expected)
+            self.assertEqual(row['licenseConcluded'], 'NOASSERTION')
+            sha1s.append(expected['SHA1'])
+        self.assertEqual(sbom['packages'][0]['packageVerificationCode']['packageVerificationCodeValue'],
+                         hashlib.sha1(''.join(sorted(sha1s)).encode()).hexdigest())
+        contained = {r['relatedSpdxElement'] for r in sbom['relationships'] if r['relationshipType'] == 'CONTAINS'}
+        self.assertEqual(contained, {row['SPDXID'] for row in records.values()})
+        self.assertEqual(len(contained), len(source))
+        epoch = int(self.git('show', '-s', '--format=%ct', self.a))
+        self.assertEqual(sbom['creationInfo']['created'],
+                         builder.datetime.fromtimestamp(epoch, builder.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
+        manifest = json.loads(outputs['release-manifest.json'])
+        self.assertEqual(manifest['sbom_sha256'], builder.digest(outputs['sbom.spdx.json']))
+        self.assertEqual(manifest['gates']['sbom'], 'GENERATED_TRACKED_FILES_ONLY')
+        directory = self.base / 'tampered-sbom'
+        builder.build(self.repo, self.a, directory)
+        (directory / 'sbom.spdx.json').write_text('{}')
+        with self.assertRaisesRegex(ValueError, 'differs from pinned source'):
+            builder.verify(self.repo, self.a, directory)
 
     def test_git_location_environment_cannot_redirect_snapshot_or_fixture(self):
         baseline = builder.candidate(self.repo, self.a)

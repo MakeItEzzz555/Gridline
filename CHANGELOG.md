@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0 candidate — qualification pending
+
+- Integrate book evidence, provider-specific update discovery, jurisdiction/source triage and reproducible artifacts from PRs #37–#40. Synchronize seven version records.
+- Add deterministic SPDX 2.3 tracked-file SBOM with hashes and explicit dependency/license review gaps. Retain fail-closed publication status; no stable release or issue completion is implied.
+
 ## Unreleased — book evidence and original review references
 
 - Record all 15 ArchEyes titles with edition/ISBN/access status, claim counterexamples and explicit gaps; correct the Ching edition gap and conflicting Materials for Design ISBN.

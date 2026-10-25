@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build or verify reproducible, explicitly UNQUALIFIED bundles from a pinned Git SHA."""
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import io
 import json
@@ -187,6 +188,40 @@ def read_zip(data):
     return files
 
 
+def file_sbom(files, version, source_sha, created):
+    """Describe tracked source files only; do not infer runtime dependencies or licenses."""
+    entries, checksums, relationships = [], [], []
+    package_id = 'SPDXRef-Package-source'
+    for index, (name, (content, _mode)) in enumerate(sorted(files.items())):
+        identity = f'SPDXRef-File-{index}'
+        sha1 = hashlib.sha1(content).hexdigest()
+        checksums.append(sha1)
+        entries.append({'SPDXID': identity, 'fileName': './' + name,
+                        'checksums': [{'algorithm': 'SHA1', 'checksumValue': sha1},
+                                      {'algorithm': 'SHA256', 'checksumValue': digest(content)}],
+                        'licenseConcluded': 'NOASSERTION', 'licenseInfoInFiles': ['NOASSERTION'],
+                        'copyrightText': 'NOASSERTION'})
+        relationships.append({'spdxElementId': package_id, 'relationshipType': 'CONTAINS',
+                              'relatedSpdxElement': identity})
+    relationships.append({'spdxElementId': 'SPDXRef-DOCUMENT', 'relationshipType': 'DESCRIBES',
+                          'relatedSpdxElement': package_id})
+    return {'spdxVersion': 'SPDX-2.3', 'dataLicense': 'CC0-1.0', 'SPDXID': 'SPDXRef-DOCUMENT',
+            'name': 'Gridline tracked-source file SBOM',
+            'documentNamespace': 'https://github.com/MakeItEzzz555/Gridline/spdx/' + source_sha,
+            'creationInfo': {'created': created, 'creators': ['Tool: gridline-build-release-1'],
+                             'comment': 'Reproducible creation date uses the source commit timestamp.'},
+            'comment': 'Tracked source files only, including the nested Claude mirror. Excludes external '
+                       'Python packages, provider clients and native hosts. No license scan or dependency '
+                       'resolution performed; NOASSERTION requires separate review.',
+            'packages': [{'SPDXID': package_id, 'name': 'gridline-source', 'versionInfo': version,
+                          'downloadLocation': 'NOASSERTION', 'filesAnalyzed': True,
+                          'packageVerificationCode': {'packageVerificationCodeValue':
+                              hashlib.sha1(''.join(sorted(checksums)).encode()).hexdigest()},
+                          'licenseConcluded': 'NOASSERTION', 'licenseDeclared': 'NOASSERTION',
+                          'copyrightText': 'NOASSERTION'}],
+            'files': entries, 'relationships': relationships}
+
+
 def candidate(repo, source_sha):
     """Prepare bytes for an unqualified candidate; all provenance starts at Git objects."""
     files, tree = snapshot(repo, source_sha)
@@ -200,12 +235,16 @@ def candidate(repo, source_sha):
         inventory[name] = {path: {'sha256': digest(content), 'size': len(content), 'mode': oct(mode)}
                            for path, (content, mode) in sorted(contents.items())}
     outputs['file-inventory.json'] = encode(inventory)
+    epoch = int(git(repo, 'show', '-s', '--format=%ct', source_sha).decode().strip())
+    created = datetime.fromtimestamp(epoch, timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    outputs['sbom.spdx.json'] = encode(file_sbom(files, version, source_sha, created))
     manifest = {'schema_version': 1, 'product': 'gridline', 'version': version,
                 'source_sha': source_sha, 'source_tree_sha': tree,
                 'qualification': 'UNQUALIFIED_CANDIDATE', 'publish_allowed': False,
                 'artifacts': artifacts, 'inventory_sha256': digest(outputs['file-inventory.json']),
+                'sbom_sha256': digest(outputs['sbom.spdx.json']),
                 'gates': {'independent_review': 'NOT_RUN', 'native_hosts': 'NOT_TESTED',
-                          'provider_upgrade_acceptance': 'NOT_TESTED', 'sbom': 'NOT_BUILT',
+                          'provider_upgrade_acceptance': 'NOT_TESTED', 'sbom': 'GENERATED_TRACKED_FILES_ONLY',
                           'publisher_attestation': 'NOT_BUILT', 'secret_and_license_review': 'NOT_RUN',
                           'owner_publication_approval': 'NOT_GRANTED'}}
     outputs['release-manifest.json'] = encode(manifest)
