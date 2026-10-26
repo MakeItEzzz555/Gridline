@@ -13,6 +13,8 @@
 
 **[Copy the install prompt](#install-with-your-ai-agent-copy-once)** · **[Current status](#what-gridline-actually-ships--october-2026)** · **[Skills](#the-30-superpowers)** · **[Drawings](#coordinated-cad-drawings)** · **[Tools](#cad--bim--aec-tools)** · **[Research](docs/RESEARCH.md)**
 
+https://github.com/user-attachments/assets/a397a1b3-0f50-4d00-948a-62c9537144d8
+
 </div>
 
 ---
