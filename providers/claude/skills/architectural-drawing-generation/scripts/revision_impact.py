@@ -66,21 +66,43 @@ def sheet_refs(sheet: dict) -> dict[str, set[str]]:
 
 def affected_sheets(group: str, item_id: str, before: dict | None, after: dict | None,
                     old: dict, new: dict) -> list[str]:
+    """Conservatively follow declared host/level links in both revisions.
+
+    A wall edit can invalidate an opening-only detail; a level edit can
+    invalidate a room-only section. Unindexed external drawings remain unknown.
+    """
     matched = set()
-    for spec in (old, new):
+    for spec, item in ((old, before), (new, after)):
         walls = indexed(spec.get("walls", []), "walls")
+        openings = indexed(spec.get("openings", []), "openings")
+        rooms = indexed(spec.get("rooms", []), "rooms")
+        related = {group: {item_id}}
+        level = (item or {}).get("level")
+        if group == "levels":
+            level = item_id
+            related["walls"] = {w["id"] for w in walls.values() if w.get("level") == level}
+        elif group == "openings":
+            host = (item or {}).get("wall")
+            if host in walls:
+                related["walls"] = {host}
+                level = walls[host].get("level")
+        if group == "walls":
+            related["walls"] = {item_id}
+        if group in ("walls", "levels"):
+            # Host edits affect hosted opening details even if the sheet
+            # references only the opening ID, not the wall or its level.
+            hosts = related.get("walls", set())
+            related["openings"] = {o["id"] for o in openings.values()
+                                   if o.get("wall") in hosts}
+            # Room-wall adjacency is not indexed. Flag same-level room
+            # details conservatively rather than claiming exhaustive coverage.
+            related["rooms"] = {r["id"] for r in rooms.values()
+                                if r.get("level") == level}
+        if level is not None:
+            related.setdefault("levels", set()).add(level)
         for sheet in spec.get("sheets", []):
             refs = sheet_refs(sheet)
-            explicit = item_id in refs.get(group, set())
-            item = (before or {}) if spec is old else (after or {})
-            level = item.get("level")
-            if group == "levels":
-                level = item_id
-            if group == "openings":
-                parent = walls.get(item.get("wall"), {})
-                level = parent.get("level")
-            # A sheet with only a level is a level-linked plan; explicit refs
-            # are also required for sections/elevations/details at other levels.
+            explicit = any(refs.get(kind, set()) & ids for kind, ids in related.items())
             if explicit or (level is not None and sheet.get("level") == level):
                 matched.add(sheet["number"])
     return sorted(matched)
@@ -119,6 +141,11 @@ def analyze(old: dict, new: dict) -> dict:
                         schedules.add(SCHEDULES["openings"].get(item.get("kind"), "opening-schedule-UNKNOWN"))
             if group == "rooms":
                 schedules.add(SCHEDULES["rooms"])
+            if group in ("levels", "walls"):
+                # Without full room-wall topology, changing a wall or level
+                # can alter hosted openings, room quantities and schedules.
+                schedules.update(("door-schedule.csv", "window-schedule.csv",
+                                  "room-schedule.csv"))
             changes.append({
                 "group": group,
                 "id": key,

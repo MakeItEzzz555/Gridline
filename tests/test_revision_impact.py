@@ -97,6 +97,32 @@ class RevisionImpactTests(unittest.TestCase):
         with self.assertRaises(impact.InvalidSpecification):
             impact.analyze(self.old, self.new)
 
+    def test_wall_edit_flags_hosted_opening_only_section_and_dependent_schedules(self):
+        # This section has no wall reference and is on a different level;
+        # the hosted opening is the only explicit link to the changed wall.
+        section = {"number": "A-301", "title": "Door detail",
+                   "level": "L99", "references": {"openings": ["D01"]}}
+        self.old["sheets"].append(copy.deepcopy(section))
+        self.new["sheets"].append(copy.deepcopy(section))
+        self.new["walls"][0]["thickness"] += 50
+        result = impact.analyze(self.old, self.new)
+        self.assertIn("A-301", result["affected_indexed_sheets"])
+        self.assertEqual(result["changed_sheets"], [])
+        self.assertTrue({"door-schedule.csv", "window-schedule.csv",
+                         "room-schedule.csv"}.issubset(result["schedules_to_recheck"]))
+
+    def test_level_height_edit_flags_dependent_detail_and_schedules(self):
+        detail = {"number": "A-401", "title": "Room volume detail",
+                  "level": "L99", "references": {"rooms": ["R01"]}}
+        self.old["sheets"].append(copy.deepcopy(detail))
+        self.new["sheets"].append(copy.deepcopy(detail))
+        self.new["levels"][0]["height"] += 200
+        result = impact.analyze(self.old, self.new)
+        self.assertIn("A-401", result["affected_indexed_sheets"])
+        self.assertEqual(result["changed_sheets"], [])
+        self.assertTrue({"door-schedule.csv", "window-schedule.csv",
+                         "room-schedule.csv"}.issubset(result["schedules_to_recheck"]))
+
     def test_cli_reports_json_and_nonzero_for_bad_spec(self):
         with tempfile.TemporaryDirectory() as td:
             old = Path(td) / "old.json"
