@@ -169,7 +169,7 @@ Record actual Codex, Claude Code or Gemini CLI activations and use the dependenc
 [Full lifecycle map](docs/AEC_LIFECYCLE.md).
 ## Revision impact and cross-sheet QA (read-only pilot)
 
-When a window, wall, room, level or drawing revision changes, Gridline can now identify **affected indexed sheets and schedules** to review before issue. This covers references declared in the building specification; it **does not pretend to inspect unrelated PDFs or 40 unknown external drawings**.
+When a window, wall, room, level or drawing revision changes, Gridline can now identify **affected indexed sheets and schedules** to review before issue. The read-only impact report now follows indexed wall→opening and level→wall/room dependencies in both revisions, including details that reference only a hosted opening or room. Wall and level edits conservatively flag door, window and room schedules because the available data does not prove that quantities are unaffected. This covers declared building-specification relationships; it **does not inspect unrelated PDFs, prove complete room-wall adjacency, or certify 40 unknown external drawings**.
 
 ```bash
 python3 skills/architectural-drawing-generation/scripts/revision_impact.py before.building.json after.building.json --out impact.json

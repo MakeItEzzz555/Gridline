@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Make read-only revision-impact review conservative for wall and level changes: follow hosted-opening and same-level room references across both versions, and flag door/window/room schedules. Add adversarial detail-only fixtures; external drawings and room-wall topology remain unverified.
+
 ## 0.9.0 — 2026-10-26
 
 - Add13 explicit ARCHIMESH visual recipes with pinned external-source consent, disposable Blender5.2.3 generation, native/GLB geometry/UV/normal/PBR readback, bounded workload and corruption acceptance. Retain Gridline's canonical wall/opening oracle; no user-profile add-on installation or existing-host edits.
