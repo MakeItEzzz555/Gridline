@@ -178,6 +178,68 @@ class ComponentStateTests(unittest.TestCase):
         self.approve(rollback);state.commit(self.path,rollback)
         self.assertEqual(state.inspect(self.path)['document'],self.spec)
 
+    def test_signed_root_rewind_without_approved_restore_fails_closed(self):
+        proposal = self.proposal(0, 1.0)
+        self.approve(proposal)
+        committed = state.commit(self.path, proposal)
+        self.assertNotEqual(committed['revision'], self.base)
+        # The old root is still a genuinely signed document. Repointing head
+        # must not bypass the most recent approved transition.
+        with state.transaction(self.path) as db:
+            db.execute('UPDATE head SET hash=? WHERE id=1', (self.base,))
+        with self.assertRaisesRegex(ValueError, 'latest committed event'):
+            state.inspect(self.path)
+        with self.assertRaisesRegex(ValueError, 'latest committed event'):
+            state.head_revision(self.path, self.fingerprint, self.base)
+        with self.assertRaisesRegex(ValueError, 'latest committed event'):
+            self.proposal(1, 1.3)
+
+    def test_forged_commit_event_cannot_authenticate_canonical_head(self):
+        # Append-only audit does not imply that an arbitrary event is signed.
+        with state.transaction(self.path) as db:
+            state.event(db, 'COMMITTED', 'invented', 'owner',
+                        {'state': 'COMMITTED', 'proposal': 'invented',
+                         'revision': self.base, 'previous': self.base})
+        with self.assertRaisesRegex(ValueError, 'latest committed event'):
+            state.inspect(self.path)
+
+    def test_replayed_signed_commit_event_cannot_fake_new_transition(self):
+        proposal = self.proposal(0, 1.0)
+        self.approve(proposal)
+        committed = state.commit(self.path, proposal)
+        with state.transaction(self.path) as db:
+            state.event(db, 'COMMITTED', proposal, 'owner', committed)
+        with self.assertRaisesRegex(ValueError, 'latest committed event previous'):
+            state.inspect(self.path)
+
+    def test_latest_event_must_match_approved_transition_receipt(self):
+        proposal = self.proposal(0, 1.0)
+        self.approve(proposal)
+        # Simulate a faulty commit receipt writer while retaining a real owner
+        # signature and a genuine committed document.
+        original_event = state.event
+        def bad_receipt(db, kind, ident, actor, detail):
+            if kind == 'COMMITTED':
+                detail = dict(detail, rebased=True)
+            return original_event(db, kind, ident, actor, detail)
+        with patch.object(state, 'event', side_effect=bad_receipt):
+            state.commit(self.path, proposal)
+        with self.assertRaisesRegex(ValueError, 'latest committed event does not match'):
+            state.inspect(self.path)
+
+    def test_approved_restore_to_previously_seen_content_is_authenticated(self):
+        proposal = self.proposal(0, 1.0)
+        self.approve(proposal)
+        changed = state.commit(self.path, proposal)['revision']
+        restore = state.restore_proposal(self.path, self.base, 'owner',
+                                         'restore prior approved content', 'test evidence')['proposal']
+        self.approve(restore)
+        result = state.commit(self.path, restore)
+        self.assertEqual(result['previous'], changed)
+        self.assertEqual(result['revision'], self.base)
+        self.assertEqual(state.head_revision(self.path, self.fingerprint), self.base)
+        self.assertEqual(state.inspect(self.path)['document'], self.spec)
+
     def test_invalid_changes_and_failed_transaction_preserve_state(self):
         for field,value in (('id','invented'),('source_element_id','reused'),('host_id','invented-host'),('kind','window')):
             item=copy.deepcopy(self.spec['components'][0]);item[field]=value

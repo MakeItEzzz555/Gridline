@@ -266,8 +266,31 @@ def authenticated_revision(db, expected_key, revision=None):
     initial=document_at(db,root)
     if key_sha256!=expected_key or verify_signature(key,signature,payload('INITIALIZE',initial['project_id'],root,key_sha256,owner))!=key_sha256:
         raise ValueError('canonical owner key/initialization signature mismatch')
+    # Content hashes are identities, not transition counters. A legitimate
+    # restore may reuse the root hash, so the signed revision DAG alone cannot
+    # detect a head pointer silently rewound to previously approved content.
+    latest=db.execute("SELECT object_hash,actor,detail FROM events WHERE kind='COMMITTED' ORDER BY seq DESC LIMIT 1").fetchone()
+    previous=None
+    if latest is not None:
+        try: receipt=json.loads(latest[2])
+        except (TypeError,ValueError):raise ValueError('latest committed event is malformed') from None
+        if (not isinstance(receipt,dict) or receipt.get('state')!='COMMITTED'
+                or receipt.get('proposal')!=latest[0] or receipt.get('revision')!=current
+                or not isinstance(receipt.get('previous'),str)
+                or receipt['previous']==current):
+            raise ValueError('canonical head does not match latest committed event')
+        previous=receipt['previous']
+        prior=db.execute("SELECT detail FROM events WHERE kind='COMMITTED' AND seq < (SELECT MAX(seq) FROM events WHERE kind='COMMITTED') ORDER BY seq DESC LIMIT 1").fetchone()
+        try: expected_previous=json.loads(prior[0])['revision'] if prior else root
+        except (TypeError,ValueError,KeyError):raise ValueError('prior committed event is malformed') from None
+        if previous!=expected_previous:
+            raise ValueError('latest committed event previous state does not follow audit history')
+    latest_base=db.execute('SELECT base FROM proposals WHERE hash=?',(latest[0],)).fetchone() if latest else None
+    if latest and latest_base is None:raise ValueError('latest committed event has no recorded proposal')
     target=current if revision is None else revision
-    verified={root:initial};pending=[(target,False)];active=set()
+    verified={root:initial}
+    pending=[(ident,False) for ident in {target,current,previous,latest_base[0] if latest_base else None} if ident is not None]
+    active=set()
     while pending:
         ident,ready=pending.pop()
         if ident in verified:continue
@@ -290,6 +313,30 @@ def authenticated_revision(db, expected_key, revision=None):
         document=document_at(db,ident)
         if document!=replace(before,patch) or document['project_id']!=initial['project_id']:raise ValueError('canonical revision differs from approved patch')
         verified[ident]=document;active.remove(ident)
+    if latest is None and current!=root:
+        raise ValueError('canonical head has no latest committed event')
+    if latest:
+        proposal=latest[0]
+        approved=db.execute("SELECT actor,detail FROM events WHERE kind='APPROVED' AND object_hash=? ORDER BY seq DESC LIMIT 1",(proposal,)).fetchone()
+        if latest[1]!=owner or approved is None or approved[0]!=owner:
+            raise ValueError('latest committed event lacks owner approval')
+        if db.execute("SELECT 1 FROM events WHERE kind='REJECTED_OWNER' AND object_hash=?",(proposal,)).fetchone():
+            raise ValueError('latest committed event uses a rejected proposal')
+        approver,public,fingerprint,message=approval_context(db,proposal,'APPROVE')
+        try: proof=base64.b64decode(json.loads(approved[1])['signature_b64'],validate=True)
+        except (TypeError,ValueError,KeyError):raise ValueError('latest committed event has malformed approval') from None
+        if approver!=owner or fingerprint!=key_sha256 or verify_signature(public,proof,message)!=key_sha256:
+            raise ValueError('latest committed event has invalid approval signature')
+        base,raw_patch=db.execute('SELECT base,patch FROM proposals WHERE hash=?',(proposal,)).fetchone()
+        patch=json.loads(raw_patch)
+        for group,items in patch_groups(patch).items():
+            original={i['id']:i for i in elements(verified[base],group)}
+            prior={i['id']:i for i in elements(verified[previous],group)}
+            if any(prior.get(i['id'])!=original.get(i['id']) for i in items):
+                raise ValueError('latest committed event bypassed a stale conflict')
+        if (replace(verified[previous],patch)!=verified[current]
+                or receipt.get('rebased')!=(base!=previous)):
+            raise ValueError('latest committed event does not match approved transition')
     return target
 
 
