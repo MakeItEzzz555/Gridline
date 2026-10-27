@@ -115,8 +115,15 @@ reassignment, missing attributes and arbitrary unit/datum changes are rejected.
 Coordinated opening/component edits must be one geometrically consistent proposal.
 Unrelated stale edits merge only after full revalidation; same-target edits conflict.
 Root initialization and every stored transition proof are checked before a revision
-is trusted. A fabricated database head or receipt cannot authenticate an unsigned
-revision. Old unreleased database schemas fail closed; no silent migration occurs.
+is trusted. The current head must also agree with the latest committed audit event:
+its owner-approved proposal, previous document, conflict preconditions and resulting
+content are verified even when a legitimate restore reuses an earlier content hash.
+Repointing the head to a previously signed revision without an approved restore now
+fails closed, including historical-revision reads and new proposals. A fabricated
+commit event cannot substitute for a valid owner signature. This does not provide
+external anti-rollback protection against an attacker who can replace the entire
+trusted database with an older snapshot. Old unreleased database schemas fail
+closed; no silent migration occurs.
 
 Changes flag indexed plans and explicit references, including dependent openings
 and schedules. Unindexed drawings, external families/types and professional

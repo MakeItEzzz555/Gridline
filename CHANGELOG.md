@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Bind the signed canonical-state head to the latest owner-approved commit event, including the exact previous state and rebase outcome. Reject silent rewinds to a previously signed content hash and forged/mismatched commit receipts; preserve legitimate signed restores and the existing SQLite v3 schema. Add adversarial regressions; no live CAD/BIM authorization is implied.
 - Make read-only revision-impact review conservative for wall and level changes: follow hosted-opening and same-level room references across both versions, and flag door/window/room schedules. Add adversarial detail-only fixtures; external drawings and room-wall topology remain unverified.
 
 ## 0.9.0 — 2026-10-26
