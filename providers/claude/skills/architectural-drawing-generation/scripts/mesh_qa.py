@@ -4,6 +4,11 @@ from collections import Counter, defaultdict
 
 
 def bounds_in_basis(boxes):
+    """Return [min, max] bounds of each box in the first box's basis, in metres.
+
+    Computed from projected corners, independently of the mesher. Raises ValueError
+    when a box is not a quarter-turn from the first.
+    """
     a=boxes[0]['rotation_z']; c,s=math.cos(a),math.sin(a)
     result=[]
     for b in boxes:
@@ -40,6 +45,10 @@ def union_volume(boxes,voids=()):
 
 
 def inside(point,boxes,margin=0):
+    """True if a world point (m) is strictly inside any rotated box grown by margin.
+
+    A negative margin shrinks the boxes.
+    """
     for b in boxes:
         a=b['rotation_z']; c,s=math.cos(a),math.sin(a)
         x,y,z=[point[i]-b['center_m'][i] for i in range(3)]
@@ -49,6 +58,14 @@ def inside(point,boxes,margin=0):
 
 
 def check_surface(vertices,faces,boxes,tolerance=1e-7,voids=()):
+    """Verify a mesh is exactly the closed boundary of boxes minus voids.
+
+    vertices are world metres; tolerance (m) welds split normals for topology checks
+    only. Requires manifold, consistently wound edges, no orphan, duplicate or sliver
+    faces, a boundary witness for every source and void face, and the analytic union
+    volume. Returns volume and count fields with status 'PASS'; raises ValueError on the
+    first failure. Inputs are not mutated.
+    """
     if not vertices or not faces or any(len(p)!=3 or any(not math.isfinite(v) for v in p) for p in vertices):
         raise ValueError('invalid mesh vertices')
     edges=Counter(); directed=Counter(); seen=set(); volume=0; used=set(); links=defaultdict(lambda:defaultdict(set))

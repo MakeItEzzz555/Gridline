@@ -10,6 +10,11 @@ from pathlib import Path
 
 
 def read_glb(path):
+    """Parse one GLB within Gridline's profile; return (gltf_json, binary_chunk).
+
+    Raises ValueError for files over 64 MiB, non-2.0 assets, extensions other than
+    KHR_materials_transmission, external buffers/images, or bad chunk bounds.
+    """
     path=Path(path)
     if path.stat().st_size>64*1024*1024:raise ValueError('GLB byte budget exceeded')
     raw=path.read_bytes()
@@ -42,6 +47,11 @@ def read_glb(path):
 
 
 def accessor(doc,binary,index):
+    """Decode one SCALAR or VEC3 accessor into a list of per-element tuples.
+
+    Only unsigned byte/short/int and float components, no sparse or normalized data,
+    1 to 2,000,000 elements; anything else, or a read outside the buffer, raises ValueError.
+    """
     if type(index)!=int or not 0<=index<len(doc['accessors']):raise ValueError('invalid GLB accessor reference')
     a=doc['accessors'][index]
     if 'sparse' in a or a.get('normalized'):raise ValueError('unsupported GLB accessor')
@@ -62,6 +72,12 @@ def accessor(doc,binary,index):
 
 
 def check_glb(path):
+    """Check raw GLB triangles before an importer can repair them.
+
+    Every mesh must be used by exactly one node, and every triangle must be in range,
+    unique, non-degenerate and agree with its vertex normals. Returns status 'PASS' with
+    raw_triangles and mesh_count; the first violation raises ValueError.
+    """
     doc,binary=read_glb(path);triangles=0
     references=[n['mesh'] for n in doc.get('nodes',[]) if 'mesh' in n]
     if any(type(i)!=int for i in references) or sorted(references)!=list(range(len(doc.get('meshes',[])))):

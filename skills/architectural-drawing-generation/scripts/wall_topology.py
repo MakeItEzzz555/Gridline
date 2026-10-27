@@ -11,6 +11,12 @@ MAX_CELLS = 250_000
 
 
 def local_boxes(entries):
+    """Project boxes into the first entry's rotated basis; return (angle_rad, bounds).
+
+    bounds holds one [min_xyz, max_xyz] pair per entry in metres, rounded to QUANTUM_M.
+    Raises ValueError for 0 or >10,000 entries, non-finite or >10 km values,
+    sub-micron dimensions, or a rotation that is not a quarter-turn from the first entry.
+    """
     if not entries or len(entries)>10000:
         raise ValueError('unsupported topology input count')
     angle=entries[0]['rotation_z']
@@ -37,6 +43,12 @@ def local_boxes(entries):
 
 
 def union_boxes(entries,name,void_boxes=()):
+    """Mesh the union of entries minus void_boxes as one closed boundary.
+
+    Returns a copy of entries[0] named name, with host cleared, world vertices in metres,
+    outward-wound quad faces, and the source and void boxes kept for verification.
+    Inputs are not mutated. Raises ValueError past MAX_CELLS grid cells.
+    """
     angle,bounds=local_boxes(entries+list(void_boxes))
     axes=[sorted({b[side][i] for b in bounds for side in (0,1)}) for i in range(3)]
     if math.prod(len(a)-1 for a in axes)>MAX_CELLS:

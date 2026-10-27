@@ -14,6 +14,10 @@ from glb_qa import check_glb
 
 
 def create_material(name, rgb, roughness=0.66, metallic=0.0):
+    """Create a Principled BSDF material in the open .blend; rgb is three 0-1 floats.
+
+    "Gridline Glass" also gets alpha 0.52.
+    """
     mat=bpy.data.materials.new(name)
     mat.diffuse_color=(*rgb,1)
     mat.use_nodes=True
@@ -28,6 +32,13 @@ def create_material(name, rgb, roughness=0.66, metallic=0.0):
 
 
 def build(scene, out):
+    """Write model.blend and model.glb into out from a gridline-blender-scene.v0 scene.
+
+    Resets Blender to factory settings first, so run it in a fresh background session.
+    Joined meshes pass check_surface before creation; units are metric at scale 1.0.
+    Raises ValueError for another schema, invalid boxes or metadata that would replace
+    reserved identity keys.
+    """
     if scene.get("schema") != "gridline-blender-scene.v0":
         raise ValueError("unsupported scene schema")
     bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -103,6 +114,12 @@ def build(scene, out):
 
 
 def verify_object(obj, entry, tolerance):
+    """Check one read-back mesh object against its scene entry; return its evidence.
+
+    tolerance (m) bounds world-corner error for plain boxes; joined meshes are checked by
+    check_surface with a 1e-5 m weld. Raises ValueError when modifiers, constraints,
+    visibility, identity metadata, materials or geometry differ.
+    """
     if (getattr(obj,"modifiers",()) or getattr(obj,"constraints",())
             or getattr(obj,"hide_render",False) or getattr(obj,"hide_viewport",False)):
         raise ValueError(f"unsupported modifier/constraint/visibility: {obj.name}")
@@ -149,6 +166,11 @@ def verify_object(obj, entry, tolerance):
 
 
 def verify(scene,out):
+    """Read back out/model.blend and out/model.glb and write out/verification.json.
+
+    Checks the raw GLB first, then units and every mesh in both formats. Replaces the
+    open Blender session's data. Raises ValueError on any mismatch.
+    """
     raw_glb=check_glb(out/"model.glb")
     bpy.ops.wm.open_mainfile(filepath=str(out/"model.blend"))
     units = bpy.context.scene.unit_settings
@@ -173,6 +195,7 @@ def verify(scene,out):
 
 
 def main():
+    """Entry point: Blender --background --python worker -- build|verify scene.json output-dir."""
     args=sys.argv[sys.argv.index("--")+1:]
     if len(args)!=3 or args[0] not in ("build","verify"):
         raise SystemExit("usage: Blender --background --python worker -- build|verify scene.json output-dir")
