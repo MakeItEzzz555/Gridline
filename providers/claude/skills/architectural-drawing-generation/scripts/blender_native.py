@@ -30,6 +30,10 @@ MAX_COORD_MM = 1_000_000
 
 
 def _number(v, name, *, positive=False):
+    """Return v as a float if finite, within MAX_COORD_MM and, when positive, above 0.
+
+    Otherwise raise ValueError naming the field.
+    """
     if type(v) not in (float, int) or not math.isfinite(v):
         raise ValueError(f"{name} must be a finite number")
     if (positive and v <= 0) or abs(v) > MAX_COORD_MM:
@@ -38,6 +42,13 @@ def _number(v, name, *, positive=False):
 
 
 def compile_scene(spec):
+    """Compile a building-spec.v1 dict (mm) into a gridline-blender-scene.v0 dict (m).
+
+    Walls become occupancy boxes split around hosted openings; openings become door or
+    glass boxes. The input is deep-copied, never mutated. Raises ValueError for non-mm
+    units, shape errors, duplicate IDs, unknown levels or hosts, openings that do not fit
+    or overlap, or more than MAX_ELEMENTS entities.
+    """
     if not isinstance(spec, dict):
         raise ValueError("building specification must be an object")
     if len(json.dumps(spec)) > MAX_SPEC_BYTES:
@@ -106,6 +117,7 @@ def compile_scene(spec):
         openings[host].append((offset, offset + width, sill, sill + height, op))
     boxes, elements = [], []
     def box(kind, gid, host, center, dims, angle, metadata=None):
+        """Append one box, converting mm to m; any dimension <= 1e-9 mm skips it."""
         if any(v <= 1e-9 for v in dims):
             return
         boxes.append({"name": f"{kind}_{gid}_{len(boxes):04d}",
@@ -166,6 +178,11 @@ def compile_scene(spec):
 
 
 def source_bytes(path):
+    """Read at most MAX_SPEC_BYTES from a regular file, following no symlink in any component.
+
+    Raises ValueError for '..', non-regular or oversized files; OSError when a
+    component is missing or is a symlink.
+    """
     # Pin components so source path swaps cannot turn reads into symlink escapes.
     path = Path(path).expanduser().absolute()
     if len(path.parts) < 2:
@@ -193,10 +210,17 @@ def source_bytes(path):
 
 
 def load_spec(path):
+    """Load a JSON spec through source_bytes, rejecting NaN and Infinity."""
     return json.loads(source_bytes(path), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(f"invalid {x}")))
 
 
 def publish(tmp, out, receipts, *, names=("model.blend", "model.glb", "verification.json", "scene.json")):
+    """Copy the named files from tmp, plus receipt.json, into a new out directory.
+
+    Never overwrites: out is created with mode 0700 and each file exclusively with 0600,
+    opening parents without following symlinks. Raises ValueError for unsafe names or if
+    out is swapped during publication; a failure can leave a partial out behind.
+    """
     if (not isinstance(names,(tuple,list)) or not names
             or any(not isinstance(name,str) or Path(name).name != name or '\\' in name or name in ('', '.', '..', 'receipt.json') for name in names)
             or len(set(names)) != len(names)):
@@ -231,6 +255,11 @@ def publish(tmp, out, receipts, *, names=("model.blend", "model.glb", "verificat
 
 
 def run_blender(blender, worker, command, *args):
+    """Run the worker in background Blender (factory startup, no auto-exec, 180 s timeout).
+
+    Returns the CompletedProcess. A nonzero exit raises RuntimeError with the last 1,800
+    characters of output; a hang raises subprocess.TimeoutExpired.
+    """
     cmd=[str(blender), "--background", "--factory-startup", "--disable-autoexec", "--python-exit-code", "1", "--python",
          str(worker), "--", command, *map(str,args)]
     result=subprocess.run(cmd, check=False, timeout=180, capture_output=True, text=True)
@@ -241,6 +270,10 @@ def run_blender(blender, worker, command, *args):
 
 
 def main():
+    """CLI: doctor probes the Blender binary; build SPEC OUT compiles, builds, verifies and publishes.
+
+    OUT must be new. Returns 0, or 1 after printing a BLOCKED reason.
+    """
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--blender", type=Path, default=DEFAULT_BLENDER)
     sub=parser.add_subparsers(dest="command", required=True)

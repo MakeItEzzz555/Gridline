@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Document inputs, outputs, units, mutation and failure boundaries for all 23 functions in the Blender bridge and geometry checkers (`blender_native`, `blender_native_worker`, `glb_qa`, `mesh_qa`, `wall_topology`; #36). Docstrings only: syntax trees are otherwise identical. Their SHA-256 hashes change, so native evidence recorded against earlier hashes cannot be reused as-is.
 - Bind the signed canonical-state head to the latest owner-approved commit event, including the exact previous state and rebase outcome. Reject silent rewinds to a previously signed content hash and forged/mismatched commit receipts; preserve legitimate signed restores and the existing SQLite v3 schema. Add adversarial regressions; no live CAD/BIM authorization is implied.
 - Make read-only revision-impact review conservative for wall and level changes: follow hosted-opening and same-level room references across both versions, and flag door/window/room schedules. Add adversarial detail-only fixtures; external drawings and room-wall topology remain unverified.
 
