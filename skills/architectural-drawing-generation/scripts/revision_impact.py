@@ -16,7 +16,7 @@ import json
 import sys
 from pathlib import Path
 
-GROUPS = ("levels", "walls", "openings", "rooms")
+GROUPS = ("levels", "walls", "openings", "rooms", "grids")
 REFERENCABLE = {"levels", "walls", "openings", "rooms"}
 SCHEDULES = {
     "openings": {"window": "window-schedule.csv", "door": "door-schedule.csv"},
@@ -72,6 +72,11 @@ def affected_sheets(group: str, item_id: str, before: dict | None, after: dict |
     invalidate a room-only section. Unindexed external drawings remain unknown.
     """
     matched = set()
+    if group == "grids":
+        # Grids are drawn across plans but have no per-sheet dependency index.
+        # Treat additions, removals and edits as affecting every indexed sheet.
+        return sorted({sheet["number"] for spec in (old, new)
+                       for sheet in spec.get("sheets", [])})
     for spec, item in ((old, before), (new, after)):
         walls = indexed(spec.get("walls", []), "walls")
         openings = indexed(spec.get("openings", []), "openings")
@@ -165,19 +170,29 @@ def analyze(old: dict, new: dict) -> dict:
     )
     if sheet_changes or changed_project_fields:
         schedules.add(SCHEDULES["sheets"])
+    changed_document_fields = sorted(
+        key for key in ("units", "standard", "schema_version")
+        if old.get(key) != new.get(key)
+    )
+    if "units" in changed_document_fields:
+        # A changed length unit can invalidate every dimensional schedule.
+        schedules.update(("door-schedule.csv", "window-schedule.csv", "room-schedule.csv"))
+    if "standard" in changed_document_fields:
+        schedules.add(SCHEDULES["sheets"])
 
     return {
         "schema_version": 1,
-        "status": "REVIEW_REQUIRED" if changes or sheet_changes or changed_project_fields or stale_refs else "NO_INDEXED_CHANGES",
+        "status": "REVIEW_REQUIRED" if changes or sheet_changes or changed_project_fields or changed_document_fields or stale_refs else "NO_INDEXED_CHANGES",
         "changes": changes,
         "changed_sheets": sheet_changes,
         "changed_project_fields": changed_project_fields,
+        "changed_document_fields": changed_document_fields,
         "stale_sheet_references": stale_refs,
         "schedules_to_recheck": sorted(schedules),
         "affected_indexed_sheets": sorted(set(sheet for c in changes for sheet in c["affected_indexed_sheets"]) | set(sheet_changes)
-                                         | ({s["number"] for s in old.get("sheets", []) + new.get("sheets", [])} if changed_project_fields else set())
+                                         | ({s["number"] for s in old.get("sheets", []) + new.get("sheets", [])} if changed_project_fields or changed_document_fields else set())
                                          | {r["sheet"] for r in stale_refs}),
-        "coverage": "PARTIAL: only sheets in either JSON spec are indexed; all external elevations, sections, details, linked references and PDF markups require separate inspection",
+        "coverage": "PARTIAL: grid and document-setting edits conservatively flag all indexed sheets; external elevations, sections, details, linked references and PDF markups require separate inspection",
         "verified_live_host": False,
         "verified_exported_geometry": False,
     }
