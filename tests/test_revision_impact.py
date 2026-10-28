@@ -123,6 +123,57 @@ class RevisionImpactTests(unittest.TestCase):
         self.assertTrue({"door-schedule.csv", "window-schedule.csv",
                          "room-schedule.csv"}.issubset(result["schedules_to_recheck"]))
 
+    def test_grid_geometry_change_flags_all_indexed_sheets(self):
+        self.new["grids"][0]["end"][1] += 250
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+        self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+        self.assertEqual(result["changes"][0]["group"], "grids")
+        self.assertEqual(result["changes"][0]["changed_fields"], ["end"])
+        self.assertEqual(result["changed_sheets"], [])
+        self.assertEqual(result["schedules_to_recheck"], [])
+
+    def test_added_and_removed_grids_require_sheet_review(self):
+        for operation in ("added", "removed"):
+            with self.subTest(operation=operation):
+                self.new = copy.deepcopy(self.old)
+                if operation == "added":
+                    self.new["grids"].append({"id": "NEW", "start": [1, 2], "end": [3, 4]})
+                else:
+                    self.new["grids"].pop()
+                result = impact.analyze(self.old, self.new)
+                self.assertEqual(result["status"], "REVIEW_REQUIRED")
+                self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+                self.assertEqual(result["changes"][0]["operation"], operation)
+
+    def test_unit_change_flags_all_sheets_and_dimensional_schedules(self):
+        self.new["units"] = "m"
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["changed_document_fields"], ["units"])
+        self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+        self.assertEqual(result["schedules_to_recheck"],
+                         ["door-schedule.csv", "room-schedule.csv", "window-schedule.csv"])
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+
+    def test_standards_profile_change_flags_all_sheets_and_register(self):
+        self.new["standard"] = "ncs"
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["changed_document_fields"], ["standard"])
+        self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+        self.assertIn("sheet-register.csv", result["schedules_to_recheck"])
+
+    def test_schema_version_change_is_not_silently_ignored(self):
+        self.new["schema_version"] = "building-spec.v2"
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["changed_document_fields"], ["schema_version"])
+        self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+
+    def test_duplicate_grid_ids_fail_closed(self):
+        self.new["grids"].append(copy.deepcopy(self.new["grids"][0]))
+        with self.assertRaises(impact.InvalidSpecification):
+            impact.analyze(self.old, self.new)
+
     def test_cli_reports_json_and_nonzero_for_bad_spec(self):
         with tempfile.TemporaryDirectory() as td:
             old = Path(td) / "old.json"
