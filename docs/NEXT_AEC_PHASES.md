@@ -73,6 +73,8 @@ export GRIDLINE_MCP_PROJECT_ROOT=/absolute/path/to/your/architectural-project
 python3 skills/architectural-drawing-generation/scripts/gridline_mcp.py
 ```
 
+On POSIX hosts with `O_NOFOLLOW` and descriptor-relative opens, MCP JSON inputs are read from pinned regular-file descriptors with a 5 MB read limit, preventing a concurrent symlink replacement from redirecting reads outside the authorized root. The Windows/unsupported-host fallback validates and bounds paths but is **not race-proof**; keep its project directory trusted and non-writable by untrusted processes. A pair of independently opened JSON files is not a transactional snapshot.
+
 Configure the MCP client to launch that script by its **absolute path** with a Python environment containing the v2 SDK, using local **stdio** transport. For example, a client's generic `mcpServers` format, if supported:
 
 ```json

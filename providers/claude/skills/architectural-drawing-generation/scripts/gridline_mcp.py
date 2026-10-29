@@ -7,16 +7,25 @@ directory. No write tools, shell execution, network listener, or host mutations.
 """
 from __future__ import annotations
 
+import json
 import os
+import stat
 import sys
 from pathlib import Path
 
-from revision_impact import analyze, read_spec
+from revision_impact import analyze
 
 MAX_SPEC_SIZE = 5_000_000
+HAS_SECURE_OPEN = (hasattr(os, "O_NOFOLLOW") and hasattr(os, "O_DIRECTORY")
+                   and os.open in os.supports_dir_fd)
 
 
 def project_file(path: str, root: Path) -> Path:
+    """Validate a path for legacy callers; do not reopen it as a security boundary.
+
+    compare_revisions uses read_project_spec instead, which pins file descriptors
+    on platforms supporting descriptor-relative, no-follow directory traversal.
+    """
     if not isinstance(path, str) or not path or "\x00" in path:
         raise ValueError("A non-empty project-relative JSON path is required")
     root = root.expanduser().resolve(strict=True)
@@ -35,13 +44,76 @@ def project_file(path: str, root: Path) -> Path:
     return candidate
 
 
+
+def read_project_spec(path: str, root: Path) -> dict:
+    """Read a bounded JSON snapshot with descriptor-relative confinement on POSIX.
+
+    Pin the authorized directory, traverse each component without following
+    symlinks, and read only from the final opened regular-file descriptor.
+    A concurrent rename cannot redirect that descriptor outside the root.
+    On platforms without these OS primitives, retain the existing checked
+    pathname fallback; that fallback is not race-proof.
+    """
+    if not isinstance(path, str) or not path or "\x00" in path:
+        raise ValueError("A non-empty project-relative JSON path is required")
+    requested = Path(path)
+    if requested.is_absolute() or ".." in requested.parts or requested.suffix.lower() != ".json":
+        raise ValueError("Only project-relative JSON files within the authorized directory are allowed")
+    base = root.expanduser().resolve(strict=True)
+    if not base.is_dir():
+        raise ValueError("Project root must be a directory")
+
+    if not HAS_SECURE_OPEN:
+        # Backward-compatible fallback for platforms lacking dir_fd support.
+        # This does not provide race-proof confinement; see README.
+        with project_file(path, base).open("rb") as handle:
+            data = handle.read(MAX_SPEC_SIZE + 1)
+        if len(data) > MAX_SPEC_SIZE:
+            raise ValueError("Project JSON exceeds the 5 MB read limit")
+    else:
+        dir_flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+        dir_fd = os.open(base, dir_flags)
+        try:
+            for part in requested.parts[:-1]:
+                next_fd = os.open(part, dir_flags, dir_fd=dir_fd)
+                os.close(dir_fd)
+                dir_fd = next_fd
+            flags = os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0)
+            file_fd = os.open(requested.parts[-1], flags, dir_fd=dir_fd)
+            try:
+                info = os.fstat(file_fd)
+                if not stat.S_ISREG(info.st_mode):
+                    raise ValueError("Project JSON must be a regular file")
+                if info.st_size > MAX_SPEC_SIZE:
+                    raise ValueError("Project JSON exceeds the 5 MB read limit")
+                chunks = []
+                total = 0
+                while True:
+                    chunk = os.read(file_fd, min(65536, MAX_SPEC_SIZE + 1 - total))
+                    if not chunk:
+                        break
+                    total += len(chunk)
+                    if total > MAX_SPEC_SIZE:
+                        raise ValueError("Project JSON exceeds the 5 MB read limit")
+                    chunks.append(chunk)
+                data = b"".join(chunks)
+            finally:
+                os.close(file_fd)
+        finally:
+            os.close(dir_fd)
+    document = json.loads(data.decode("utf-8"))
+    if not isinstance(document, dict):
+        raise ValueError("Project JSON must contain an object")
+    return document
+
+
 def compare_revisions(before: str, after: str, project_root: str | None = None) -> dict:
     """Compare two explicitly provided project JSON files; never alter them."""
     root = project_root or os.environ.get("GRIDLINE_MCP_PROJECT_ROOT", "")
     if not root:
         raise ValueError("GRIDLINE_MCP_PROJECT_ROOT must be set explicitly")
     base = Path(root)
-    return analyze(read_spec(project_file(before, base)), read_spec(project_file(after, base)))
+    return analyze(read_project_spec(before, base), read_project_spec(after, base))
 
 
 def capabilities() -> dict:
