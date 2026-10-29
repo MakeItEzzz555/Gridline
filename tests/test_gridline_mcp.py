@@ -1,4 +1,5 @@
 import json
+from unittest import mock
 import os
 import subprocess
 import sys
@@ -58,6 +59,107 @@ class GridlineReadOnlyMCPTests(unittest.TestCase):
             self.assertIn("window-schedule.csv", result["schedules_to_recheck"])
             self.assertEqual(before_bytes, old.read_bytes())
             self.assertEqual(after_bytes, new.read_bytes())
+
+    @unittest.skipUnless(hasattr(os, "O_NOFOLLOW") and os.open in os.supports_dir_fd,
+                         "requires descriptor-relative no-follow opens")
+    def test_ancestor_swap_after_validation_cannot_escape_root(self):
+        # A concurrent process replaces an authorized directory with a symlink
+        # just before its descriptor-relative open. The outside JSON must not
+        # be opened even if it contains a syntactically valid building spec.
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            authorized = base / "authorized"
+            folder = authorized / "part"
+            folder.mkdir(parents=True)
+            outside = base / "outside"
+            outside.mkdir()
+            payload = EXAMPLE.read_bytes()
+            (folder / "before.json").write_bytes(payload)
+            (folder / "after.json").write_bytes(payload)
+            (outside / "before.json").write_bytes(payload)
+            (outside / "after.json").write_bytes(payload)
+            real_open = os.open
+            swapped = False
+
+            def swap_then_open(path, flags, *args, **kwargs):
+                nonlocal swapped
+                if path == "part" and "dir_fd" in kwargs and not swapped:
+                    swapped = True
+                    folder.rename(authorized / "old-part")
+                    folder.symlink_to(outside, target_is_directory=True)
+                return real_open(path, flags, *args, **kwargs)
+
+            with mock.patch.object(gridline_mcp.os, "open", side_effect=swap_then_open):
+                with self.assertRaises((ValueError, OSError)):
+                    gridline_mcp.compare_revisions(
+                        "part/before.json", "part/after.json", project_root=str(authorized))
+            self.assertTrue(swapped)
+
+    @unittest.skipUnless(hasattr(os, "O_NOFOLLOW") and os.open in os.supports_dir_fd,
+                         "requires descriptor-relative no-follow opens")
+    def test_file_growth_after_stat_is_still_bounded(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            payload = EXAMPLE.read_bytes()
+            (base / "before.json").write_bytes(payload)
+            (base / "after.json").write_bytes(payload)
+            real_read = os.read
+            grown = False
+
+            def grow_then_read(fd, size):
+                nonlocal grown
+                if not grown:
+                    grown = True
+                    with (base / "before.json").open("ab") as target:
+                        target.write(b" " * (gridline_mcp.MAX_SPEC_SIZE + 1))
+                return real_read(fd, size)
+
+            with mock.patch.object(gridline_mcp.os, "read", side_effect=grow_then_read):
+                with self.assertRaisesRegex(ValueError, "5 MB"):
+                    gridline_mcp.compare_revisions(
+                        "before.json", "after.json", project_root=str(base))
+            self.assertTrue(grown)
+
+    def test_nested_authorized_json_is_readable(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            nested = base / "subdir"
+            nested.mkdir()
+            payload = EXAMPLE.read_bytes()
+            (nested / "before.json").write_bytes(payload)
+            (nested / "after.json").write_bytes(payload)
+            report = gridline_mcp.compare_revisions(
+                "subdir/before.json", "subdir/after.json", project_root=td)
+            self.assertEqual(report["status"], "NO_INDEXED_CHANGES")
+
+    @unittest.skipUnless(hasattr(os, "O_NOFOLLOW") and os.open in os.supports_dir_fd,
+                         "requires descriptor-relative no-follow opens")
+    def test_leaf_swap_to_outside_symlink_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            authorized = base / "authorized"
+            authorized.mkdir()
+            outside = base / "outside.json"
+            outside.write_bytes(EXAMPLE.read_bytes())
+            leaf = authorized / "before.json"
+            leaf.write_bytes(EXAMPLE.read_bytes())
+            (authorized / "after.json").write_bytes(EXAMPLE.read_bytes())
+            real_open = os.open
+            swapped = False
+
+            def swap_then_open(path, flags, *args, **kwargs):
+                nonlocal swapped
+                if path == "before.json" and "dir_fd" in kwargs and not swapped:
+                    swapped = True
+                    leaf.unlink()
+                    leaf.symlink_to(outside)
+                return real_open(path, flags, *args, **kwargs)
+
+            with mock.patch.object(gridline_mcp.os, "open", side_effect=swap_then_open):
+                with self.assertRaises((ValueError, OSError)):
+                    gridline_mcp.compare_revisions(
+                        "before.json", "after.json", project_root=str(authorized))
+            self.assertTrue(swapped)
 
     def test_capabilities_do_not_claim_native_connections(self):
         cap = gridline_mcp.capabilities()

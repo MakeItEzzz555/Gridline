@@ -177,7 +177,7 @@ When an opening, wall, room, level, grid, project unit, drafting standard or dra
 python3 skills/architectural-drawing-generation/scripts/revision_impact.py before.building.json after.building.json --out impact.json
 ```
 
-There is also an opt-in local, read-only Gridline MCP server exposing this comparison to MCP-compatible agents (requires the official Python MCP SDK v2 and an explicitly permitted project directory). **It is not a connection to AutoCAD or Revit.**
+There is also an opt-in local, read-only Gridline MCP server exposing this comparison to MCP-compatible agents (requires the official Python MCP SDK v2 and an explicitly permitted project directory). **It is not a connection to AutoCAD or Revit.** On POSIX systems with descriptor-relative no-follow opens, project JSON reads pin the authorized directory and opened regular-file descriptors, rejecting symlink swaps and reads beyond 5 MB. On Windows and platforms without those primitives, the compatibility fallback retains path validation and bounded reads **but cannot guarantee protection against concurrent pathname replacement**; use a trusted, non-writable project directory there.
 
 [Next phases: IFC/IDS validation, official Autodesk MCP, Rhino, Blender, Archicad, editable 3D and scanned drawing research](docs/NEXT_AEC_PHASES.md).
 

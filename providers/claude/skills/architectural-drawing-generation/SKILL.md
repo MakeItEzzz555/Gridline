@@ -114,7 +114,7 @@ Do not claim a visual/DWG/BIM content comparison from this result alone.
 For MCP-compatible agents, an optional local read-only stdio server lives at
 `scripts/gridline_mcp.py`. It requires the official Python MCP SDK v2 and an
 explicit `GRIDLINE_MCP_PROJECT_ROOT` directory. It exposes only revision-impact
-comparison and capabilities; it does not modify drawings or connect to Autodesk.
+comparison and capabilities; it does not modify drawings or connect to Autodesk. On supported POSIX hosts it reads bounded JSON snapshots from no-follow, descriptor-relative handles; on Windows and other hosts without those primitives, the compatible pathname fallback is not race-proof against concurrent directory replacement. Only use a trusted project directory there.
 See repository `docs/NEXT_AEC_PHASES.md` for host/vendor adapter gates.
 
 ## Source-detail intake gate
