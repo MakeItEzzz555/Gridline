@@ -115,6 +115,8 @@ def affected_sheets(group: str, item_id: str, before: dict | None, after: dict |
 
 def analyze(old: dict, new: dict) -> dict:
     for spec in (old, new):
+        if not isinstance(spec, dict) or not isinstance(spec.get("project", {}), dict):
+            raise InvalidSpecification("revision and project must be JSON objects")
         for group in (*GROUPS, "sheets"):
             indexed(spec.get(group, []), group)
         for sheet in spec.get("sheets", []):
@@ -170,9 +172,14 @@ def analyze(old: dict, new: dict) -> dict:
     )
     if sheet_changes or changed_project_fields:
         schedules.add(SCHEDULES["sheets"])
+    # Treat future/extension top-level fields conservatively. Otherwise a
+    # site, datum, material or custom document edit can return NO_INDEXED_CHANGES
+    # even though generated sheets may depend on it. Presence matters: adding
+    # an explicit null is still a document change.
+    modeled_fields = set(GROUPS) | {"project", "sheets"}
     changed_document_fields = sorted(
-        key for key in ("units", "standard", "schema_version")
-        if old.get(key) != new.get(key)
+        key for key in (old.keys() | new.keys()) - modeled_fields
+        if key not in old or key not in new or old[key] != new[key]
     )
     if "units" in changed_document_fields:
         # A changed length unit can invalidate every dimensional schedule.
@@ -192,7 +199,7 @@ def analyze(old: dict, new: dict) -> dict:
         "affected_indexed_sheets": sorted(set(sheet for c in changes for sheet in c["affected_indexed_sheets"]) | set(sheet_changes)
                                          | ({s["number"] for s in old.get("sheets", []) + new.get("sheets", [])} if changed_project_fields or changed_document_fields else set())
                                          | {r["sheet"] for r in stale_refs}),
-        "coverage": "PARTIAL: grid and document-setting edits conservatively flag all indexed sheets; external elevations, sections, details, linked references and PDF markups require separate inspection",
+        "coverage": "PARTIAL: grid and all top-level document-field edits conservatively flag all indexed sheets; unclassified fields may affect schedules requiring manual review; external elevations, sections, details, linked references and PDF markups require separate inspection",
         "verified_live_host": False,
         "verified_exported_geometry": False,
     }
