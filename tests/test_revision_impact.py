@@ -174,6 +174,33 @@ class RevisionImpactTests(unittest.TestCase):
         with self.assertRaises(impact.InvalidSpecification):
             impact.analyze(self.old, self.new)
 
+
+    def test_unclassified_site_change_flags_all_sheets(self):
+        self.new["site"] = {"orientation_deg": 35}
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+        self.assertEqual(result["changed_document_fields"], ["site"])
+        self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+        self.assertEqual(result["changes"], [])
+        self.assertIn("manual review", result["coverage"])
+
+    def test_removed_custom_document_field_is_not_ignored(self):
+        self.old["coordinate_system"] = {"datum": "local"}
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["changed_document_fields"], ["coordinate_system"])
+        self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+
+    def test_added_null_field_is_a_document_change(self):
+        self.new["materials"] = None
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["changed_document_fields"], ["materials"])
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+
+    def test_malformed_project_object_fails_closed(self):
+        self.new["project"] = []
+        with self.assertRaisesRegex(impact.InvalidSpecification, "JSON objects"):
+            impact.analyze(self.old, self.new)
+
     def test_cli_reports_json_and_nonzero_for_bad_spec(self):
         with tempfile.TemporaryDirectory() as td:
             old = Path(td) / "old.json"

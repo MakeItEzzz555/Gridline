@@ -106,7 +106,7 @@ For changes to windows, walls, rooms, levels, grids, project units, drafting sta
 compare explicit before/after project JSONs using:
 `python3 scripts/revision_impact.py before.building.json after.building.json --out impact.json`
 
-The report enumerates changed IDs, `changed_document_fields` (units, standard, schema_version), schedules and **indexed** drawings requiring review. Grid changes and document-setting changes conservatively flag every indexed sheet because there is no per-sheet grid/style dependency index; unit changes also flag dimensional schedules. Other edits follow declared host/level and sheet-reference links.
+The report enumerates changed IDs, `changed_document_fields` (units, standard, schema_version and unclassified top-level site/datum/material fields), schedules and **indexed** drawings requiring review. Unclassified document-field changes conservatively flag every indexed sheet, but their schedule dependencies remain a manual-review gap. Grid changes and document-setting changes conservatively flag every indexed sheet because there is no per-sheet grid/style dependency index; unit changes also flag dimensional schedules. Other edits follow declared host/level and sheet-reference links.
 Sections, elevations, unindexed PDFs and hand markups remain UNKNOWN unless
 explicitly linked using each sheet's `references` mapping (openings/walls/rooms/levels).
 Do not claim a visual/DWG/BIM content comparison from this result alone.
