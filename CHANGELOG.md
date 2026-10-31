@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prevent false NO_INDEXED_CHANGES for unresolved wall/room level, opening host or receiving-room links in either revision. Report additive `stale_model_references` with revision and reason, conservatively flag indexed sheets/dimensional schedules, and trace room edits to receiving-door-only detail sheets and the door schedule. Eight adversarial/compatibility regressions; preserve read-only APIs and provider parity.
+
 - Conservatively detect added, removed and modified unclassified top-level building-spec fields (e.g. site, datum and materials) during read-only revision-impact analysis. Flag all indexed sheets rather than returning a false NO_INDEXED_CHANGES; distinguish absent keys from explicit null, reject malformed project objects, and add four regressions. Unknown schedule dependencies remain a manual-review limitation; preserve report schema and provider parity.
 
 - Pin read-only MCP project JSON reads to no-follow, descriptor-relative regular-file handles on POSIX and enforce the 5 MB limit on bytes actually read. Reject ancestor/leaf symlink swaps and post-stat file growth with adversarial tests. Preserve the portable pathname fallback where dir_fd is unavailable (including Windows), explicitly documenting its remaining race limitation; this does not grant native host access.

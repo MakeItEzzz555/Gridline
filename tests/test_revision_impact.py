@@ -201,6 +201,82 @@ class RevisionImpactTests(unittest.TestCase):
         with self.assertRaisesRegex(impact.InvalidSpecification, "JSON objects"):
             impact.analyze(self.old, self.new)
 
+
+    def test_unchanged_orphaned_opening_host_never_reports_no_changes(self):
+        self.old["openings"][0]["wall"] = "MISSING-WALL"
+        self.new = copy.deepcopy(self.old)
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+        self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+        self.assertEqual({r["revision"] for r in result["stale_model_references"]},
+                         {"before", "after"})
+        self.assertTrue(all(r["field"] == "wall" and r["target"] == "MISSING-WALL"
+                            for r in result["stale_model_references"]))
+        self.assertTrue({"door-schedule.csv", "window-schedule.csv",
+                         "room-schedule.csv"}.issubset(result["schedules_to_recheck"]))
+
+    def test_unchanged_orphaned_wall_level_is_flagged(self):
+        self.old["walls"][0]["level"] = "MISSING-LEVEL"
+        self.new = copy.deepcopy(self.old)
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+        self.assertTrue(any(r["group"] == "walls" and r["field"] == "level"
+                            for r in result["stale_model_references"]))
+
+    def test_unchanged_orphaned_room_level_is_flagged(self):
+        self.old["rooms"][0]["level"] = "MISSING-LEVEL"
+        self.new = copy.deepcopy(self.old)
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+        self.assertTrue(any(r["group"] == "rooms" and r["field"] == "level"
+                            for r in result["stale_model_references"]))
+
+    def test_missing_receiving_room_is_reported_in_both_revisions(self):
+        self.old["openings"][0]["receiving_room"] = "MISSING-ROOM"
+        self.new = copy.deepcopy(self.old)
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+        self.assertEqual(len(result["stale_model_references"]), 2)
+        self.assertTrue(all(r["field"] == "receiving_room" and
+                            r["reason"] == "missing_target"
+                            for r in result["stale_model_references"]))
+
+    def test_receiving_room_on_wrong_level_requires_review(self):
+        self.old["levels"].append({"id": "L01", "name": "Upper",
+                                   "elevation": 3000, "height": 3000})
+        self.old["rooms"][0]["level"] = "L01"
+        self.old["openings"][0]["receiving_room"] = "R01"
+        self.new = copy.deepcopy(self.old)
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+        self.assertEqual([r["reason"] for r in result["stale_model_references"]],
+                         ["level_mismatch", "level_mismatch"])
+
+    def test_after_only_broken_host_identifies_revision(self):
+        self.new["openings"][0]["wall"] = "MISSING-WALL"
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual([r["revision"] for r in result["stale_model_references"]],
+                         ["after"])
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+
+    def test_room_edit_flags_receiving_door_only_detail_and_schedule(self):
+        for spec in (self.old, self.new):
+            spec["openings"][0]["receiving_room"] = "R01"
+            spec["sheets"].append({"number": "A-401", "title": "Door detail",
+                                   "level": "L99", "references": {"openings": ["D01"]}})
+        self.new["rooms"][0]["name"] = "Living / dining"
+        result = impact.analyze(self.old, self.new)
+        self.assertIn("A-401", result["affected_indexed_sheets"])
+        self.assertEqual(result["changed_sheets"], [])
+        self.assertEqual(result["stale_model_references"], [])
+        self.assertTrue({"room-schedule.csv", "door-schedule.csv"}.issubset(
+            result["schedules_to_recheck"]))
+
+    def test_valid_legacy_document_has_no_false_integrity_flags(self):
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["stale_model_references"], [])
+        self.assertEqual(result["status"], "NO_INDEXED_CHANGES")
+
     def test_cli_reports_json_and_nonzero_for_bad_spec(self):
         with tempfile.TemporaryDirectory() as td:
             old = Path(td) / "old.json"
