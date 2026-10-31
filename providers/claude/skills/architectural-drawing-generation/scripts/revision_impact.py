@@ -64,6 +64,42 @@ def sheet_refs(sheet: dict) -> dict[str, set[str]]:
     return output
 
 
+def stale_model_links(spec: dict, revision: str) -> list[dict]:
+    """Find unresolved model relationships without treating a review as CAD validation.
+
+    Report both revisions: an unchanged broken host/level/receiving-room link
+    must not produce NO_INDEXED_CHANGES. Do not guess replacement identities.
+    """
+    levels = indexed(spec.get("levels", []), "levels")
+    walls = indexed(spec.get("walls", []), "walls")
+    rooms = indexed(spec.get("rooms", []), "rooms")
+    openings = indexed(spec.get("openings", []), "openings")
+    issues = []
+    for group, items, field, targets in (
+        ("walls", walls, "level", levels),
+        ("rooms", rooms, "level", levels),
+        ("openings", openings, "wall", walls),
+    ):
+        for item_id, item in sorted(items.items()):
+            target = item.get(field)
+            if not isinstance(target, str) or target not in targets:
+                issues.append({"revision": revision, "group": group, "id": item_id,
+                               "field": field, "target": target, "reason": "missing_target"})
+    for item_id, item in sorted(openings.items()):
+        if "receiving_room" not in item:
+            continue
+        target = item["receiving_room"]
+        if not isinstance(target, str) or target not in rooms:
+            issues.append({"revision": revision, "group": "openings", "id": item_id,
+                           "field": "receiving_room", "target": target,
+                           "reason": "missing_target"})
+        elif item.get("wall") in walls and rooms[target].get("level") != walls[item["wall"]].get("level"):
+            issues.append({"revision": revision, "group": "openings", "id": item_id,
+                           "field": "receiving_room", "target": target,
+                           "reason": "level_mismatch"})
+    return issues
+
+
 def affected_sheets(group: str, item_id: str, before: dict | None, after: dict | None,
                     old: dict, new: dict) -> list[str]:
     """Conservatively follow declared host/level links in both revisions.
@@ -93,6 +129,11 @@ def affected_sheets(group: str, item_id: str, before: dict | None, after: dict |
                 level = walls[host].get("level")
         if group == "walls":
             related["walls"] = {item_id}
+        if group == "rooms":
+            # A room change can affect a door-only detail whose opening
+            # declares that room as its receiving/served room.
+            related["openings"] = {o["id"] for o in openings.values()
+                                   if o.get("receiving_room") == item_id}
         if group in ("walls", "levels"):
             # Host edits affect hosted opening details even if the sheet
             # references only the opening ID, not the wall or its level.
@@ -131,8 +172,18 @@ def analyze(old: dict, new: dict) -> dict:
                     stale_refs.append({"revision": label, "sheet": sheet["number"],
                                        "group": group, "id": key})
 
+    stale_model_refs = [
+        issue for label, spec in (("before", old), ("after", new))
+        for issue in stale_model_links(spec, label)
+    ]
+
     changes = []
     schedules = set()
+    if stale_model_refs:
+        # Broken source relationships may affect any sheet and any derived
+        # dimensional schedule; never silently issue an unchanged verdict.
+        schedules.update(("door-schedule.csv", "window-schedule.csv",
+                          "room-schedule.csv"))
     for group in GROUPS:
         before_items = indexed(old.get(group, []), group)
         after_items = indexed(new.get(group, []), group)
@@ -148,6 +199,9 @@ def analyze(old: dict, new: dict) -> dict:
                         schedules.add(SCHEDULES["openings"].get(item.get("kind"), "opening-schedule-UNKNOWN"))
             if group == "rooms":
                 schedules.add(SCHEDULES["rooms"])
+                if any(o.get("kind") == "door" and o.get("receiving_room") == key
+                       for spec in (old, new) for o in spec.get("openings", [])):
+                    schedules.add(SCHEDULES["openings"]["door"])
             if group in ("levels", "walls"):
                 # Without full room-wall topology, changing a wall or level
                 # can alter hosted openings, room quantities and schedules.
@@ -189,17 +243,19 @@ def analyze(old: dict, new: dict) -> dict:
 
     return {
         "schema_version": 1,
-        "status": "REVIEW_REQUIRED" if changes or sheet_changes or changed_project_fields or changed_document_fields or stale_refs else "NO_INDEXED_CHANGES",
+        "status": "REVIEW_REQUIRED" if changes or sheet_changes or changed_project_fields or changed_document_fields or stale_refs or stale_model_refs else "NO_INDEXED_CHANGES",
         "changes": changes,
         "changed_sheets": sheet_changes,
         "changed_project_fields": changed_project_fields,
         "changed_document_fields": changed_document_fields,
         "stale_sheet_references": stale_refs,
+        "stale_model_references": stale_model_refs,
         "schedules_to_recheck": sorted(schedules),
         "affected_indexed_sheets": sorted(set(sheet for c in changes for sheet in c["affected_indexed_sheets"]) | set(sheet_changes)
                                          | ({s["number"] for s in old.get("sheets", []) + new.get("sheets", [])} if changed_project_fields or changed_document_fields else set())
-                                         | {r["sheet"] for r in stale_refs}),
-        "coverage": "PARTIAL: grid and all top-level document-field edits conservatively flag all indexed sheets; unclassified fields may affect schedules requiring manual review; external elevations, sections, details, linked references and PDF markups require separate inspection",
+                                         | {r["sheet"] for r in stale_refs}
+                                         | ({s["number"] for s in old.get("sheets", []) + new.get("sheets", [])} if stale_model_refs else set())),
+        "coverage": "PARTIAL: broken host/level/receiving-room links flag all indexed sheets and dimensional schedules; room edits trace declared receiving-room doors; grid and top-level document edits flag indexed sheets; unclassified fields may affect schedules requiring manual review; external elevations, sections, details, linked references and PDF markups require separate inspection",
         "verified_live_host": False,
         "verified_exported_geometry": False,
     }
