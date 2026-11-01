@@ -277,6 +277,108 @@ class RevisionImpactTests(unittest.TestCase):
         self.assertEqual(result["stale_model_references"], [])
         self.assertEqual(result["status"], "NO_INDEXED_CHANGES")
 
+    def test_added_null_project_metadata_is_not_ignored(self):
+        self.new["project"]["north_deg"] = None
+        result = impact.analyze(self.old, self.new)
+        self.assertEqual(result["changed_project_fields"], ["north_deg"])
+        self.assertEqual(result["status"], "REVIEW_REQUIRED")
+        self.assertEqual(result["affected_indexed_sheets"], ["A-101", "A-102"])
+        self.assertIn("sheet-register.csv", result["schedules_to_recheck"])
+
+    def test_added_null_element_metadata_identifies_changed_field(self):
+        self.new["openings"][0]["review_note"] = None
+        result = impact.analyze(self.old, self.new)
+        opening = next(c for c in result["changes"] if c["id"] == "D01")
+        self.assertEqual(opening["changed_fields"], ["review_note"])
+
+    def test_cli_rejects_output_equal_to_either_input(self):
+        with tempfile.TemporaryDirectory() as td:
+            before, after = (Path(td) / n for n in ("before.json", "after.json"))
+            before.write_text(json.dumps(self.old), encoding="utf-8")
+            after.write_text(json.dumps(self.new), encoding="utf-8")
+            for out in (before, after):
+                with self.subTest(out=out.name):
+                    originals = (before.read_bytes(), after.read_bytes())
+                    p = subprocess.run([sys.executable, str(impact.__file__),
+                                        str(before), str(after), "--out", str(out)],
+                                       capture_output=True, text=True)
+                    self.assertEqual(p.returncode, 2, p.stderr)
+                    self.assertIn("input", p.stderr.lower())
+                    self.assertEqual((before.read_bytes(), after.read_bytes()), originals)
+
+    def test_cli_rejects_output_hardlink_to_input(self):
+        import os
+        with tempfile.TemporaryDirectory() as td:
+            before, after, out = (Path(td) / n for n in ("before.json", "after.json", "impact.json"))
+            before.write_text(json.dumps(self.old), encoding="utf-8")
+            after.write_text(json.dumps(self.new), encoding="utf-8")
+            os.link(before, out)
+            original = before.read_bytes()
+            p = subprocess.run([sys.executable, str(impact.__file__), str(before),
+                                str(after), "--out", str(out)], capture_output=True, text=True)
+            self.assertEqual(p.returncode, 2, p.stderr)
+            self.assertEqual(before.read_bytes(), original)
+            self.assertEqual(out.read_bytes(), original)
+
+    def test_cli_rejects_output_symlink_without_touching_target(self):
+        with tempfile.TemporaryDirectory() as td:
+            before, after, out, target = (Path(td) / n for n in
+                                          ("before.json", "after.json", "impact.json", "target.txt"))
+            before.write_text(json.dumps(self.old), encoding="utf-8")
+            after.write_text(json.dumps(self.new), encoding="utf-8")
+            target.write_text("KEEP", encoding="utf-8")
+            try:
+                out.symlink_to(target)
+            except (OSError, NotImplementedError):
+                self.skipTest("symlink creation unavailable")
+            p = subprocess.run([sys.executable, str(impact.__file__), str(before),
+                                str(after), "--out", str(out)], capture_output=True, text=True)
+            self.assertEqual(p.returncode, 2, p.stderr)
+            self.assertEqual(target.read_text(encoding="utf-8"), "KEEP")
+            self.assertTrue(out.is_symlink())
+
+    def test_cli_output_failure_returns_error_without_traceback(self):
+        with tempfile.TemporaryDirectory() as td:
+            before, after, parent = (Path(td) / n for n in
+                                     ("before.json", "after.json", "not-a-directory"))
+            before.write_text(json.dumps(self.old), encoding="utf-8")
+            after.write_text(json.dumps(self.new), encoding="utf-8")
+            parent.write_text("KEEP", encoding="utf-8")
+            p = subprocess.run([sys.executable, str(impact.__file__), str(before),
+                                str(after), "--out", str(parent / "impact.json")],
+                               capture_output=True, text=True)
+            self.assertEqual(p.returncode, 2, p.stderr)
+            self.assertNotIn("Traceback", p.stderr)
+            self.assertEqual(parent.read_text(encoding="utf-8"), "KEEP")
+
+    def test_report_replace_failure_preserves_existing_report(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as td:
+            before, after, out = (Path(td) / n for n in
+                                  ("before.json", "after.json", "impact.json"))
+            before.write_text(json.dumps(self.old), encoding="utf-8")
+            after.write_text(json.dumps(self.new), encoding="utf-8")
+            out.write_text("PRIOR REPORT", encoding="utf-8")
+            with patch.object(impact.os, "replace", side_effect=OSError("simulated rename failure")):
+                with self.assertRaisesRegex(OSError, "simulated rename failure"):
+                    impact._write_report(out, '{"status":"REVIEW_REQUIRED"}\n', (before, after))
+            self.assertEqual(out.read_text(encoding="utf-8"), "PRIOR REPORT")
+            self.assertEqual(sorted(p.name for p in Path(td).iterdir()),
+                             ["after.json", "before.json", "impact.json"])
+
+    def test_successful_report_replace_cleans_temp_file(self):
+        with tempfile.TemporaryDirectory() as td:
+            before, after, out = (Path(td) / n for n in
+                                  ("before.json", "after.json", "impact.json"))
+            before.write_text(json.dumps(self.old), encoding="utf-8")
+            after.write_text(json.dumps(self.new), encoding="utf-8")
+            out.write_text("OLD REPORT", encoding="utf-8")
+            impact._write_report(out, '{"status":"REVIEW_REQUIRED"}\n', (before, after))
+            self.assertEqual(json.loads(out.read_text(encoding="utf-8"))["status"],
+                             "REVIEW_REQUIRED")
+            self.assertEqual(sorted(p.name for p in Path(td).iterdir()),
+                             ["after.json", "before.json", "impact.json"])
+
     def test_cli_reports_json_and_nonzero_for_bad_spec(self):
         with tempfile.TemporaryDirectory() as td:
             old = Path(td) / "old.json"
