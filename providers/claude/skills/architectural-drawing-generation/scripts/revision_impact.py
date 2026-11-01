@@ -13,7 +13,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 GROUPS = ("levels", "walls", "openings", "rooms", "grids")
@@ -192,7 +194,8 @@ def analyze(old: dict, new: dict) -> dict:
             if before == after:
                 continue
             fields = sorted(set(before or {}) | set(after or {}))
-            fields = [f for f in fields if (before or {}).get(f) != (after or {}).get(f)]
+            fields = [f for f in fields if f not in (before or {}) or f not in (after or {})
+                      or before[f] != after[f]]
             if group == "openings":
                 for item in (before, after):
                     if item:
@@ -222,7 +225,8 @@ def analyze(old: dict, new: dict) -> dict:
                            if old_sheets.get(k) != new_sheets.get(k))
     changed_project_fields = sorted(
         key for key in set(old.get("project", {})) | set(new.get("project", {}))
-        if old.get("project", {}).get(key) != new.get("project", {}).get(key)
+        if key not in old.get("project", {}) or key not in new.get("project", {})
+        or old["project"][key] != new["project"][key]
     )
     if sheet_changes or changed_project_fields:
         schedules.add(SCHEDULES["sheets"])
@@ -261,6 +265,48 @@ def analyze(old: dict, new: dict) -> dict:
     }
 
 
+def _guard_report_destination(output: Path, inputs: tuple[Path, Path]) -> None:
+    """Refuse input aliases and output symlinks before writing a review report.
+
+    This guards ordinary path/symlink/hardlink mistakes, not concurrent
+    adversarial filesystem replacement. The source JSON files remain read-only.
+    """
+    if output.is_symlink():
+        raise InvalidSpecification("report output must not be a symbolic link")
+    for source in inputs:
+        if output.resolve() == source.resolve() or (
+            output.exists() and source.exists() and output.samefile(source)
+        ):
+            raise InvalidSpecification("report output aliases an input specification")
+
+
+def _write_report(output: Path, contents: str, inputs: tuple[Path, Path]) -> None:
+    """Atomically replace a report without truncating an existing report on error.
+
+    Creates a temporary file in the destination directory and removes it on
+    failure. A successful rename replaces an existing regular report file.
+    """
+    _guard_report_destination(output, inputs)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", newline="\n",
+            dir=output.parent, prefix=f".{output.name}.", suffix=".tmp",
+            delete=False,
+        ) as stream:
+            temp_path = Path(stream.name)
+            stream.write(contents)
+            stream.flush()
+            os.fsync(stream.fileno())
+        # Recheck to catch ordinary path changes during report generation.
+        _guard_report_destination(output, inputs)
+        os.replace(temp_path, output)
+    finally:
+        if temp_path is not None:
+            temp_path.unlink(missing_ok=True)
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("before", type=Path)
@@ -274,8 +320,11 @@ def main(argv=None) -> int:
         return 2
     output = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
     if args.out:
-        args.out.parent.mkdir(parents=True, exist_ok=True)
-        args.out.write_text(output, encoding="utf-8")
+        try:
+            _write_report(args.out, output, (args.before, args.after))
+        except (ValueError, OSError) as exc:
+            print(f"ERROR: cannot write revision-impact report: {exc}", file=sys.stderr)
+            return 2
     else:
         print(output, end="")
     return 0
