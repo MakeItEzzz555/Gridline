@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 import tempfile
@@ -45,8 +46,41 @@ def indexed(items: list, label: str) -> dict:
     return output
 
 
+def _unique_json_pairs(pairs: list[tuple[str, object]]) -> dict:
+    """Reject duplicate object keys at every nesting level before data is lost."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise InvalidSpecification(f"duplicate JSON key {key!r}")
+        result[key] = value
+    return result
+
+
+def _reject_json_constant(value: str) -> None:
+    """The Python JSON decoder otherwise accepts non-standard NaN/Infinity."""
+    raise InvalidSpecification(f"non-finite JSON constant {value!r}")
+
+
+def _finite_json_float(value: str) -> float:
+    """Reject exponent overflow that decodes as infinity despite valid syntax."""
+    number = float(value)
+    if not math.isfinite(number):
+        raise InvalidSpecification("non-finite JSON number")
+    return number
+
+
+def parse_spec_json(contents: str | bytes) -> dict:
+    """Decode unambiguous finite JSON for both CLI and read-only MCP inputs."""
+    document = json.loads(contents, object_pairs_hook=_unique_json_pairs,
+                          parse_constant=_reject_json_constant,
+                          parse_float=_finite_json_float)
+    if not isinstance(document, dict):
+        raise InvalidSpecification("building specification must be a JSON object")
+    return document
+
+
 def read_spec(path: Path) -> dict:
-    doc = json.loads(path.read_text(encoding="utf-8"))
+    doc = parse_spec_json(path.read_text(encoding="utf-8"))
     if not isinstance(doc, dict):
         raise InvalidSpecification(f"{path}: expected JSON object")
     for group in (*GROUPS, "sheets"):

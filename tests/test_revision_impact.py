@@ -18,6 +18,50 @@ class RevisionImpactTests(unittest.TestCase):
         self.old = json.loads(EXAMPLE.read_text(encoding="utf-8"))
         self.new = copy.deepcopy(self.old)
 
+    def test_file_parser_rejects_duplicate_keys_at_any_depth(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "ambiguous.json"
+            for payload in ('{"project": {}, "project": {}}',
+                            '{"project": {"revision": "A", "revision": "B"}}'):
+                with self.subTest(payload=payload):
+                    path.write_text(payload, encoding="utf-8")
+                    with self.assertRaisesRegex(impact.InvalidSpecification, "duplicate JSON key"):
+                        impact.read_spec(path)
+
+    def test_file_parser_rejects_nonfinite_literals_and_overflow(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "invalid.json"
+            for number in ("NaN", "Infinity", "-Infinity", "1e999"):
+                with self.subTest(number=number):
+                    path.write_text('{"project": {"north_deg": ' + number + '}}',
+                                    encoding="utf-8")
+                    with self.assertRaisesRegex(impact.InvalidSpecification, "non-finite"):
+                        impact.read_spec(path)
+
+    def test_file_parser_preserves_valid_unicode_and_finite_values(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "valid.json"
+            path.write_text('{"project": {"name": "Δοκιμή", "north_deg": 12.5}}',
+                            encoding="utf-8")
+            self.assertEqual(impact.read_spec(path)["project"],
+                             {"name": "Δοκιμή", "north_deg": 12.5})
+
+    def test_cli_rejects_ambiguous_spec_without_replacing_report(self):
+        with tempfile.TemporaryDirectory() as td:
+            before, after, out = (Path(td) / name for name in
+                                  ("before.json", "after.json", "impact.json"))
+            before.write_text('{"project": {"revision": "A", "revision": "B"}}',
+                              encoding="utf-8")
+            after.write_text(json.dumps(self.new), encoding="utf-8")
+            out.write_text("PRIOR REPORT", encoding="utf-8")
+            result = subprocess.run([sys.executable, str(impact.__file__),
+                                     str(before), str(after), "--out", str(out)],
+                                    capture_output=True, text=True)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("duplicate JSON key", result.stderr)
+            self.assertNotIn("Traceback", result.stderr)
+            self.assertEqual(out.read_text(encoding="utf-8"), "PRIOR REPORT")
+
     def test_no_changes(self):
         result = impact.analyze(self.old, self.new)
         self.assertEqual(result["status"], "NO_INDEXED_CHANGES")

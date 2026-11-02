@@ -7,13 +7,12 @@ directory. No write tools, shell execution, network listener, or host mutations.
 """
 from __future__ import annotations
 
-import json
 import os
 import stat
 import sys
 from pathlib import Path
 
-from revision_impact import analyze
+from revision_impact import analyze, parse_spec_json
 
 MAX_SPEC_SIZE = 5_000_000
 HAS_SECURE_OPEN = (hasattr(os, "O_NOFOLLOW") and hasattr(os, "O_DIRECTORY")
@@ -101,10 +100,7 @@ def read_project_spec(path: str, root: Path) -> dict:
                 os.close(file_fd)
         finally:
             os.close(dir_fd)
-    document = json.loads(data.decode("utf-8"))
-    if not isinstance(document, dict):
-        raise ValueError("Project JSON must contain an object")
-    return document
+    return parse_spec_json(data.decode("utf-8"))
 
 
 def compare_revisions(before: str, after: str, project_root: str | None = None) -> dict:
