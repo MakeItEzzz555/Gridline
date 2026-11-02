@@ -23,30 +23,6 @@ Gridline gives capable AI coding/agent tools a structured way to help with the *
 
 It is not one giant “act like an architect” prompt. Each specialist is discovered only when relevant, keeping the always-loaded context small and the workflow auditable.
 
-## What Gridline actually ships — October 2026
-
-Gridline combines **30 portable AEC skills and 12 specialist agents** with runnable drafting and review utilities. The descriptions below distinguish **implemented software**, **partial review coverage**, and **planned capabilities**. Architectural validation is not professional certification.
-
-| Capability | Current evidence and scope |
-| --- | --- |
-| Agent installation and skill routing | Cross-provider packages, portable skill directories, a one-copy installation prompt, provider activation fixtures, and reversible/ownership-aware global installers ([v0.5.0–0.5.1](CHANGELOG.md)) |
-| Conceptual drawings | Dependency-free JSON-to-SVG/DXF engine for six supported primitives; output remains **conceptual, not for construction** ([drawing details](docs/DRAWING_OUTPUTS.md)) |
-| Specification-derived CAD plan sheets | Structured building JSON → standard-layered **DXF plans**, paper-space layouts/title blocks, required vector PDFs, room/door/window schedules and a sheet register, with ISO 13567 / NCS profiles and office overrides ([PR #6](https://github.com/MakeItEzzz555/Gridline/pull/6)) |
-| Local drawing checks | `aec_cad.py check` independently measures supported wall/opening/room primitives and PDF straight-vector plot mapping, plus selected drafting/title/tag/schedule invariants. Receipts bind input/output/validator hashes and coverage. **This is supported local 2D verification, not complete geometry, PDF visual fidelity or native AutoCAD acceptance.** ([verification scope](docs/DRAWING_OUTPUTS.md)) |
-| Read-only revision-impact review | Compare two building specs to list changed openings, walls, rooms, levels, grids and document settings, affected **indexed** sheets and impacted schedules. Coverage is partial: declared host/level/receiving-room links, missing model references and grid/document-setting changes are tracked; report output is atomic and rejects input aliases, ambiguous duplicate JSON keys and non-finite numeric values, but room-wall adjacency and unrelated CAD/PDF drawings are not independently inspected ([PR #9](https://github.com/MakeItEzzz555/Gridline/pull/9), [issue #10](https://github.com/MakeItEzzz555/Gridline/issues/10)) |
-| Local read-only MCP server | Optional **Gridline-owned** stdio MCP review server exposes revision comparison and capability discovery. It **does not connect to or edit** AutoCAD, Revit or other native applications ([PR #9](https://github.com/MakeItEzzz555/Gridline/pull/9)) |
-| Professional host integration | Revit, AutoCAD, Rhino/Grasshopper, IFC/Bonsai and related **workflow guidance** exists in skills. Native MCP tool connections, host acceptance testing and controlled model writes are **not yet shipped** ([issue #12](https://github.com/MakeItEzzz555/Gridline/issues/12)) |
-| Local Blender 3D proof (experimental) | `scripts/blender_native.py` can generate a **new** native .blend + .glb from supported building-spec walls/levels/doors/windows and independently reopen/measure outputs in a locally installed Blender version. Does **not** create detailed roofs/interiors or reconstruct architecture from a reference photo; this is a CLI bridge, **not a native Blender MCP** ([scope and usage](docs/BLENDER_NATIVE_BRIDGE.md)) |
-| Optional ARCHIMESH components (0.9.0) | Typed component catalog, explicit pinned-source execution, disposable Blender 5.2.3 native/GLB readback, signed local proposals and opt-in CC0 texture cache. The local ledger now also rejects a head rewind to an older signed content hash without an approved transition. Source-bound IFC4 and real texture readback are tested; professional/client and live-host gates remain explicit ([usage, evidence and limits](docs/ARCHIMESH_INTEGRATION.md)). |
-
-### Verified limitations and next engineering gates
-
-The independent [Gridline/Codex technical audit](docs/GRIDLINE_CODEX_AUDIT_AND_DISCUSSION_2026-10-22.md) reproduced a critical defect in the old checker: deleting one opening LINE while preserving tags/schedules still returned PASS. [PR #21](https://github.com/MakeItEzzz555/Gridline/pull/21) adds independent readback and adversarial tests for supported primitives. Full geometric completeness, raster visibility and native acceptance remain separate gates; the checker is not construction-ready certification.
-
-Other gates remain open: [cross-sheet comparison and 40-sheet reference fixtures (#10)](https://github.com/MakeItEzzz555/Gridline/issues/10), [IFC schema/IDS validation (#11)](https://github.com/MakeItEzzz555/Gridline/issues/11), [real CAD/BIM adapters (#12)](https://github.com/MakeItEzzz555/Gridline/issues/12), [editable 2D→3D/BIM (#13)](https://github.com/MakeItEzzz555/Gridline/issues/13), [scanned/hand-marked plans (#14)](https://github.com/MakeItEzzz555/Gridline/issues/14), [human-approved revision state/transactions (#15)](https://github.com/MakeItEzzz555/Gridline/issues/15), and [native AutoCAD open/AUDIT/edit/plot/round-trip evidence (#16)](https://github.com/MakeItEzzz555/Gridline/issues/16).
-
-**These are implementation issues, not completed product claims.** The [community progress ledger](docs/COMMUNITY_PROGRESS_2026-10-23.md) records delivered pieces, proof, remaining acceptance criteria, and why issues stay open. Contributions, professional CAD sample sets and critical reviews are welcome.
-
 ## Install with your AI agent — copy once
 
 **No terminal knowledge required.** Open Codex, Claude Code, Gemini CLI, Cursor, OpenCode, Copilot, or another filesystem-capable agent and paste this:
@@ -71,7 +47,6 @@ Stop rather than guessing if a command, path, host or permission model is unclea
 
 [Full install prompt, alternatives and safety notes](INSTALL_PROMPT.md).
 ## One command
-
 For Agent Skills hosts supported by the community `skills` installer:
 
 ```bash
@@ -112,6 +87,29 @@ bash scripts/install-global.sh auto
 ```
 
 Windows users can run `powershell -ExecutionPolicy Bypass -File .\scripts\install-global.ps1 auto`.
+## What Gridline actually ships — October 2026
+
+Gridline combines **30 portable AEC skills and 12 specialist agents** with runnable drafting and review utilities. The descriptions below distinguish **implemented software**, **partial review coverage**, and **planned capabilities**. Architectural validation is not professional certification.
+
+| Capability | Current evidence and scope |
+| --- | --- |
+| Agent installation and skill routing | Cross-provider packages, portable skill directories, a one-copy installation prompt, provider activation fixtures, and reversible/ownership-aware global installers ([v0.5.0–0.5.1](CHANGELOG.md)) |
+| Conceptual drawings | Dependency-free JSON-to-SVG/DXF engine for six supported primitives; output remains **conceptual, not for construction** ([drawing details](docs/DRAWING_OUTPUTS.md)) |
+| Specification-derived CAD plan sheets | Structured building JSON → standard-layered **DXF plans**, paper-space layouts/title blocks, required vector PDFs, room/door/window schedules and a sheet register, with ISO 13567 / NCS profiles and office overrides ([PR #6](https://github.com/MakeItEzzz555/Gridline/pull/6)) |
+| Local drawing checks | `aec_cad.py check` independently measures supported wall/opening/room primitives and PDF straight-vector plot mapping, plus selected drafting/title/tag/schedule invariants. Receipts bind input/output/validator hashes and coverage. **This is supported local 2D verification, not complete geometry, PDF visual fidelity or native AutoCAD acceptance.** ([verification scope](docs/DRAWING_OUTPUTS.md)) |
+| Read-only revision-impact review | Compare two building specs to list changed openings, walls, rooms, levels, grids and document settings, affected **indexed** sheets and impacted schedules. Coverage is partial: declared host/level/receiving-room links, missing model references and grid/document-setting changes are tracked; report output is atomic and rejects input aliases, ambiguous duplicate JSON keys and non-finite numeric values, but room-wall adjacency and unrelated CAD/PDF drawings are not independently inspected ([PR #9](https://github.com/MakeItEzzz555/Gridline/pull/9), [issue #10](https://github.com/MakeItEzzz555/Gridline/issues/10)) |
+| Local read-only MCP server | Optional **Gridline-owned** stdio MCP review server exposes revision comparison and capability discovery. It **does not connect to or edit** AutoCAD, Revit or other native applications ([PR #9](https://github.com/MakeItEzzz555/Gridline/pull/9)) |
+| Professional host integration | Revit, AutoCAD, Rhino/Grasshopper, IFC/Bonsai and related **workflow guidance** exists in skills. Native MCP tool connections, host acceptance testing and controlled model writes are **not yet shipped** ([issue #12](https://github.com/MakeItEzzz555/Gridline/issues/12)) |
+| Local Blender 3D proof (experimental) | `scripts/blender_native.py` can generate a **new** native .blend + .glb from supported building-spec walls/levels/doors/windows and independently reopen/measure outputs in a locally installed Blender version. Does **not** create detailed roofs/interiors or reconstruct architecture from a reference photo; this is a CLI bridge, **not a native Blender MCP** ([scope and usage](docs/BLENDER_NATIVE_BRIDGE.md)) |
+| Optional ARCHIMESH components (0.9.0) | Typed component catalog, explicit pinned-source execution, disposable Blender 5.2.3 native/GLB readback, signed local proposals and opt-in CC0 texture cache. The local ledger now also rejects a head rewind to an older signed content hash without an approved transition. Source-bound IFC4 and real texture readback are tested; professional/client and live-host gates remain explicit ([usage, evidence and limits](docs/ARCHIMESH_INTEGRATION.md)). |
+
+### Verified limitations and next engineering gates
+
+The independent [Gridline/Codex technical audit](docs/GRIDLINE_CODEX_AUDIT_AND_DISCUSSION_2026-10-22.md) reproduced a critical defect in the old checker: deleting one opening LINE while preserving tags/schedules still returned PASS. [PR #21](https://github.com/MakeItEzzz555/Gridline/pull/21) adds independent readback and adversarial tests for supported primitives. Full geometric completeness, raster visibility and native acceptance remain separate gates; the checker is not construction-ready certification.
+
+Other gates remain open: [cross-sheet comparison and 40-sheet reference fixtures (#10)](https://github.com/MakeItEzzz555/Gridline/issues/10), [IFC schema/IDS validation (#11)](https://github.com/MakeItEzzz555/Gridline/issues/11), [real CAD/BIM adapters (#12)](https://github.com/MakeItEzzz555/Gridline/issues/12), [editable 2D→3D/BIM (#13)](https://github.com/MakeItEzzz555/Gridline/issues/13), [scanned/hand-marked plans (#14)](https://github.com/MakeItEzzz555/Gridline/issues/14), [human-approved revision state/transactions (#15)](https://github.com/MakeItEzzz555/Gridline/issues/15), and [native AutoCAD open/AUDIT/edit/plot/round-trip evidence (#16)](https://github.com/MakeItEzzz555/Gridline/issues/16).
+
+**These are implementation issues, not completed product claims.** The [community progress ledger](docs/COMMUNITY_PROGRESS_2026-10-23.md) records delivered pieces, proof, remaining acceptance criteria, and why issues stay open. Contributions, professional CAD sample sets and critical reviews are welcome.
 
 ## Measured skill activation
 
