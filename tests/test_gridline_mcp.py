@@ -16,6 +16,36 @@ EXAMPLE = ROOT / "skills/architectural-drawing-generation/references/example-hou
 
 
 class GridlineReadOnlyMCPTests(unittest.TestCase):
+    def test_mcp_rejects_duplicate_keys_in_either_revision(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            (base / "before.json").write_bytes(EXAMPLE.read_bytes())
+            (base / "after.json").write_bytes(EXAMPLE.read_bytes())
+            for name in ("before.json", "after.json"):
+                with self.subTest(name=name):
+                    target = base / name
+                    original = target.read_bytes()
+                    try:
+                        target.write_text('{"project": {"revision": "A", "revision": "B"}}',
+                                          encoding="utf-8")
+                        with self.assertRaisesRegex(ValueError, "duplicate JSON key"):
+                            gridline_mcp.compare_revisions("before.json", "after.json",
+                                                           project_root=td)
+                    finally:
+                        target.write_bytes(original)
+
+    def test_mcp_rejects_nonfinite_literals_and_overflow(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            (base / "after.json").write_bytes(EXAMPLE.read_bytes())
+            for number in ("NaN", "Infinity", "-Infinity", "1e999"):
+                with self.subTest(number=number):
+                    (base / "before.json").write_text(
+                        '{"project": {"north_deg": ' + number + '}}', encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, "non-finite"):
+                        gridline_mcp.compare_revisions("before.json", "after.json",
+                                                       project_root=td)
+
     def test_requires_opt_in_project_root(self):
         with self.assertRaisesRegex(ValueError, "GRIDLINE_MCP_PROJECT_ROOT"):
             gridline_mcp.compare_revisions("one.json", "two.json", project_root="")

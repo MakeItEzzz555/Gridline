@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fail closed on ambiguous/non-standard building JSON in both revision-impact CLI and read-only MCP: reject duplicate object keys at any nesting depth, NaN/Infinity constants and floating-point exponent overflow before analysis. Preserve valid Unicode/finite JSON and existing output schemas; regression-test both read paths and ensure failed CLI parsing cannot overwrite an existing report. Canonical and Claude provider implementations remain identical.
+
 - Prevent destructive revision-impact `--out` collisions with either source JSON (including hardlinks and symlinks); atomically replace reports, clean temporary files and return a controlled nonzero exit on write errors. Preserve previous reports when replacement fails. Distinguish absent project/element fields from explicit null in changed-field receipts. Eight focused regressions reproduce the prior unsafe writes/missed metadata and verify recovery; provider-neutral implementation remains synchronized. Not a concurrent filesystem-race guarantee.
 
 - Prevent false NO_INDEXED_CHANGES for unresolved wall/room level, opening host or receiving-room links in either revision. Report additive `stale_model_references` with revision and reason, conservatively flag indexed sheets/dimensional schedules, and trace room edits to receiving-door-only detail sheets and the door schedule. Eight adversarial/compatibility regressions; preserve read-only APIs and provider parity.
